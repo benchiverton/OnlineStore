@@ -1,0 +1,10 @@
+﻿@page "/products/{ProductId}"
+
+<ProductInformationHeader ProductId="@ProductId"></ProductInformationHeader>
+
+<ProductPurchase ProductId="@ProductId"></ProductPurchase>
+
+@code {
+    [Parameter]
+    public string ProductId { get; set; }
+}

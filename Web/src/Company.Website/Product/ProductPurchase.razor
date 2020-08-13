@@ -1,0 +1,140 @@
+﻿@inject ProductInformationService ProductInformationService
+@inject ProductVarientsService ProductVarientsService
+@inject CartService CartService
+
+@inject NavigationManager NavManager
+
+<div class="product-purchase">
+    <div class="row">
+        <div class="col-md-6">
+            Images etc
+        </div>
+        <div class="col-md-6">
+            <h2>@productInformation.Name</h2>
+            @if (selectedProductVarient?.Id != null)
+            {
+                <PricingSummary CurrencyCode="GBP" ProductVarientId="@selectedProductVarient.Id"></PricingSummary>
+            }
+
+            @* Dropdown for index 1 *@
+            @if (!string.IsNullOrEmpty(productVarients.Index1))
+            {
+                    <select class="form-control" @bind="SelectedIndex1">
+                        @foreach (var index1Value in productVarients.Index1Values)
+                        {
+                            <option value="@index1Value">@index1Value</option>
+                        }
+                    </select>
+            }
+
+            @* Dropdown for index 2 *@
+            @if (!string.IsNullOrEmpty(productVarients.Index2))
+            {
+                <h5>@productVarients.Index2</h5>
+                <select class="form-control" @bind="SelectedIndex2">
+                    @foreach (var index2Value in productVarients.Index2Values)
+                    {
+                        <option value="@index2Value">@index2Value</option>
+                    }
+                </select>
+            }
+
+            @* Dropdown for index 3 *@
+            @if (!string.IsNullOrEmpty(productVarients.Index3))
+            {
+                <h4>@productVarients.Index3</h4>
+                <select class="form-control" @bind="SelectedIndex3">
+                    @foreach (var index3Value in productVarients.Index3Values)
+                    {
+                        <option value="@index3Value">@index3Value</option>
+                    }
+                </select>
+            }
+
+            <div class="row cart-buttons">
+                <div class="col-md-6">
+                    <button class="btn btn-primary" @onclick="AddToCart">
+                        <Icon Name="IconName.CartPlus" Margin="Margin.Is3.FromRight" />Add To Cart
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-success" @onclick="BuyNow">
+                        <Icon Name="IconName.ArrowRight" Margin="Margin.Is3.FromRight" />Buy Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<Snackbar @ref="snackbar" Color="SnackbarColor.Primary">
+    <SnackbarBody>
+        Added to cart!
+    </SnackbarBody>
+</Snackbar>
+
+@code {
+    [Parameter]
+    public string ProductId { get; set; }
+
+    Snackbar snackbar;
+
+    private ProductInformation productInformation;
+    private ProductVarients productVarients;
+
+    // the id of the selected product varient
+    private ProductVarient selectedProductVarient;
+
+    // the selected values of the drop down lists
+    private string _selectedIndex1;
+    private string SelectedIndex1
+    {
+        get => _selectedIndex1; set
+        {
+            _selectedIndex1 = value;
+            selectedProductVarient = ProductVarientsService.GetProductVarient(ProductId, SelectedIndex1, SelectedIndex2, SelectedIndex3).Result;
+        }
+    }
+    private string _selectedIndex2;
+    private string SelectedIndex2
+    {
+        get => _selectedIndex2; set
+        {
+            _selectedIndex2 = value;
+            selectedProductVarient = ProductVarientsService.GetProductVarient(ProductId, SelectedIndex1, SelectedIndex2, SelectedIndex3).Result;
+        }
+    }
+    private string _selectedIndex3;
+    private string SelectedIndex3
+    {
+        get => _selectedIndex3; set
+        {
+            _selectedIndex3 = value;
+            selectedProductVarient = ProductVarientsService.GetProductVarient(ProductId, SelectedIndex1, SelectedIndex2, SelectedIndex3).Result;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        productInformation = await ProductInformationService.GetProductInformationById(ProductId);
+        productVarients = await ProductVarientsService.GetProductVarients(ProductId);
+
+        SelectedIndex1 = productVarients.Index1Values?.FirstOrDefault();
+        SelectedIndex2 = productVarients.Index2Values?.FirstOrDefault();
+        SelectedIndex3 = productVarients.Index3Values?.FirstOrDefault();
+
+        selectedProductVarient = await ProductVarientsService.GetProductVarient(ProductId, SelectedIndex1, SelectedIndex2, SelectedIndex3);
+    }
+
+    private void AddToCart()
+    {
+        CartService.AddProductVarientToCart(selectedProductVarient.Id);
+        snackbar.Show();
+    }
+
+    private void BuyNow()
+    {
+        CartService.AddProductVarientToCart(selectedProductVarient.Id);
+        NavManager.NavigateTo("cart");
+    }
+}

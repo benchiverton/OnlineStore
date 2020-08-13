@@ -1,0 +1,55 @@
+﻿@inject ProductService ProductService
+@inject ProductInformationService ProductInformationService
+
+<SidebarContent>
+    <SidebarBrand>
+        <a href="">
+            <img src="\images\logo_light.png" class="logo">
+        </a>
+    </SidebarBrand>
+    <SidebarNavigation>
+        <SidebarItem>
+            <SidebarLink To="" Title="Home">
+                <Icon Name="IconName.Home" Margin="Margin.Is3.FromRight" />Home
+            </SidebarLink>
+        </SidebarItem>
+        <SidebarItem>
+            <SidebarLink Toggled="(isOpen)=> productsSubItems.Toggle(isOpen)" IsShow="true">
+                <Icon Name="IconName.Heart" Margin="Margin.Is3.FromRight" />Products
+            </SidebarLink>
+            <SidebarSubItem @ref="productsSubItems" IsShow="true">
+                @if (productLinkAndNames != null)
+                {
+                    foreach (var productLinkAndName in productLinkAndNames)
+                    {
+                        <SidebarItem>
+                            <SidebarLink To="@productLinkAndName.link">@productLinkAndName.name</SidebarLink>
+                        </SidebarItem>
+                    }
+                }
+            </SidebarSubItem>
+        </SidebarItem>
+        <SidebarItem>
+            <SidebarLink To="cart" Title="My Cart">
+                <Icon Name="IconName.ShoppingCart" Margin="Margin.Is3.FromRight" />My Cart
+            </SidebarLink>
+        </SidebarItem>
+    </SidebarNavigation>
+</SidebarContent>
+
+@code{
+    private SidebarSubItem productsSubItems;
+    private List<(string link, string name)> productLinkAndNames;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var productLinkAndNamesTemp = new List<(string link, string name)>();
+        var products = await ProductService.GetProducts();
+        foreach (var product in products)
+        {
+            var productInformation = await ProductInformationService.GetProductInformationById(product.Id);
+            productLinkAndNamesTemp.Add(($"products/{product.Id}", productInformation.Name));
+        }
+        productLinkAndNames = productLinkAndNamesTemp;
+    }
+}

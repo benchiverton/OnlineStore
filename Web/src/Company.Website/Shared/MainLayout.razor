@@ -1,0 +1,33 @@
+﻿@inherits LayoutComponentBase
+
+<div class="top-row pl-4 navbar navbar-light">
+    <button class="sidebar-opener btn btn-primary" @onclick="OpenSidebar">
+        <Icon Name="IconName.Bars" Margin="Margin.Is0.FromRight" />
+    </button>
+    <CartButton></CartButton>
+</div>
+
+<Sidebar @ref="sidebar" Visible="@isVisible">
+    <MainSidebarContent />
+</Sidebar>
+
+<div class="main" style="opacity: @mainOpacity" @onclick="CloseNavbar">
+    @Body
+</div>
+
+@code {
+    private Sidebar sidebar;
+
+    private bool isVisible = false;
+    private string mainOpacity => isVisible ? "0.5" : "1";
+
+    private void OpenSidebar()
+    {
+        isVisible = true;
+    }
+
+    private void CloseNavbar()
+    {
+        isVisible = false;
+    }
+}

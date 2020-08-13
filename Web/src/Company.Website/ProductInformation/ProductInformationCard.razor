@@ -1,0 +1,27 @@
+﻿@inject ProductInformationService ProductInformationService
+
+<div class="card img-fluid information-card">
+    <img class="card-img-top" src="\images\products\@(ProductId).png" alt="Card image" style="height: 40vh; object-fit: cover">
+    <div class="card-img-overlay">
+        <div style="height: 40%" />
+        <h5 class="card-title">@productInformation.Name</h5>
+    </div>
+    <div class="card-img-overlay-hover">
+        <div style="height: 30%" />
+        <h5 class="card-title">@productInformation.Description1</h5>
+        <p class="card-text">@productInformation.Description2</p>
+        <a href="products/@ProductId" class="btn" style="color: #3db287; background-color: white">Browse</a>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string ProductId { get; set; }
+
+    private ProductInformation productInformation { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        productInformation = await ProductInformationService.GetProductInformationById(ProductId);
+    }
+}
