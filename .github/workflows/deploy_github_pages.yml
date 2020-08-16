@@ -23,4 +23,4 @@ jobs:
       with:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         BRANCH: gh-pages
-        FOLDER: ${{ env.PROJECT_LOCATION }}${{ env.BUILD_LOCATION }}wwwroot
+        FOLDER: {{ env.BUILD_LOCATION }}wwwroot
