@@ -1,15 +1,22 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+.sidebar {
+    /* Blazorise sidebar theme variables */
+    --bsb-dark: deepskyblue !important;
+    --bsb-dark-dark: deepskyblue !important;
+    --bsb-dark-light: white !important;
+}
+
 a, .btn-link {
     color: #0366d6;
 }
 
-/*.btn-primary {
+.btn-primary {
     color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+    background-color: deepskyblue;
+    border-color: deepskyblue;
 }
-*/
+
 app {
     position: relative;
     display: flex;
@@ -147,7 +154,6 @@ app {
     }
 
 .sidebar {
-    background: deepskyblue;
 }
 
     /* override css from blazorise so sidebar is consistent between large/small screens */
