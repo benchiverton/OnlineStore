@@ -1,4 +1,4 @@
-<Blazorise.ThemeProvider Theme="@_theme">
+<Blazorise.ThemeProvider>
     <Router AppAssembly="@typeof(Program).Assembly">
         <Found Context="routeData">
             <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
@@ -10,26 +10,3 @@
         </NotFound>
     </Router>
 </Blazorise.ThemeProvider>
-
-@code{
-    private readonly Theme _theme = new Theme
-    {
-        ColorOptions = new ThemeColorOptions
-        {
-            Primary = "deepskyblue",
-            Secondary = "indianred"
-        },
-        SidebarOptions = new ThemeSidebarOptions
-        {
-            BackgroundColor = "deepskyblue",
-            Color = "White",
-            Width = "250px"
-        },
-        ButtonOptions = new ThemeButtonOptions(),
-        SnackbarOptions = new ThemeSnackbarOptions
-        {
-            BackgroundColor = "deepskyblue",
-            TextColor = "White"
-        }
-    };
-}
