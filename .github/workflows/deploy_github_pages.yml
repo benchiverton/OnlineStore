@@ -17,10 +17,10 @@ jobs:
       with:
         dotnet-version: 3.1.301
     - name: Publish with dotnet
-      run: dotnet publish ${{ env.PROJECT_LOCATION }}${{ env.PROJECT_FILE }} --configuration Release --output ${{ BUILD_LOCATION }}
+      run: dotnet publish ${{ env.PROJECT_LOCATION }}${{ env.PROJECT_FILE }} --configuration Release --output ${{ env.BUILD_LOCATION }}
     - name: Deploy to Github Pages
       uses: JamesIves/github-pages-deploy-action@releases/v3
       with:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         BRANCH: gh-pages
-        FOLDER: ${{ env.PROJECT_LOCATION }}${{ BUILD_LOCATION }}wwwroot
+        FOLDER: ${{ env.PROJECT_LOCATION }}${{ env.BUILD_LOCATION }}wwwroot
