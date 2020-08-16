@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
-namespace Company.Website.ProductVarients
+namespace Company.Website.ProductVariants
 {
-    public class ProductVarients
+    public class ProductVariants
     {
         public string ProductId { get; set; }
 

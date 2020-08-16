@@ -1,0 +1,36 @@
+@inject PricingService PricingService
+@inject CurrencyService CurrencyService
+
+<h3>Total Price:</h3>
+@if (FullTotalPrice > DealTotalPrice)
+{
+    <h6 style="text-decoration: line-through;">@GetFormattedAmount(FullTotalPrice)</h6>
+}
+<h5>@GetFormattedAmount(DealTotalPrice)</h5>
+
+@code {
+    [Parameter]
+    public List<(int, int)> ProductVariantIdAndQuantities { get; set; }
+    [Parameter]
+    public string CurrencyCode { get; set; }
+
+    private string CurrencySymbol { get; set; }
+    private decimal FullTotalPrice { get; set; }
+    private decimal DealTotalPrice { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        CurrencySymbol = CurrencyService.GetCurrencyCharacter(CurrencyCode);
+
+        FullTotalPrice = 0m;
+        DealTotalPrice = 0m;
+        foreach (var productVariantIdAndQuantity in ProductVariantIdAndQuantities)
+        {
+            var pricing = await PricingService.GetPricingByProductTypId(productVariantIdAndQuantity.Item1);
+            FullTotalPrice += pricing.FullPriceGBP * productVariantIdAndQuantity.Item2;
+            DealTotalPrice += pricing.DealPriceGBP * productVariantIdAndQuantity.Item2;
+        }
+    }
+
+    private string GetFormattedAmount(decimal amount) => $"{CurrencySymbol}{amount:0.00} {CurrencyCode}";
+}

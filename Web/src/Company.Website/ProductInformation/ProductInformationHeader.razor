@@ -1,4 +1,4 @@
-﻿@inject ProductInformationService ProductInformationService
+@inject ProductInformationService ProductInformationService
 
 <div class="img-fluid" style="max-height:500px; overflow: hidden">
     <img class="img-top" src="\images\products\@(ProductId).png" alt="image" style="width: 100%; height: 40vh; object-fit: cover">
@@ -8,10 +8,10 @@
     [Parameter]
     public string ProductId { get; set; }
 
-    private ProductInformation productInformation { get; set; }
+    private ProductInformation ProductInformation { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        productInformation = await ProductInformationService.GetProductInformationById(ProductId);
+        ProductInformation = await ProductInformationService.GetProductInformationById(ProductId);
     }
 }

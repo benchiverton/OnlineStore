@@ -11,7 +11,7 @@ using Company.Website.Cart;
 using Company.Website.Pricing;
 using Company.Website.Product;
 using Company.Website.ProductInformation;
-using Company.Website.ProductVarients;
+using Company.Website.ProductVariants;
 
 namespace Company.Website
 {
@@ -38,7 +38,7 @@ namespace Company.Website
             builder.Services.AddTransient<ProductInformationService>();
             builder.Services.AddTransient<PricingService>();
             builder.Services.AddTransient<CurrencyService>();
-            builder.Services.AddTransient<ProductVarientsService>();
+            builder.Services.AddTransient<ProductVariantsService>();
             builder.Services.AddScoped<CartService>();
 
             // session storage for the shopping cart

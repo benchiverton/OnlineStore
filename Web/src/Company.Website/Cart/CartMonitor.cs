@@ -1,25 +1,22 @@
-﻿using System;
+using System;
 using System.Linq;
 
 namespace Company.Website.Cart
 {
     public class CartMonitor : IObserver<Cart>
     {
-        private IDisposable cancellation;
-        private Action updateAction;
+        private IDisposable _cancellation;
+        private Action _updateAction;
 
-        public int CartSize;
+        public int CartSize { get; private set; }
 
         public virtual void Subscribe(CartService provider, Action onNext = null)
         {
-            updateAction = onNext;
-            cancellation = provider.Subscribe(this);
+            _updateAction = onNext;
+            _cancellation = provider.Subscribe(this);
         }
 
-        public virtual void Unsubscribe()
-        {
-            cancellation.Dispose();
-        }
+        public virtual void Unsubscribe() => _cancellation.Dispose();
 
         public void OnCompleted()
         {
@@ -34,7 +31,7 @@ namespace Company.Website.Cart
         public void OnNext(Cart value)
         {
             CartSize = value.CartProducts.Sum(cp => cp.Quantity);
-            updateAction?.Invoke();
+            _updateAction?.Invoke();
         }
     }
 }
