@@ -1,32 +1,32 @@
-﻿@inject PricingService PricingService
+@inject PricingService PricingService
 @inject CurrencyService CurrencyService
 
-@if (fullPrice > dealPrice)
+@if (FullPrice > DealPrice)
 {
-    <h6 style="text-decoration: line-through;">@GetFormattedAmount(fullPrice)</h6>
+    <h6 style="text-decoration: line-through;">@GetFormattedAmount(FullPrice)</h6>
 }
-<h5>@GetFormattedAmount(dealPrice)</h5>
-<p>@pricing.Details</p>
+<h5>@GetFormattedAmount(DealPrice)</h5>
+<p>@Pricing.Details</p>
 
 @code {
     [Parameter]
-    public int ProductVarientId { get; set; }
+    public int ProductVariantId { get; set; }
     [Parameter]
     public string CurrencyCode { get; set; }
 
-    private string currencySymbol { get; set; }
-    private Pricing pricing { get; set; }
-    private decimal fullPrice { get; set; }
-    public decimal dealPrice { get; set; }
+    private string CurrencySymbol { get; set; }
+    private Pricing Pricing { get; set; }
+    private decimal FullPrice { get; set; }
+    public decimal DealPrice { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
-        currencySymbol = CurrencyService.GetCurrencyCharacter(CurrencyCode);
+        CurrencySymbol = CurrencyService.GetCurrencyCharacter(CurrencyCode);
 
-        pricing = await PricingService.GetPricingByProductTypId(ProductVarientId);
-        fullPrice = await CurrencyService.ConvertCurrency(CurrencyCode, pricing.FullPriceGBP);
-        dealPrice = await CurrencyService.ConvertCurrency(CurrencyCode, pricing.DealPriceGBP);
+        Pricing = await PricingService.GetPricingByProductTypId(ProductVariantId);
+        FullPrice = await CurrencyService.ConvertCurrency(CurrencyCode, Pricing.FullPriceGBP);
+        DealPrice = await CurrencyService.ConvertCurrency(CurrencyCode, Pricing.DealPriceGBP);
     }
 
-    private string GetFormattedAmount(decimal amount) => $"{currencySymbol}{amount:0.00} {CurrencyCode}";
+    private string GetFormattedAmount(decimal amount) => $"{CurrencySymbol}{amount:0.00} {CurrencyCode}";
 }

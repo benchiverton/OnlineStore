@@ -1,4 +1,4 @@
-﻿using Blazored.SessionStorage;
+using Blazored.SessionStorage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,18 +33,15 @@ namespace Company.Website.Cart
                 var cart = GetCartFromStorage();
                 observer.OnNext(cart);
             }
-            return new Unsubscriber<Cart>(_observers, observer);
+            return new UnSubscriber<Cart>(_observers, observer);
         }
 
-        public Cart GetCartFromStorage()
-        {
-            return _sessionStorage.GetItem<Cart>(CartKey) ?? new Cart();
-        }
+        public Cart GetCartFromStorage() => _sessionStorage.GetItem<Cart>(CartKey) ?? new Cart();
 
-        public void AddProductVarientToCart(int productVarientId)
+        public void AddProductVariantToCart(int productVariantId)
         {
             var cart = GetCartFromStorage();
-            var existingProduct = cart.CartProducts.FirstOrDefault(cp => cp.ProductVarientId == productVarientId);
+            var existingProduct = cart.CartProducts.FirstOrDefault(cp => cp.ProductVariantId == productVariantId);
             if (existingProduct != null)
             {
                 existingProduct.Quantity++;
@@ -53,7 +50,7 @@ namespace Company.Website.Cart
             {
                 cart.CartProducts.Add(new CartProduct
                 {
-                    ProductVarientId = productVarientId,
+                    ProductVariantId = productVariantId,
                     Quantity = 1
                 });
             }

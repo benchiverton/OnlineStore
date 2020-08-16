@@ -1,17 +1,49 @@
-﻿@page "/cart"
+@page "/cart"
+@using Company.Website.ProductVariants
 
 @inject CartService CartService
+@inject ProductVariantsService ProductVariantsService
+@inject ProductInformationService ProductInformationService
+@inject PricingService PricingService
 
-@foreach(var cartProduct in cart.CartProducts)
-{
-    <h4>@cartProduct.ProductVarientId - @cartProduct.Quantity</h4>
-}
+<div style="padding: 20px">
+    <h1>Checkout</h1>
+
+    <h3>Summary:</h3>
+
+    <Table Hoverable="true">
+        <TableHeader>
+            <TableRow>
+                <TableHeaderCell>Product</TableHeaderCell>
+                <TableHeaderCell>Deal Price/Unit</TableHeaderCell>
+                <TableHeaderCell>Quantity</TableHeaderCell>
+            </TableRow>
+        </TableHeader>
+        <TableBody>
+            @foreach (var cartProduct in _cart.CartProducts)
+            {
+                var productVariant = ProductVariantsService.GetProductVariantById(cartProduct.ProductVariantId).Result;
+                var productInformation = ProductInformationService.GetProductInformationById(productVariant.ProductId).Result;
+                var pricing = PricingService.GetPricingByProductTypId(productVariant.Id).Result;
+                var displayName = $"{productInformation.Name} {(string.IsNullOrEmpty(productVariant.Index1) ? "" : $"- {productVariant.Index1}")} {(string.IsNullOrEmpty(productVariant.Index2) ? "" : $"- {productVariant.Index2}")} {(string.IsNullOrEmpty(productVariant.Index3) ? "" : $"- {productVariant.Index3}")}";
+                <TableRow>
+                    <TableRowCell>@displayName</TableRowCell>
+                    <TableRowCell>@pricing.DealPriceGBP</TableRowCell>
+                    <TableRowCell>@cartProduct.Quantity</TableRowCell>
+                </TableRow>
+            }
+        </TableBody>
+    </Table>
+
+    <PricingTotal CurrencyCode="GBP" ProductVariantIdAndQuantities="@_cart.CartProducts.Select(cp => (cp.ProductVariantId, cp.Quantity)).ToList()"></PricingTotal>
+
+</div>
 
 @code {
-    private Cart cart;
+    private Cart _cart;
 
     protected override void OnInitialized()
     {
-        cart = CartService.GetCartFromStorage();
+        _cart = CartService.GetCartFromStorage();
     }
 }

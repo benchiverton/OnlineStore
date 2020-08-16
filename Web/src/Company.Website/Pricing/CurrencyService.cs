@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 
@@ -23,10 +23,8 @@ namespace Company.Website.Pricing
             }
         }
 
-        public async Task<decimal> ConvertCurrency(string currencyCode, decimal amount)
-        {
-            return amount;
-        }
+        // TODO
+        public async Task<decimal> ConvertCurrency(string currencyCode, decimal amount) => amount;
 
         public string GetCurrencyCharacter(string currencyCode) => _currencySymbols[currencyCode];
     }

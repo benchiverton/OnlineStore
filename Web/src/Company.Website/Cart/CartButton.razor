@@ -1,21 +1,28 @@
-﻿@inject CartService CartService
+@implements IDisposable
+
+@inject CartService CartService
 
 <a href="cart" class="shopping-cart">
     <Icon Name="IconName.ShoppingCart" Margin="Margin.Is3.FromRight" />
-    @cartMonitor?.CartSize
+    <b>@_cartMonitor?.CartSize</b>
 </a>
 
 @code {
-    private CartMonitor cartMonitor;
+    private CartMonitor _cartMonitor;
 
     protected override void OnInitialized()
     {
-        cartMonitor = new CartMonitor();
-        cartMonitor.Subscribe(CartService, Refresh);
+        _cartMonitor = new CartMonitor();
+        _cartMonitor.Subscribe(CartService, Refresh);
     }
 
     public void Refresh()
     {
-        this.StateHasChanged();
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        _cartMonitor.Unsubscribe();
     }
 }

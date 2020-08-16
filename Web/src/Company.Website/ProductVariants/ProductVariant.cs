@@ -1,6 +1,6 @@
-﻿namespace Company.Website.ProductVarients
+namespace Company.Website.ProductVariants
 {
-    public class ProductVarient
+    public class ProductVariant
     {
         public int Id { get; set; }
         public string ProductId { get; set; }
