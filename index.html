@@ -8,12 +8,11 @@
 
     <!-- Set base href to OnlineStore if it's in the path name (current location of GitHub Pages) -->
     <script type="text/javascript">
-        var href = "";
+        var href = "/";
         if (document.location.pathname.includes("OnlineStore")) {
-            href = "OnlineStore/";
+            href = "/OnlineStore/";
         }
-        console.log("<base href='/" + href + "' />");
-        document.write("<base href='/" + href + "' />");
+        document.write("<base href='" + href + "' />");
     </script>
 
     <!-- Bootstrap, Font Awesome -->
