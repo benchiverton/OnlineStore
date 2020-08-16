@@ -1,0 +1,21 @@
+﻿@inject CartService CartService
+
+<a href="cart" class="shopping-cart">
+    <Icon Name="IconName.ShoppingCart" Margin="Margin.Is3.FromRight" />
+    @cartMonitor?.CartSize
+</a>
+
+@code {
+    private CartMonitor cartMonitor;
+
+    protected override void OnInitialized()
+    {
+        cartMonitor = new CartMonitor();
+        cartMonitor.Subscribe(CartService, Refresh);
+    }
+
+    public void Refresh()
+    {
+        this.StateHasChanged();
+    }
+}

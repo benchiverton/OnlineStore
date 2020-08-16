@@ -1,0 +1,12 @@
+﻿@inject CartService CartService
+
+
+
+@code {
+    private Cart cart;
+
+    protected override void OnInitialized()
+    {
+        cart = CartService.GetCartFromStorage();
+    }
+}

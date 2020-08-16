@@ -1,0 +1,17 @@
+﻿@page "/cart"
+
+@inject CartService CartService
+
+@foreach(var cartProduct in cart.CartProducts)
+{
+    <h4>@cartProduct.ProductVarientId - @cartProduct.Quantity</h4>
+}
+
+@code {
+    private Cart cart;
+
+    protected override void OnInitialized()
+    {
+        cart = CartService.GetCartFromStorage();
+    }
+}
