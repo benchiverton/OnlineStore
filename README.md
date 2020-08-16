@@ -1,9 +1,12 @@
 # Online Store
 
-Example of an online store I've written using client side Blazor. Is uses the following:
-
-* RXJS to communicate between components (eg - shopping basket)
-* Blazorise Bootstrap components (eg https://bootstrapdemo.blazorise.com/)
+Blazor webassembly app for a generic online store, written for fun.
 
 ### Deployment:
 ![Deploy to GihHub Pages](https://github.com/benchiverton/OnlineStore/workflows/Deploy%20to%20GihHub%20Pages/badge.svg)
+
+The app has been deployed to GitHub pages via GitHub actions, following the instructions [here](https://www.davideguida.com/how-to-deploy-blazor-webassembly-on-github-pages-using-github-actions/). This is the URL where the app will be automatically deployed is here:
+
+https://benchiverton.github.io/OnlineStore
+
+There are some issues as GitHub pages (unsurprisingly) isn't intended to support this, but it's mostly fine.
