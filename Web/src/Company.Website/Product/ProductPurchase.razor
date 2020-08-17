@@ -115,7 +115,7 @@
         }
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         _productInformation = await ProductInformationService.GetProductInformationById(ProductId);
         _productVariants = await ProductVariantsService.GetProductVariants(ProductId);
