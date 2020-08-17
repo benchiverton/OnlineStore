@@ -20,12 +20,13 @@
             @* Dropdown for index 1 *@
             @if (!string.IsNullOrEmpty(_productVariants.Index1))
             {
-                    <select class="form-control" @bind="SelectedIndex1">
-                        @foreach (var index1Value in _productVariants.Index1Values)
-                        {
-                            <option value="@index1Value">@index1Value</option>
-                        }
-                    </select>
+                <h5>@_productVariants.Index1</h5>
+                <select class="form-control" @bind="SelectedIndex1">
+                    @foreach (var index1Value in _productVariants.Index1Values)
+                    {
+                        <option value="@index1Value">@index1Value</option>
+                    }
+                </select>
             }
 
             @* Dropdown for index 2 *@
