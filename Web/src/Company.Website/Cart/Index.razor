@@ -30,6 +30,11 @@
                     <TableRowCell>@displayName</TableRowCell>
                     <TableRowCell>@pricing.DealPriceGBP</TableRowCell>
                     <TableRowCell>@cartProduct.Quantity</TableRowCell>
+                    <TableRowCell>
+                        <button @onclick="() => DeleteItemFromCart(productVariant.Id)">
+                            <Icon Name="IconName.MinusSquare" Margin="Margin.Is3.IsAuto" />
+                        </button>
+                    </TableRowCell>
                 </TableRow>
             }
         </TableBody>
@@ -45,5 +50,11 @@
     protected override void OnInitialized()
     {
         _cart = CartService.GetCartFromStorage();
+    }
+
+    private void DeleteItemFromCart(int productVariantId)
+    {
+        CartService.Delete(productVariantId);
+        StateHasChanged();
     }
 }
