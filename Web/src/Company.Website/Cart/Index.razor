@@ -35,13 +35,8 @@
                 </DataGridColumn>
                 <DataGridColumn TItem="CartProduct" Field="@nameof(CartProduct.Quantity)" Caption="Quantity" Editable="true">
                     <EditTemplate>
-                        <Validation UsePattern="true">
-                            <NumericEdit TValue="int" Pattern="^[1-9][0-9]*$" Value="@((int) context.CellValue)" ValueChanged="@(v => context.CellValue = (object) v)" MinValue="">
-                                <Feedback>
-                                    <ValidationError>Quantity must be greater than 0.</ValidationError>
-                                </Feedback>
-                            </NumericEdit>
-                        </Validation>
+                        @* Blazorise data grids don't support validation *@
+                        <NumericEdit TValue="int" Value="@((int) context.CellValue)" ValueChanged="@(v => context.CellValue = (int) v < 1 ? 1 : (int) v > 999 ? 999 : (int) v)"/>
                     </EditTemplate>
                 </DataGridColumn>
                 <DataGridCommandColumn TItem="CartProduct" NewCommandAllowed="false">
@@ -84,6 +79,11 @@
     private async Task OnReadData()
     {
         _cartProducts = CartService.GetCartFromStorage().CartProducts;
+    }
+
+    private int GetBoundQuantity(int quantity)
+    {
+        return quantity < 1 ? 1 : quantity > 999 ? 999 : quantity;
     }
 
     private void UpdateItemInCart(SavedRowItem<CartProduct, Dictionary<string, object>> e)
