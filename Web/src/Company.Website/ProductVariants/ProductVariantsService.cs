@@ -15,9 +15,10 @@ namespace Company.Website.ProductVariants
                 && pv.Index2 == index2
                 && pv.Index3 == index3);
 
-        public async Task<ProductVariant> GetProductVariantById(int productVariantId) =>
+        public async Task<ProductVariant> GetProductVariantById(string productId, int productVariantId) =>
             _productVariantList.FirstOrDefault(pv =>
-                pv.Id == productVariantId);
+                pv.ProductId == productId
+                && pv.Id == productVariantId);
 
         private readonly List<ProductVariants> _productVariantsList = new List<ProductVariants>
         {

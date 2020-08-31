@@ -1,4 +1,5 @@
 @inject ProductVariantsService ProductVariantsService
+
 @* Dropdown for index 1 *@
 @if (!string.IsNullOrEmpty(_productVariants.Index1))
 {
@@ -36,7 +37,6 @@
 }
 
 @code {
-
     [Parameter]
     public string ProductId { get; set; }
 

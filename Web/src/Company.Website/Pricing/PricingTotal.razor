@@ -1,16 +1,18 @@
 @inject PricingService PricingService
 @inject CurrencyService CurrencyService
 
-<h3>Total Price:</h3>
-@if (FullTotalPrice > DealTotalPrice)
-{
-    <h6 style="text-decoration: line-through;">@GetFormattedAmount(FullTotalPrice)</h6>
-}
-<h5>@GetFormattedAmount(DealTotalPrice)</h5>
+<p>
+    Subtotal:
+    @if (FullTotalPrice > DealTotalPrice)
+    {
+    <span style="text-decoration: line-through;">@GetFormattedAmount(FullTotalPrice)</span>
+    }
+    <b>@GetFormattedAmount(DealTotalPrice)</b>
+</p>
 
 @code {
     [Parameter]
-    public List<(int, int)> ProductVariantIdAndQuantities { get; set; }
+    public List<(string, int, int)> ProductVariantIdAndQuantities { get; set; }
     [Parameter]
     public string CurrencyCode { get; set; }
 
@@ -22,13 +24,18 @@
     {
         CurrencySymbol = CurrencyService.GetCurrencyCharacter(CurrencyCode);
 
+        if (ProductVariantIdAndQuantities == null)
+        {
+            return;
+        }
+
         FullTotalPrice = 0m;
         DealTotalPrice = 0m;
         foreach (var productVariantIdAndQuantity in ProductVariantIdAndQuantities)
         {
-            var pricing = await PricingService.GetPricingByProductTypId(productVariantIdAndQuantity.Item1);
-            FullTotalPrice += pricing.FullPriceGBP * productVariantIdAndQuantity.Item2;
-            DealTotalPrice += pricing.DealPriceGBP * productVariantIdAndQuantity.Item2;
+            var pricing = await PricingService.GetPricingByProductTypeId(productVariantIdAndQuantity.Item1, productVariantIdAndQuantity.Item2);
+            FullTotalPrice += pricing.FullPriceGBP * productVariantIdAndQuantity.Item3;
+            DealTotalPrice += pricing.DealPriceGBP * productVariantIdAndQuantity.Item3;
         }
     }
 
