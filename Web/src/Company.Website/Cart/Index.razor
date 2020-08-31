@@ -88,6 +88,8 @@
 
     private void UpdateItemInCart(SavedRowItem<CartProduct, Dictionary<string, object>> e)
     {
+        // Blazorise validation will show an error if the quantity is outside of 1-999, however,
+        // the user can still click 'Save'. Here we make sure quantity is between 1-999 (inclusive).
         e.Item.Quantity = e.Item.Quantity < 1 ? 1 : e.Item.Quantity > 999 ? 999 : e.Item.Quantity;
         CartService.UpdateQuantity(e.Item.ProductId, e.Item.ProductVariantId, e.Item.Quantity);
         StateHasChanged();
