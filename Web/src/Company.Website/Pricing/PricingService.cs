@@ -4,9 +4,10 @@ using System.Threading.Tasks;
 
 namespace Company.Website.Pricing
 {
+    // TODO: rework how pricing is modelled
     public class PricingService
     {
-        public async Task<Pricing> GetPricingByProductTypId(int productVariantId) => _pricings.First(p => p.Id == _productVariantIdPricingIdMap[productVariantId]);
+        public async Task<Pricing> GetPricingByProductTypeId(string productId, int productVariantId) => _pricings.First(p => p.Id == _productVariantIdPricingIdMap[productVariantId]);
 
         private readonly Dictionary<int, int> _productVariantIdPricingIdMap = new Dictionary<int, int>
         {

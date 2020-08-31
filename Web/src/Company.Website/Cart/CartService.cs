@@ -38,36 +38,42 @@ namespace Company.Website.Cart
 
         public Cart GetCartFromStorage() => _sessionStorage.GetItem<Cart>(CartKey) ?? new Cart();
 
-        public void AddProductVariantToCart(int productVariantId)
+        public void AddProductVariantToCart(string productId, int productVariantId)
         {
             var cart = GetCartFromStorage();
-            var existingProduct = cart.CartProducts.FirstOrDefault(cp => cp.ProductVariantId == productVariantId);
-            if (existingProduct != null)
-            {
-                existingProduct.Quantity++;
-            }
-            else
+            var existingProduct = GetExistingCartProduct(cart, productId, productVariantId);
+            if (existingProduct == null)
             {
                 cart.CartProducts.Add(new CartProduct
                 {
+                    ProductId = productId,
                     ProductVariantId = productVariantId,
                     Quantity = 1
                 });
             }
+            else
+            {
+                existingProduct.Quantity++;
+            }
             SetCartInStorage(cart);
         }
 
-        public void Remove(int productVariantId)
+        public void UpdateQuantity(string productId, int productVariantId, int desiredQuantity)
         {
             var cart = GetCartFromStorage();
-            var existingProduct = cart.CartProducts.First(cp => cp.ProductVariantId == productVariantId);
-            if (existingProduct.Quantity == 1)
+            var existingProduct = GetExistingCartProduct(cart, productId, productVariantId);
+            if (existingProduct == null)
             {
-                cart.CartProducts.Remove(existingProduct);
+                cart.CartProducts.Add(new CartProduct
+                {
+                    ProductId = productId,
+                    ProductVariantId = productVariantId,
+                    Quantity = desiredQuantity
+                });
             }
-            if (existingProduct.Quantity > 1)
+            else if (desiredQuantity > 0)
             {
-                existingProduct.Quantity--;
+                existingProduct.Quantity = desiredQuantity;
             }
             else
             {
@@ -75,6 +81,20 @@ namespace Company.Website.Cart
             }
             SetCartInStorage(cart);
         }
+
+        public void Delete(string productId, int productVariantId)
+        {
+            var cart = GetCartFromStorage();
+            var existingProduct = GetExistingCartProduct(cart, productId, productVariantId);
+            if (existingProduct != null)
+            {
+                cart.CartProducts.Remove(existingProduct);
+                SetCartInStorage(cart);
+            }
+        }
+
+        private CartProduct? GetExistingCartProduct(Cart cart, string productId, int productVariantId)
+            => cart.CartProducts.FirstOrDefault(cp => cp.ProductId == productId && cp.ProductVariantId == productVariantId);
 
         private void SetCartInStorage(Cart cart)
         {

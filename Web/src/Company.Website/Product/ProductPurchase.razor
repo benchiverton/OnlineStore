@@ -12,7 +12,7 @@
             <h2>@_productInformation.Name</h2>
             @if (_selectedProductVariantId != null)
             {
-                <PricingSummary CurrencyCode="GBP" ProductVariantId="@_selectedProductVariantId"></PricingSummary>
+                <PricingSummary CurrencyCode="GBP" ProductId="@ProductId" ProductVariantId="@_selectedProductVariantId"></PricingSummary>
             }
 
             <ProductVariantsSelector ProductId="@ProductId" ProductVariantChanged="@ProductVariantChanged"></ProductVariantsSelector>
@@ -62,13 +62,13 @@
 
     private void AddToCart()
     {
-        CartService.AddProductVariantToCart(_selectedProductVariantId);
+        CartService.AddProductVariantToCart(ProductId, _selectedProductVariantId);
         _snackbar.Show();
     }
 
     private void BuyNow()
     {
-        CartService.AddProductVariantToCart(_selectedProductVariantId);
+        CartService.AddProductVariantToCart(ProductId, _selectedProductVariantId);
         NavManager.NavigateTo("cart");
     }
 }

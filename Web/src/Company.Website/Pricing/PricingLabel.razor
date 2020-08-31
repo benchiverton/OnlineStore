@@ -3,10 +3,9 @@
 
 @if (FullPrice > DealPrice)
 {
-    <h6 style="text-decoration: line-through;">@GetFormattedAmount(FullPrice)</h6>
+    <span style="text-decoration: line-through;">@GetFormattedAmount(FullPrice)</span>
 }
-<h5>@GetFormattedAmount(DealPrice)</h5>
-<p>@Pricing.Details</p>
+<b>@GetFormattedAmount(DealPrice)</b>
 
 @code {
     [Parameter]
