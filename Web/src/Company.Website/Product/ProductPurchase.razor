@@ -1,6 +1,4 @@
-@using Company.Website.ProductVariants
 @inject ProductInformationService ProductInformationService
-@inject ProductVariantsService ProductVariantsService
 @inject CartService CartService
 
 @inject NavigationManager NavManager
@@ -12,46 +10,12 @@
         </div>
         <div class="col-md-6">
             <h2>@_productInformation.Name</h2>
-            @if (_selectedProductVariant?.Id != null)
+            @if (_selectedProductVariantId != null)
             {
-                <PricingSummary CurrencyCode="GBP" ProductVariantId="@_selectedProductVariant.Id"></PricingSummary>
+                <PricingSummary CurrencyCode="GBP" ProductVariantId="@_selectedProductVariantId"></PricingSummary>
             }
 
-            @* Dropdown for index 1 *@
-            @if (!string.IsNullOrEmpty(_productVariants.Index1))
-            {
-                <h5>@_productVariants.Index1</h5>
-                <select class="form-control" @bind="SelectedIndex1">
-                    @foreach (var index1Value in _productVariants.Index1Values)
-                    {
-                        <option value="@index1Value">@index1Value</option>
-                    }
-                </select>
-            }
-
-            @* Dropdown for index 2 *@
-            @if (!string.IsNullOrEmpty(_productVariants.Index2))
-            {
-                <h5>@_productVariants.Index2</h5>
-                <select class="form-control" @bind="SelectedIndex2">
-                    @foreach (var index2Value in _productVariants.Index2Values)
-                    {
-                        <option value="@index2Value">@index2Value</option>
-                    }
-                </select>
-            }
-
-            @* Dropdown for index 3 *@
-            @if (!string.IsNullOrEmpty(_productVariants.Index3))
-            {
-                <h4>@_productVariants.Index3</h4>
-                <select class="form-control" @bind="SelectedIndex3">
-                    @foreach (var index3Value in _productVariants.Index3Values)
-                    {
-                        <option value="@index3Value">@index3Value</option>
-                    }
-                </select>
-            }
+            <ProductVariantsSelector ProductId="@ProductId" ProductVariantChanged="@ProductVariantChanged"></ProductVariantsSelector>
 
             <div class="row cart-buttons">
                 <div class="col-md-6">
@@ -82,61 +46,29 @@
     Snackbar _snackbar;
 
     private ProductInformation _productInformation;
-    private ProductVariants _productVariants;
 
-    // the id of the selected product variant
-    private ProductVariant _selectedProductVariant;
-
-    // the selected values of the drop down lists
-    private string _selectedIndex1;
-    private string SelectedIndex1
-    {
-        get => _selectedIndex1; set
-        {
-            _selectedIndex1 = value;
-            _selectedProductVariant = ProductVariantsService.GetProductVariant(ProductId, SelectedIndex1, SelectedIndex2, SelectedIndex3).Result;
-        }
-    }
-    private string _selectedIndex2;
-    private string SelectedIndex2
-    {
-        get => _selectedIndex2; set
-        {
-            _selectedIndex2 = value;
-            _selectedProductVariant = ProductVariantsService.GetProductVariant(ProductId, SelectedIndex1, SelectedIndex2, SelectedIndex3).Result;
-        }
-    }
-    private string _selectedIndex3;
-    private string SelectedIndex3
-    {
-        get => _selectedIndex3; set
-        {
-            _selectedIndex3 = value;
-            _selectedProductVariant = ProductVariantsService.GetProductVariant(ProductId, SelectedIndex1, SelectedIndex2, SelectedIndex3).Result;
-        }
-    }
+    private int _selectedProductVariantId;
 
     protected override async Task OnParametersSetAsync()
     {
         _productInformation = await ProductInformationService.GetProductInformationById(ProductId);
-        _productVariants = await ProductVariantsService.GetProductVariants(ProductId);
+    }
 
-        SelectedIndex1 = _productVariants.Index1Values?.FirstOrDefault();
-        SelectedIndex2 = _productVariants.Index2Values?.FirstOrDefault();
-        SelectedIndex3 = _productVariants.Index3Values?.FirstOrDefault();
-
-        _selectedProductVariant = await ProductVariantsService.GetProductVariant(ProductId, SelectedIndex1, SelectedIndex2, SelectedIndex3);
+    private void ProductVariantChanged(int newProductVariantId)
+    {
+        _selectedProductVariantId = newProductVariantId;
+        StateHasChanged();
     }
 
     private void AddToCart()
     {
-        CartService.AddProductVariantToCart(_selectedProductVariant.Id);
+        CartService.AddProductVariantToCart(_selectedProductVariantId);
         _snackbar.Show();
     }
 
     private void BuyNow()
     {
-        CartService.AddProductVariantToCart(_selectedProductVariant.Id);
+        CartService.AddProductVariantToCart(_selectedProductVariantId);
         NavManager.NavigateTo("cart");
     }
 }

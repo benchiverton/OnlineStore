@@ -57,6 +57,25 @@ namespace Company.Website.Cart
             SetCartInStorage(cart);
         }
 
+        public void Remove(int productVariantId)
+        {
+            var cart = GetCartFromStorage();
+            var existingProduct = cart.CartProducts.First(cp => cp.ProductVariantId == productVariantId);
+            if (existingProduct.Quantity == 1)
+            {
+                cart.CartProducts.Remove(existingProduct);
+            }
+            if (existingProduct.Quantity > 1)
+            {
+                existingProduct.Quantity--;
+            }
+            else
+            {
+                cart.CartProducts.Remove(existingProduct);
+            }
+            SetCartInStorage(cart);
+        }
+
         private void SetCartInStorage(Cart cart)
         {
             _sessionStorage.SetItem(CartKey, cart);

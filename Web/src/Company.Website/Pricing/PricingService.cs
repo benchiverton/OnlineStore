@@ -16,12 +16,12 @@ namespace Company.Website.Pricing
             {10, 10},
             {11, 10},
             {12, 10},
-            {20, 0},
-            {21, 0},
-            {22, 0},
-            {30, 20},
-            {31, 20},
-            {32, 20},
+            {20, 20},
+            {21, 20},
+            {22, 20},
+            {30, 30},
+            {31, 30},
+            {32, 30},
         };
 
         private readonly List<Pricing> _pricings = new List<Pricing>
@@ -43,6 +43,13 @@ namespace Company.Website.Pricing
             new Pricing
             {
                 Id = 20,
+                FullPriceGBP = 50m,
+                DealPriceGBP = 25m,
+                Details = "50% off for a limited time!"
+            },
+            new Pricing
+            {
+                Id = 30,
                 FullPriceGBP = 60m,
                 DealPriceGBP = 30m,
                 Details = "Free Shipping, Tax included. 50% off for a limited time!"
