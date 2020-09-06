@@ -1,0 +1,33 @@
+@inject CartService CartService
+@inject NavigationManager NavManager
+
+<button class="btn btn-primary btn-block" @onclick="AddToCart">
+    <Icon Name="IconName.CartPlus" Margin="Margin.Is3.FromRight" />Add To Cart
+</button>
+<button class="btn btn-success btn-block" @onclick="BuyNow">
+    <Icon Name="IconName.ArrowRight" Margin="Margin.Is3.FromRight" />Buy Now
+</button>
+
+@code {
+
+    [Parameter]
+    public string ProductId { get; set; }
+
+    [Parameter]
+    public int ProductVariantId { get; set; }
+
+    [Parameter]
+    public Action OnCartAddedToBasket { get; set; }
+
+    private void AddToCart()
+    {
+        CartService.AddProductVariantToCart(ProductId, ProductVariantId);
+        OnCartAddedToBasket.Invoke();
+    }
+
+    private void BuyNow()
+    {
+        CartService.AddProductVariantToCart(ProductId, ProductVariantId);
+        NavManager.NavigateTo("cart");
+    }
+}

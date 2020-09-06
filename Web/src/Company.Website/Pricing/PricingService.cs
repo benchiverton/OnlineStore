@@ -30,30 +30,30 @@ namespace Company.Website.Pricing
             new Pricing
             {
                 Id = 0,
-                FullPriceGBP = 20m,
+                ListPriceGBP = 20m,
                 DealPriceGBP = 10m,
-                Details = "Free Shipping, Tax included. 50% off!"
+                Details = "Free Shipping, Tax included."
             },
             new Pricing
             {
                 Id = 10,
-                FullPriceGBP = 40m,
+                ListPriceGBP = 40m,
                 DealPriceGBP = 20m,
-                Details = "Free Shipping, Tax included. Still 50% off!"
+                Details = "Free Shipping, Tax included."
             },
             new Pricing
             {
                 Id = 20,
-                FullPriceGBP = 50m,
+                ListPriceGBP = 50m,
                 DealPriceGBP = 25m,
-                Details = "50% off for a limited time!"
+                Details = "Free Shipping, Tax included."
             },
             new Pricing
             {
                 Id = 30,
-                FullPriceGBP = 60m,
+                ListPriceGBP = 60m,
                 DealPriceGBP = 30m,
-                Details = "Free Shipping, Tax included. 50% off for a limited time!"
+                Details = "Free Shipping, Tax included."
             },
         };
     }

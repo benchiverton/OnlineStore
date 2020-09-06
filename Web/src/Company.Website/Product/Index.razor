@@ -1,10 +1,49 @@
-﻿@page "/products/{ProductId}"
+@page "/products/{ProductId}"
 
-<ProductInformationHeader ProductId="@ProductId"></ProductInformationHeader>
+<div class="container-fluid">
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+            <ProductInformationHeader ProductId="@ProductId"></ProductInformationHeader>
+        </div>
+        <div class="col-md">
+            <ProductInformationTitle ProductId="@ProductId"></ProductInformationTitle>
 
-<ProductPurchase ProductId="@ProductId"></ProductPurchase>
+            <PricingBreakdown CurrencyCode="GBP" ProductId="@ProductId" ProductVariantId="@_selectedProductVariantId"></PricingBreakdown>
+
+            <ProductVariantsSelector ProductId="@ProductId" ProductVariantChanged="@ProductVariantChanged"></ProductVariantsSelector>
+
+            <ProductInformationDetails ProductId="@ProductId"></ProductInformationDetails>
+        </div>
+        <div class="col-md">
+            <Card>
+                <CardBody>
+                    <PricingSummary CurrencyCode="GBP" ProductId="@ProductId" ProductVariantId="@_selectedProductVariantId"></PricingSummary>
+
+                    <CartButtons ProductId="@ProductId" ProductVariantId="@_selectedProductVariantId" OnCartAddedToBasket="@(() => _snackbar.Show())"></CartButtons>
+                </CardBody>
+            </Card>
+        </div>
+    </div>
+</div>
+
+<Snackbar @ref="_snackbar" Color="SnackbarColor.Success">
+    <SnackbarBody>
+        <Icon Name="IconName.Check" Margin="Margin.Is3.FromRight" />Added to cart
+    </SnackbarBody>
+</Snackbar>
 
 @code {
     [Parameter]
     public string ProductId { get; set; }
+
+    Snackbar _snackbar;
+
+    private int _selectedProductVariantId;
+
+    private void ProductVariantChanged(int newProductVariantId)
+    {
+        _selectedProductVariantId = newProductVariantId;
+        StateHasChanged();
+    }
 }

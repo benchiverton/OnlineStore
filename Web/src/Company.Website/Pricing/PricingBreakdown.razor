@@ -1,0 +1,58 @@
+@inject PricingService PricingService
+@inject CurrencyService CurrencyService
+
+@if (ListPrice > DealPrice)
+{
+    <Table Narrow="true" Borderless="true">
+        <TableBody>
+            <TableRow>
+                <TableRowCell>List Price:</TableRowCell>
+                <TableRowCell>
+                    <Text Color="TextColor.Black50">@GetFormattedAmount(ListPrice)</Text>
+                </TableRowCell>
+            </TableRow>
+            <TableRow>
+                <TableRowCell>Price:</TableRowCell>
+                <TableRowCell>
+                    <Heading Size="HeadingSize.Is5" TextColor="TextColor.Success">@GetFormattedAmount(DealPrice)</Heading>
+                </TableRowCell>
+            </TableRow>
+            <TableRow>
+                <TableRowCell>You Save:</TableRowCell>
+                <TableRowCell>
+                    <Text Color="TextColor.Success">@GetFormattedAmount(ListPrice - DealPrice) (@((ListPrice - DealPrice) / ListPrice * 100)%)</Text>
+                </TableRowCell>
+            </TableRow>
+        </TableBody>
+    </Table>
+}
+else
+{
+    <h5>@GetFormattedAmount(DealPrice)</h5>
+}
+<p>@Pricing.Details</p>
+
+@code {
+    [Parameter]
+    public string ProductId { get; set; }
+    [Parameter]
+    public int ProductVariantId { get; set; }
+    [Parameter]
+    public string CurrencyCode { get; set; }
+
+    private string CurrencySymbol { get; set; }
+    private Pricing Pricing { get; set; }
+    private decimal ListPrice { get; set; }
+    public decimal DealPrice { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        CurrencySymbol = CurrencyService.GetCurrencyCharacter(CurrencyCode);
+
+        Pricing = await PricingService.GetPricingByProductTypeId(ProductId, ProductVariantId);
+        ListPrice = await CurrencyService.ConvertCurrency(CurrencyCode, Pricing.ListPriceGBP);
+        DealPrice = await CurrencyService.ConvertCurrency(CurrencyCode, Pricing.DealPriceGBP);
+    }
+
+    private string GetFormattedAmount(decimal amount) => $"{CurrencySymbol}{amount:0.00} {CurrencyCode}";
+}

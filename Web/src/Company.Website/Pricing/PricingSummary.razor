@@ -1,12 +1,7 @@
 @inject PricingService PricingService
 @inject CurrencyService CurrencyService
 
-@if (FullPrice > DealPrice)
-{
-    <h6 style="text-decoration: line-through;">@GetFormattedAmount(FullPrice)</h6>
-}
 <h5>@GetFormattedAmount(DealPrice)</h5>
-<p>@Pricing.Details</p>
 
 @code {
     [Parameter]
@@ -18,7 +13,6 @@
 
     private string CurrencySymbol { get; set; }
     private Pricing Pricing { get; set; }
-    private decimal FullPrice { get; set; }
     public decimal DealPrice { get; set; }
 
     protected override async Task OnParametersSetAsync()
@@ -26,7 +20,6 @@
         CurrencySymbol = CurrencyService.GetCurrencyCharacter(CurrencyCode);
 
         Pricing = await PricingService.GetPricingByProductTypeId(ProductId, ProductVariantId);
-        FullPrice = await CurrencyService.ConvertCurrency(CurrencyCode, Pricing.FullPriceGBP);
         DealPrice = await CurrencyService.ConvertCurrency(CurrencyCode, Pricing.DealPriceGBP);
     }
 

@@ -1,0 +1,17 @@
+@inject ProductInformationService ProductInformationService
+
+<br />
+<Heading Size="HeadingSize.Is6">@_productInformation.Description1</Heading>
+<Paragraph>@_productInformation.Description2</Paragraph>
+
+@code {
+    [Parameter]
+    public string ProductId { get; set; }
+
+    private ProductInformation _productInformation;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _productInformation = await ProductInformationService.GetProductInformationById(ProductId);
+    }
+}
