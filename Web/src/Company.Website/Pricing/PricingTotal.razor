@@ -5,7 +5,7 @@
     Subtotal:
     @if (FullTotalPrice > DealTotalPrice)
     {
-    <span style="text-decoration: line-through;">@GetFormattedAmount(FullTotalPrice)</span>
+        <span style="text-decoration: line-through;">@GetFormattedAmount(FullTotalPrice)</span>
     }
     <b>@GetFormattedAmount(DealTotalPrice)</b>
 </p>
@@ -34,7 +34,7 @@
         foreach (var productVariantIdAndQuantity in ProductVariantIdAndQuantities)
         {
             var pricing = await PricingService.GetPricingByProductTypeId(productVariantIdAndQuantity.Item1, productVariantIdAndQuantity.Item2);
-            FullTotalPrice += pricing.FullPriceGBP * productVariantIdAndQuantity.Item3;
+            FullTotalPrice += pricing.ListPriceGBP * productVariantIdAndQuantity.Item3;
             DealTotalPrice += pricing.DealPriceGBP * productVariantIdAndQuantity.Item3;
         }
     }
