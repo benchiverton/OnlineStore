@@ -140,19 +140,6 @@ app {
     padding: 0 10px 0 10px;
 }
 
-.product-purchase {
-    padding: 20px;
-}
-
-.cart-buttons {
-    padding-top: 20px;
-    font-weight: bold;
-}
-
-    .cart-buttons button {
-        width: 100%;
-    }
-
 .sidebar {
 }
 
