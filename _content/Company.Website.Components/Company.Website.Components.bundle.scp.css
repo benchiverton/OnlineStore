@@ -1,6 +1,28 @@
 @import '';
 
 /* _content/Company.Website.Components/HoverCard.razor.rz.scp.css */
-body[b-hjjwkvuo3j]
-{
+.hover-card[b-hjjwkvuo3j] {
+    max-height: 100%;
+    overflow: hidden;
+    color: white;
+    text-align: center;
 }
+
+    .hover-card .card-img-overlay[b-hjjwkvuo3j] {
+        text-shadow: 0 0 4px rgba(0,0,0,0.4);
+    }
+
+    .hover-card .card-img-overlay-hover[b-hjjwkvuo3j] {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: deepskyblue;
+        width: 100%;
+        height: 0;
+        transition: .5s ease;
+    }
+
+    .hover-card:hover .card-img-overlay-hover[b-hjjwkvuo3j] {
+        height: 100%;
+    }
