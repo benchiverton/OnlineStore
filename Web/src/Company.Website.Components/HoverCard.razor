@@ -1,0 +1,27 @@
+<div class="card img-fluid information-card">
+    <img class="card-img-top" src="@BackgroundImageLocation" alt="Card image" style="max-height: 40vh; object-fit: cover">
+    <div class="card-img-overlay">
+        <div style="height: 40%" />
+        <h5 class="card-title">@Title</h5>
+    </div>
+    <div class="card-img-overlay-hover">
+        <div style="height: 30%" />
+        <h5 class="card-title">@Description1</h5>
+        <p class="card-text">@Description2</p>
+        <a href="@PageLocation" class="btn" style="color: #3db287; background-color: white">Browse</a>
+    </div>
+</div>
+
+@code
+{
+    [Parameter]
+    public string BackgroundImageLocation { get; set; }
+    [Parameter]
+    public string Title { get; set; }
+    [Parameter]
+    public string Description1 { get; set; }
+    [Parameter]
+    public string Description2 { get; set; }
+    [Parameter]
+    public string PageLocation { get; set; }
+}

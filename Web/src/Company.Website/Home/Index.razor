@@ -1,18 +1,16 @@
-﻿@page "/"
+@page "/"
 
 @inject ProductService ProductService
 
 <div class="content px-4">
     @if (products != null)
     {
-        <div class="row">
+        <CardDeck>
             @foreach (var product in products)
             {
-                <div class="col-md-6" style="max-height: 50vh">
-                    <ProductInformationCard ProductId="@product.Id"></ProductInformationCard>
-                </div>
+                <ProductInformationCard ProductId="@product.Id"></ProductInformationCard>
             }
-        </div>
+        </CardDeck>
     }
 </div>
 
