@@ -1,4 +1,15 @@
-<Router AppAssembly="@typeof(Program).Assembly">
+@using System.Reflection
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.WebAssembly.Services
+@inject LazyAssemblyLoader LazyAssemblyLoader
+
+<Router AppAssembly="@typeof(Program).Assembly" AdditionalAssemblies="@lazyLoadedAssemblies" OnNavigateAsync="@OnNavigateAsync">
+    <Navigating>
+        <div style="position:absolute; top:30vh; width:100%; text-align:center">
+            <h1>Online Store</h1>
+            <p><i class="fas fa-spin fa-spinner"></i> Loading the requested page...</p>
+        </div>
+    </Navigating>
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
     </Found>
@@ -8,3 +19,16 @@
         </LayoutView>
     </NotFound>
 </Router>
+
+@code {
+    private List<Assembly> lazyLoadedAssemblies = new List<Assembly>();
+
+    private async Task OnNavigateAsync(NavigationContext args)
+    {
+        if (args.Path.EndsWith("cart"))
+        {
+            var assemblies = await LazyAssemblyLoader.LoadAssembliesAsync(new string[] { "Blazorise.DataGrid.dll" });
+            lazyLoadedAssemblies.AddRange(assemblies);
+        }
+    }
+}

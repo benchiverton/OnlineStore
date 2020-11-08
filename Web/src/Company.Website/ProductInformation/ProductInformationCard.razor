@@ -1,18 +1,12 @@
 @inject ProductInformationService ProductInformationService
 
-<div class="card img-fluid information-card">
-    <img class="card-img-top" src="@ProductInformation.Images.FirstOrDefault()" alt="Card image" style="height: 40vh; object-fit: cover">
-    <div class="card-img-overlay">
-        <div style="height: 40%" />
-        <h5 class="card-title">@ProductInformation.Name</h5>
-    </div>
-    <div class="card-img-overlay-hover">
-        <div style="height: 30%" />
-        <h5 class="card-title">@ProductInformation.Description1</h5>
-        <p class="card-text">@ProductInformation.Description2</p>
-        <a href="products/@ProductId" class="btn" style="color: #3db287; background-color: white">Browse</a>
-    </div>
-</div>
+<HoverCard
+    BackgroundImageLocation="@ProductInformation.Images.FirstOrDefault()"
+    Title="@ProductInformation.Name"
+    Description1="@ProductInformation.Description1"
+    Description2="@ProductInformation.Description2"
+    PageLocation="@($"products/{ProductId}")">
+</HoverCard>
 
 @code {
     [Parameter]
