@@ -12,6 +12,10 @@ using Company.Website.Pricing;
 using Company.Website.Product;
 using Company.Website.ProductInformation;
 using Company.Website.ProductVariants;
+using Serilog;
+using Serilog.Core;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace Company.Website
 {
@@ -21,6 +25,10 @@ namespace Company.Website
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
+
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.BrowserConsole()
+                .CreateLogger();
 
             builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
