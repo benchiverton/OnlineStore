@@ -30,6 +30,9 @@
 
     <!-- App style sheet -->
     <link href="css/app.css" rel="stylesheet" />
+
+    <!-- manifest file for PWA -->
+    <link href="manifest.json" rel="manifest" />
 </head>
 
 <body>
@@ -88,6 +91,8 @@
     <!-- Blazorise -->
     <script src="_content/Blazorise/blazorise.js"></script>
     <script src="_content/Blazorise.Bootstrap/blazorise.bootstrap.js"></script>
+
+    <script>navigator.serviceWorker.register('service-worker.js');</script>
 </body>
 
 </html>
