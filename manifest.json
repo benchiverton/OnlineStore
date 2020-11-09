@@ -1,0 +1,15 @@
+{
+  "name": "Online Store App",
+  "short_name": "OnlineStoreApp",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "deepskyblue",
+  "icons": [
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
