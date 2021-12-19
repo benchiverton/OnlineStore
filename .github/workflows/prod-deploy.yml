@@ -79,9 +79,13 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: Run Azure webapp deploy
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      - name: Run Azure webapp deploy for API
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ steps.vars.outputs.azure_webapp_name }}
+          app-name: ${{ steps.vars.outputs.azure_webapp_name_api }}
+          package: ${{ github.workspace }}/api
+      - name: Run Azure webapp deploy for website
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ steps.vars.outputs.azure_webapp_name_website }}
           package: ${{ github.workspace }}/website
