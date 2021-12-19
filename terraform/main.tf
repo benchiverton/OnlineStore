@@ -23,3 +23,15 @@ resource "azurerm_resource_group" "default" {
   name     = "${var.name}-${lower(var.environment)}-rg"
   location = var.location
 }
+
+output "app_service_name_api" {
+  value       = azurerm_app_service.api.name
+  description = "Online Store API app name."
+  sensitive   = false
+}
+
+output "app_service_name_website" {
+  value       = azurerm_app_service.website.name
+  description = "Online Store website app name."
+  sensitive   = false
+}

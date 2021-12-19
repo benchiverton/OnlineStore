@@ -1,47 +1,11 @@
-name: ".NET Build and Terraform Plan"
+name: "Plan Terraform for prod"
 on:
   pull_request:
     branches: [main]
 
 jobs:
-  build-api:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 6.0.100
-      - name: Install dependencies
-        run: dotnet restore src/Api/Company.Api.sln
-      - name: Build
-        run: dotnet build src/Api/Company.Api.sln --configuration Release --no-restore
-      - name: Test
-        run: dotnet test src/Api/Company.Api.sln --no-restore --verbosity normal
-      - name: Publish
-        run: dotnet publish src/Api/Company.Api/Company.Api.csproj -c Release -o publish --runtime linux-x64
-
-  build-website:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 6.0.100
-      - name: Install dependencies
-        run: dotnet restore src/Website/Company.Website.sln
-      - name: Build
-        run: dotnet build src/Website/Company.Website.sln --configuration Release --no-restore
-      - name: Test
-        run: dotnet test src/Website/Company.Website.sln --no-restore --verbosity normal
-      - name: Publish
-        run: dotnet publish src/Website/Company.Website/Company.Website.csproj -c Release -o publish --runtime linux-x64
-
-  plan-terraform-test:
-    environment: test
+  plan-terraform-prod:
+    environment: prod
     env:
       ARM_CLIENT_ID: ${{ secrets.TF_VAR_AGENT_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.TF_VAR_AGENT_CLIENT_SECRET }}
@@ -61,7 +25,7 @@ jobs:
         run: terraform fmt
       - name: Terraform Init
         id: init
-        run: terraform init -backend-config="container_name=onlinestoretfstate-test"
+        run: terraform init -backend-config="container_name=onlinestoretfstate-prod"
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
@@ -74,7 +38,7 @@ jobs:
           ARM_SUBSCRIPTION_ID: ${{ secrets.TF_VAR_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.TF_VAR_TENANT_ID }}
           TF_VAR_location: "East US"
-          TF_VAR_environment: test
+          TF_VAR_environment: prod
       - uses: actions/github-script@0.9.0
         if: github.event_name == 'pull_request'
         env:
@@ -82,7 +46,8 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            const output = `### Prod 
+            #### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
             #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
             #### Terraform Validation 🤖${{ steps.validate.outputs.stdout }}
             #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
