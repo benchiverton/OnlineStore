@@ -22,7 +22,7 @@ jobs:
       - name: Publish
         run: dotnet publish src/Api/Company.Api/Company.Api.csproj -c Release -o publish --runtime linux-x64 --self-contained false
 
-  build-web:
+  build-website:
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout"
@@ -32,13 +32,13 @@ jobs:
         with:
           dotnet-version: 6.0.100
       - name: Install dependencies
-        run: dotnet restore src/Web/Company.Website.sln
+        run: dotnet restore src/Website/Company.Website.sln
       - name: Build
-        run: dotnet build src/Web/Company.Website.sln --configuration Release --no-restore
+        run: dotnet build src/Website/Company.Website.sln --configuration Release --no-restore
       - name: Test
-        run: dotnet test src/Web/Company.Website.sln --no-restore --verbosity normal
+        run: dotnet test src/Website/Company.Website.sln --no-restore --verbosity normal
       - name: Publish
-        run: dotnet publish src/Web/Company.Website/Company.Website.csproj -c Release -o publish --runtime linux-x64 --self-contained false
+        run: dotnet publish src/Website/Company.Website/Company.Website.csproj -c Release -o publish --runtime linux-x64 --self-contained false
 
   plan-terraform-test:
     environment: test

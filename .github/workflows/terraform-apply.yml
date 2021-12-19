@@ -28,7 +28,7 @@ jobs:
           name: api
           path: src/Api/Company.Api/publish
 
-  build-web:
+  build-website:
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout"
@@ -38,18 +38,18 @@ jobs:
         with:
           dotnet-version: 6.0.100
       - name: Install dependencies
-        run: dotnet restore src/Web/Company.Website.sln
+        run: dotnet restore src/Website/Company.Website.sln
       - name: Build
-        run: dotnet build src/Web/Company.Website.sln --configuration Release --no-restore
+        run: dotnet build src/Website/Company.Website.sln --configuration Release --no-restore
       - name: Test
-        run: dotnet test src/Web/Company.Website.sln --no-restore --verbosity normal
+        run: dotnet test src/Website/Company.Website.sln --no-restore --verbosity normal
       - name: Publish
-        run: dotnet publish src/Web/Company.Website/Company.Website.csproj -c Release -o publish --runtime linux-x64 --self-contained false
+        run: dotnet publish src/Website/Company.Website/Company.Website.csproj -c Release -o publish --runtime linux-x64 --self-contained false
       - name: Publish artifact
         uses: actions/upload-artifact@v2
         with:
-          name: web
-          path: src/Web/Company.Website/publish
+          name: website
+          path: src/Website/Company.Website/publish
 
   deploy-terraform-test:
     environment: test
@@ -109,7 +109,7 @@ jobs:
           path: terraform/application-name-test.txt
 
   deploy-app-test:
-    needs: [build-api, build-web, deploy-terraform-test]
+    needs: [build-api, build-site, deploy-terraform-test]
     environment: test
     runs-on: ubuntu-latest
     steps:
