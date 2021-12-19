@@ -24,7 +24,7 @@ jobs:
       - name: Publish artifact
         uses: actions/upload-artifact@v2
         with:
-          name: api-${{ env.GITHUB_REF }}
+          name: api-${{ github.ref }}
           path: src/Api/Company.Api/publish
 
   build-website:
@@ -47,5 +47,5 @@ jobs:
       - name: Publish artifact
         uses: actions/upload-artifact@v2
         with:
-          name: website-${{ env.GITHUB_REF }}
+          name: website-${{ github.ref }}
           path: src/Website/Company.Website/publish
