@@ -1,7 +1,6 @@
-﻿namespace Company.Website.Product
+namespace Company.Website.Product;
+
+public class Product
 {
-    public class Product
-    {
-        public string Id { get; set; }
-    }
+    public string Id { get; set; }
 }

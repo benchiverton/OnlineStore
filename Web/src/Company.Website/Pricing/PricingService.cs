@@ -2,14 +2,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Company.Website.Pricing
-{
-    // TODO: rework how pricing is modelled
-    public class PricingService
-    {
-        public async Task<Pricing> GetPricingByProductTypeId(string productId, int productVariantId) => _pricings.First(p => p.Id == _productVariantIdPricingIdMap[productVariantId]);
+namespace Company.Website.Pricing;
 
-        private readonly Dictionary<int, int> _productVariantIdPricingIdMap = new Dictionary<int, int>
+// TODO: rework how pricing is modelled
+public class PricingService
+{
+    public async Task<Pricing> GetPricingByProductTypeId(string productId, int productVariantId) => _pricings.First(p => p.Id == _productVariantIdPricingIdMap[productVariantId]);
+
+    private readonly Dictionary<int, int> _productVariantIdPricingIdMap = new Dictionary<int, int>
         {
             {0, 0},
             {1, 0},
@@ -25,7 +25,7 @@ namespace Company.Website.Pricing
             {32, 30},
         };
 
-        private readonly List<Pricing> _pricings = new List<Pricing>
+    private readonly List<Pricing> _pricings = new List<Pricing>
         {
             new Pricing
             {
@@ -56,5 +56,4 @@ namespace Company.Website.Pricing
                 Details = "Free Shipping, Tax included."
             },
         };
-    }
 }

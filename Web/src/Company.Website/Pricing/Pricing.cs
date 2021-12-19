@@ -1,13 +1,12 @@
 using System;
 
-namespace Company.Website.Pricing
+namespace Company.Website.Pricing;
+
+public class Pricing
 {
-    public class Pricing
-    {
-        public int Id { get; set; }
-        public decimal ListPriceGBP { get; set; }
-        // abstract deal logic out to a deal service or something
-        public decimal DealPriceGBP { get; set; }
-        public string Details { get; set; }
-    }
+    public int Id { get; set; }
+    public decimal ListPriceGBP { get; set; }
+    // abstract deal logic out to a deal service or something
+    public decimal DealPriceGBP { get; set; }
+    public string Details { get; set; }
 }
