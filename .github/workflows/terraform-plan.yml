@@ -76,10 +76,10 @@ jobs:
         id: plan
         run: terraform plan -no-color
         env:
-          ARM_CLIENT_ID: ${{ secrets.TF_VAR_agent_client_id }}
-          ARM_CLIENT_SECRET: ${{ secrets.TF_VAR_agent_client_secret }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.TF_VAR_subscription_id }}
-          ARM_TENANT_ID: ${{ secrets.TF_VAR_tenant_id }}
+          ARM_CLIENT_ID: ${{ secrets.TF_VAR_AGENT_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.TF_VAR_AGENT_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.TF_VAR_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.TF_VAR_TENANT_ID }}
           TF_VAR_location: "East US"
           TF_VAR_environment: test
 
@@ -97,7 +97,7 @@ jobs:
 
             <details><summary>Show Plan</summary>
 
-            \`\`\`${process.env.PLAN}\`\`\`
+            \`\`\`${env.PLAN}\`\`\`
 
             </details>
 
