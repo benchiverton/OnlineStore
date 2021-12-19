@@ -8,7 +8,7 @@ jobs:
   build-api:
     runs-on: ubuntu-latest
     steps:
-      - name: "Checkout"
+      - name: Checkout
         uses: actions/checkout@v2
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
@@ -31,7 +31,7 @@ jobs:
   build-website:
     runs-on: ubuntu-latest
     steps:
-      - name: "Checkout"
+      - name: Checkout
         uses: actions/checkout@v2
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
@@ -63,45 +63,37 @@ jobs:
       run:
         working-directory: "./terraform"
     steps:
-      - name: "Checkout"
-        uses: actions/checkout@master
-
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
           terraform_wrapper: false
-
-      - name: "Terraform Format"
+      - name: Terraform Format
         id: fmt
         run: terraform fmt
-
-      - name: "Terraform Init"
+      - name: Terraform Init
         id: init
         run: terraform init -backend-config="container_name=onlinestoretfstate-test"
-
-      - name: "Terraform Validate"
+      - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
-
-      - name: "Terraform Plan"
+      - name: Terraform Plan
         id: plan
         run: terraform plan -no-color
         env:
           TF_VAR_location: "East US"
           TF_VAR_environment: test
-
-      - name: "Terraform Apply"
+      - name: Terraform Apply
         id: apply
         run: terraform apply -auto-approve
         env:
           TF_VAR_location: "East US"
           TF_VAR_environment: test
-
       - name: Set Application Name
         shell: bash
         run: |
           terraform output -raw app_service_name > application-name-test.txt
-
       - name: Upload application name for deploy job
         uses: actions/upload-artifact@v2
         with:
@@ -113,37 +105,31 @@ jobs:
     environment: test
     runs-on: ubuntu-latest
     steps:
-      # Checkout the repo
-      - uses: actions/checkout@master
-
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Download application name
         uses: actions/download-artifact@v2
         with:
           name: application-name-test
-
       - name: Load application name
         id: vars
         shell: bash
         run: |
           echo ::set-output name=azure_webapp_name::$(cat application-name-test.txt)
-
-      - name: Download site package
+      - name: Download website package
         uses: actions/download-artifact@v2
         with:
-          name: site
-          path: ${{ github.workspace }}/site
-
-      - name: "Login via Azure CLI"
+          name: website
+          path: ${{ github.workspace }}/website
+      - name: Login via Azure CLI
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      # Deploy to Azure Web apps
-      - name: "Run Azure webapp deploy"
+      - name: Run Azure webapp deploy
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ steps.vars.outputs.azure_webapp_name }}
-          package: ${{ github.workspace }}/site
+          package: ${{ github.workspace }}/website
 
   deploy-terraform-prod:
     needs: [deploy-app-test]
@@ -158,46 +144,38 @@ jobs:
       run:
         working-directory: "./terraform"
     steps:
-      - name: "Checkout"
-        uses: actions/checkout@master
-
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
           terraform_wrapper: false
-
-      - name: "Terraform Format"
+      - name: Terraform Format
         id: fmt
         run: terraform fmt
-
-      - name: "Terraform Init"
+      - name: Terraform Init
         id: init
         run: terraform init -backend-config="container_name=onlinestoretfstate-prod"
-
-      - name: "Terraform Validate"
+      - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
-
-      - name: "Terraform Plan"
+      - name: Terraform Plan
         id: plan
         run: terraform plan -no-color
         env:
           TF_VAR_location: "North Europe"
           TF_VAR_environment: prod
-
-      - name: "Terraform Apply"
+      - name: Terraform Apply
         id: apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve
         env:
           TF_VAR_location: "North Europe"
           TF_VAR_environment: prod
-
       - name: Set Application Name
         shell: bash
         run: |
           terraform output -raw app_service_name > application-name-prod.txt
-
       - name: Upload application name for deploy job
         uses: actions/upload-artifact@v2
         with:
@@ -209,35 +187,29 @@ jobs:
     environment: prod
     runs-on: ubuntu-latest
     steps:
-      # Checkout the repo
-      - uses: actions/checkout@master
-
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Download application name
         uses: actions/download-artifact@v2
         with:
           name: application-name-prod
-
       - name: Load application name
         id: vars
         shell: bash
         run: |
           echo ::set-output name=azure_webapp_name::$(cat application-name-prod.txt)
-
-      - name: Download site package
+      - name: Download website package
         uses: actions/download-artifact@v2
         with:
-          name: site
-          path: ${{ github.workspace }}/site
-
-      - name: "Login via Azure CLI"
+          name: website
+          path: ${{ github.workspace }}/website
+      - name: Login via Azure CLI
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      # Deploy to Azure Web apps
-      - name: "Run Azure webapp deploy"
+      - name: Run Azure webapp deploy
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ steps.vars.outputs.azure_webapp_name }}
-          package: ${{ github.workspace }}/site
+          package: ${{ github.workspace }}/website
