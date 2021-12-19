@@ -97,7 +97,7 @@ jobs:
 
             <details><summary>Show Plan</summary>
 
-            \`\`\`${ process.env.PLAN }\`\`\`
+            \`\`\`${{ steps.plan.outputs.stout }}\`\`\`
 
             </details>
 
