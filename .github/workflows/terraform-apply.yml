@@ -21,7 +21,7 @@ jobs:
       - name: Test
         run: dotnet test src/Api/Company.Api.sln --no-restore --verbosity normal
       - name: Publish
-        run: dotnet publish src/Api/Company.Api/Company.Api.csproj -c Release -o publish --runtime linux-x64 --self-contained false
+        run: dotnet publish src/Api/Company.Api/Company.Api.csproj -c Release -o publish --runtime linux-x64
       - name: Publish artifact
         uses: actions/upload-artifact@v2
         with:
@@ -44,7 +44,7 @@ jobs:
       - name: Test
         run: dotnet test src/Website/Company.Website.sln --no-restore --verbosity normal
       - name: Publish
-        run: dotnet publish src/Website/Company.Website/Company.Website.csproj -c Release -o publish --runtime linux-x64 --self-contained false
+        run: dotnet publish src/Website/Company.Website/Company.Website.csproj -c Release -o publish --runtime linux-x64
       - name: Publish artifact
         uses: actions/upload-artifact@v2
         with:
