@@ -78,12 +78,12 @@ jobs:
       - name: Download API package
         uses: actions/download-artifact@v2
         with:
-          name: api-${{github.event.number}}
+          name: api-${{ GITHUB_REF }}
           path: ${{ github.workspace }}/api
       - name: Download website package
         uses: actions/download-artifact@v2
         with:
-          name: website-${{github.event.number}}
+          name: website-${{ GITHUB_REF }}
           path: ${{ github.workspace }}/website
       - name: Login via Azure CLI
         uses: azure/login@v1
