@@ -85,8 +85,6 @@ jobs:
 
       - uses: actions/github-script@0.9.0
         if: github.event_name == 'pull_request'
-        env:
-          PLAN: "terraform\n${{ steps.plan.outputs.stout }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -97,7 +95,9 @@ jobs:
 
             <details><summary>Show Plan</summary>
 
-            \`\`\`${{ steps.plan.outputs.stout }}\`\`\`
+            \`\`\`
+            ${{ steps.plan.outputs.stout }}
+            \`\`\`
 
             </details>
 
