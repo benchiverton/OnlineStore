@@ -34,8 +34,8 @@ resource "azurerm_app_service" "api" {
   }
 }
 
-resource "azurerm_app_service" "web" {
-  name                = "${var.dns_prefix}-${var.name}-${var.environment}-web"
+resource "azurerm_app_service" "website" {
+  name                = "${var.dns_prefix}-${var.name}-${var.environment}-website"
   location            = azurerm_resource_group.default.location
   resource_group_name = azurerm_resource_group.default.name
   app_service_plan_id = azurerm_app_service_plan.default.id
