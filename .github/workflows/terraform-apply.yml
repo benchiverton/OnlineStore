@@ -77,7 +77,7 @@ jobs:
 
       - name: "Terraform Init"
         id: init
-        run: terraform init -backend-config="container_name=onlinestoretfstatestoragetest"
+        run: terraform init -backend-config="container_name=onlinestoretfstate-test"
 
       - name: "Terraform Validate"
         id: validate
@@ -172,7 +172,7 @@ jobs:
 
       - name: "Terraform Init"
         id: init
-        run: terraform init -backend-config="container_name=onlinestoretfstatestorageprod"
+        run: terraform init -backend-config="container_name=onlinestoretfstate-prod"
 
       - name: "Terraform Validate"
         id: validate
