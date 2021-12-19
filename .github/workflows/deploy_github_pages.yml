@@ -12,10 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET Core
+    - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.100
+        dotnet-version: 6.0.100
     - name: Publish with dotnet
       run: dotnet publish ${{ env.PROJECT_LOCATION }}${{ env.PROJECT_FILE }} --configuration Release --output ${{ env.BUILD_LOCATION }}
     - name: Deploy to Github Pages

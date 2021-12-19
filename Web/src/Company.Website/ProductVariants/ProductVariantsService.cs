@@ -2,25 +2,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Company.Website.ProductVariants
+namespace Company.Website.ProductVariants;
+
+public class ProductVariantsService
 {
-    public class ProductVariantsService
-    {
-        public async Task<ProductVariants> GetProductVariants(string productId) => _productVariantsList.First(pt => pt.ProductId == productId);
+    public async Task<ProductVariants> GetProductVariants(string productId) => _productVariantsList.First(pt => pt.ProductId == productId);
 
-        public async Task<ProductVariant> GetProductVariant(string productId, string index1, string index2, string index3) =>
-            _productVariantList.FirstOrDefault(pv =>
-                pv.ProductId == productId
-                && pv.Index1 == index1
-                && pv.Index2 == index2
-                && pv.Index3 == index3);
+    public async Task<ProductVariant> GetProductVariant(string productId, string index1, string index2, string index3) =>
+        _productVariantList.FirstOrDefault(pv =>
+            pv.ProductId == productId
+            && pv.Index1 == index1
+            && pv.Index2 == index2
+            && pv.Index3 == index3);
 
-        public async Task<ProductVariant> GetProductVariantById(string productId, int productVariantId) =>
-            _productVariantList.FirstOrDefault(pv =>
-                pv.ProductId == productId
-                && pv.Id == productVariantId);
+    public async Task<ProductVariant> GetProductVariantById(string productId, int productVariantId) =>
+        _productVariantList.FirstOrDefault(pv =>
+            pv.ProductId == productId
+            && pv.Id == productVariantId);
 
-        private readonly List<ProductVariants> _productVariantsList = new List<ProductVariants>
+    private readonly List<ProductVariants> _productVariantsList = new List<ProductVariants>
         {
             new ProductVariants
             {
@@ -58,7 +58,7 @@ namespace Company.Website.ProductVariants
             }
         };
 
-        private readonly List<ProductVariant> _productVariantList = new List<ProductVariant>
+    private readonly List<ProductVariant> _productVariantList = new List<ProductVariant>
         {
             new ProductVariant
             {
@@ -157,5 +157,4 @@ namespace Company.Website.ProductVariants
                 Index2 = "Flattered"
             },
         };
-    }
 }

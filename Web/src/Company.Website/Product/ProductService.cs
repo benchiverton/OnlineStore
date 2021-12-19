@@ -2,15 +2,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Company.Website.Product
+namespace Company.Website.Product;
+
+public class ProductService
 {
-    public class ProductService
-    {
-        public async Task<List<Product>> GetProducts() => _products;
+    public async Task<List<Product>> GetProducts() => _products;
 
-        public async Task<Product> GetProductById(string productId) => _products.First(p => p.Id == productId);
+    public async Task<Product> GetProductById(string productId) => _products.First(p => p.Id == productId);
 
-        private readonly List<Product> _products = new List<Product>
+    private readonly List<Product> _products = new List<Product>
         {
             new Product
             {
@@ -21,5 +21,4 @@ namespace Company.Website.Product
                 Id = "the_product_two"
             }
         };
-    }
 }

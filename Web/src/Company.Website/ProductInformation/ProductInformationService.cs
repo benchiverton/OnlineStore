@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Company.Website.ProductInformation
-{
-    public class ProductInformationService
-    {
-        public async Task<ProductInformation> GetProductInformationById(string productId) => _productInformation[productId];
+namespace Company.Website.ProductInformation;
 
-        private readonly Dictionary<string, ProductInformation> _productInformation = new Dictionary<string, ProductInformation>
+public class ProductInformationService
+{
+    public async Task<ProductInformation> GetProductInformationById(string productId) => _productInformation[productId];
+
+    private readonly Dictionary<string, ProductInformation> _productInformation = new Dictionary<string, ProductInformation>
         {
             { "the_product_one", new ProductInformation
             {
@@ -34,5 +34,4 @@ namespace Company.Website.ProductInformation
                 }
             }
         };
-    }
 }
