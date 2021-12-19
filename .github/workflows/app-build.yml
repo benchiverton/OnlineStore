@@ -1,4 +1,4 @@
-name: "Build applications"
+name: "Build apps"
 on:
   pull_request:
     branches: [main]

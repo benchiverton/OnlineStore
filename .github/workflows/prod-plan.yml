@@ -1,4 +1,4 @@
-name: "Plan Terraform for prod"
+name: "Prod - plan"
 on:
   pull_request:
     branches: [main]
@@ -46,7 +46,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const output = `### Prod 
+            const output = `### Terraform plan for prod
             #### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
             #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
             #### Terraform Validation 🤖${{ steps.validate.outputs.stdout }}
