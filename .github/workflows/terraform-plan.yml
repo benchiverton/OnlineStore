@@ -1,0 +1,113 @@
+name: ".NET Build and Terraform Plan"
+on:
+  pull_request:
+    branches: [main]
+
+env:
+
+jobs:
+  build-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.100
+      - name: Install dependencies
+        run: dotnet restore src/Api/Company.Api.sln
+      - name: Build
+        run: dotnet build src/Api/Company.Api.sln --configuration Release --no-restore
+      - name: Test
+        run: dotnet test src/Api/Company.Api.sln --no-restore --verbosity normal
+      - name: Publish
+        run: dotnet publish src/Api/Company.Api/Company.Api.csproj -c Release -o publish --runtime linux-x64 --self-contained false
+
+  build-web:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.100
+      - name: Install dependencies
+        run: dotnet restore src/Web/Company.Website.sln
+      - name: Build
+        run: dotnet build src/Web/Company.Website.sln --configuration Release --no-restore
+      - name: Test
+        run: dotnet test src/Web/Company.Website.sln --no-restore --verbosity normal
+      - name: Publish
+        run: dotnet publish src/Web/Company.Website/Company.Website.csproj -c Release -o publish --runtime linux-x64 --self-contained false
+
+  plan-terraform-test:
+    environment: test
+    env:
+      ARM_CLIENT_ID: ${{ secrets.TF_VAR_AGENT_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.TF_VAR_AGENT_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.TF_VAR_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.TF_VAR_TENANT_ID }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "./terraform"
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_wrapper: false
+
+      - name: "Terraform Format"
+        id: fmt
+        run: terraform fmt
+
+      - name: "Terraform Init"
+        id: init
+        run: terraform init -backend-config="container_name=onlinestoretfstatestoragetest"
+
+      - name: "Terraform Validate"
+        id: validate
+        run: terraform validate -no-color
+
+      - name: "Terraform Plan"
+        id: plan
+        run: terraform plan -no-color
+        env:
+          ARM_CLIENT_ID: ${{ secrets.TF_VAR_agent_client_id }}
+          ARM_CLIENT_SECRET: ${{ secrets.TF_VAR_agent_client_secret }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.TF_VAR_subscription_id }}
+          ARM_TENANT_ID: ${{ secrets.TF_VAR_tenant_id }}
+          TF_VAR_location: "East US"
+          TF_VAR_environment: test
+
+      - uses: actions/github-script@0.9.0
+        if: github.event_name == 'pull_request'
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Validation 🤖${{ steps.validate.outputs.stdout }}
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
+            <details><summary>Show Plan</summary>
+
+            \`\`\`${process.env.PLAN}\`\`\`
+
+            </details>
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+              
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
