@@ -59,7 +59,7 @@ jobs:
           path: terraform/application-name-test-website.txt
 
   deploy-app-test:
-    needs: [build-api, build-website, deploy-terraform-test]
+    needs: [deploy-terraform-test]
     environment: test
     runs-on: ubuntu-latest
     steps:

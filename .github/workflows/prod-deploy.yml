@@ -1,11 +1,10 @@
-name: "Build applications, deploy Terraform and applications into prod"
+name: "Deploy Terraform and applications into prod"
 on:
   push:
     branches: [main]
 
 jobs:
   deploy-terraform-prod:
-    needs: [build-api, build-website]
     environment: prod
     env:
       ARM_CLIENT_ID: ${{ secrets.TF_VAR_AGENT_CLIENT_ID }}
