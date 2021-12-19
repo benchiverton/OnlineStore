@@ -1,0 +1,101 @@
+name: "Deploy Terraform and applications into test"
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-terraform-test:
+    environment: test
+    env:
+      ARM_CLIENT_ID: ${{ secrets.TF_VAR_AGENT_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.TF_VAR_AGENT_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.TF_VAR_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.TF_VAR_TENANT_ID }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "./terraform"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_wrapper: false
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt
+      - name: Terraform Init
+        id: init
+        run: terraform init -backend-config="container_name=onlinestoretfstate-test"
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color
+        env:
+          TF_VAR_location: "East US"
+          TF_VAR_environment: test
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply -auto-approve
+        env:
+          TF_VAR_location: "East US"
+          TF_VAR_environment: test
+      - name: Set Application Names
+        shell: bash
+        run: |
+          terraform output -raw app_service_name_api > application-name-test-api.txt
+          terraform output -raw app_service_name_website > application-name-test-website.txt
+      - name: Upload API application name for deploy job
+        uses: actions/upload-artifact@v2
+        with:
+          name: application-name-test
+          path: terraform/application-name-test-api.txt
+      - name: Upload website application name for deploy job
+        uses: actions/upload-artifact@v2
+        with:
+          name: application-name-test
+          path: terraform/application-name-test-website.txt
+
+  deploy-app-test:
+    needs: [build-api, build-website, deploy-terraform-test]
+    environment: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Download application name
+        uses: actions/download-artifact@v2
+        with:
+          name: application-name-test
+      - name: Load application names
+        id: vars
+        shell: bash
+        run: |
+          echo ::set-output name=azure_webapp_name_api::$(cat application-name-test-api.txt)
+          echo ::set-output name=azure_webapp_name_website::$(cat application-name-test-website.txt)
+      - name: Download API package
+        uses: actions/download-artifact@v2
+        with:
+          name: api
+          path: ${{ github.workspace }}/api
+      - name: Download website package
+        uses: actions/download-artifact@v2
+        with:
+          name: website
+          path: ${{ github.workspace }}/website
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Run Azure webapp deploy for API
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ steps.vars.outputs.azure_webapp_name_api }}
+          package: ${{ github.workspace }}/api
+      - name: Run Azure webapp deploy for website
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ steps.vars.outputs.azure_webapp_name_website }}
+          package: ${{ github.workspace }}/website
