@@ -1,4 +1,4 @@
-name: "Deploy Terraform and applications into test"
+name: "Test - deploy"
 on:
   workflow_dispatch:
 

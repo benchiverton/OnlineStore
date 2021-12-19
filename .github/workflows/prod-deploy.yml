@@ -1,4 +1,4 @@
-name: "Deploy Terraform and applications into prod"
+name: "Prod - deploy"
 on:
   push:
     branches: [main]
