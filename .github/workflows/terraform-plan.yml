@@ -97,7 +97,7 @@ jobs:
 
             <details><summary>Show Plan</summary>
 
-            \`\`\`${env.PLAN}\`\`\`
+            \`\`\`${{ process.env.PLAN }}\`\`\`
 
             </details>
 
