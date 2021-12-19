@@ -57,8 +57,6 @@ jobs:
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_wrapper: false
 
       - name: "Terraform Format"
         id: fmt
@@ -85,6 +83,8 @@ jobs:
 
       - uses: actions/github-script@0.9.0
         if: github.event_name == 'pull_request'
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -95,9 +95,7 @@ jobs:
 
             <details><summary>Show Plan</summary>
 
-            \`\`\`
-            ${{ steps.plan.outputs.stout }}
-            \`\`\`
+            \`\`\`${process.env.PLAN}\`\`\`
 
             </details>
 
