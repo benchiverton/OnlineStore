@@ -24,8 +24,8 @@ jobs:
       - name: Publish artifact
         uses: actions/upload-artifact@v2
         with:
-          name: api
-          path: publish/api-${{ github.head_ref }}
+          name: api-${{ github.head_ref }}
+          path: publish/api
 
   build-website:
     runs-on: ubuntu-latest
@@ -47,5 +47,5 @@ jobs:
       - name: Publish artifact
         uses: actions/upload-artifact@v2
         with:
-          name: website
-          path: publish/website-${{ github.head_ref }}
+          name: website-${{ github.head_ref }}
+          path: publish/website
