@@ -8,7 +8,7 @@ env:
 
 jobs:
   build-api:
-    uses: benchiverton/OnlineStore/.github/workflows/build-and-publish-dotnet.yml@main
+    uses: benchiverton/OnlineStore/.github/workflows/build-test-publish-dotnet.yml@main
     with:
       solution_file: "src/Api/Company.Api.sln"
       project_file: "src/Api/Company.Api/Company.Api.csproj"
@@ -16,7 +16,7 @@ jobs:
       artifact_name: ${{ env.API_ARTIFACT_LOCATION }}
 
   build-website:
-    uses: benchiverton/OnlineStore/.github/workflows/build-and-publish-dotnet.yml@main
+    uses: benchiverton/OnlineStore/.github/workflows/build-test-publish-dotnet.yml@main
     with:
       solution_file: "src/Website/Company.Website.sln"
       project_file: "src/Website/Company.Website/Company.Website.csproj"
@@ -24,7 +24,7 @@ jobs:
       artifact_name: ${{ env.WEBSITE_ARTIFACT_LOCATION }}
 
   deploy-terraform-test:
-    needs: [build-api, build-website ]
+    needs: [build-api, build-website]
     environment: test
     env:
       ARM_CLIENT_ID: ${{ secrets.TF_VAR_AGENT_CLIENT_ID }}
