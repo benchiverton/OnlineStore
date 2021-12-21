@@ -79,12 +79,12 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: api
-          path: ${{ github.workspace }}/api-${{ github.head_ref }}
+          path: ${{ github.workspace }}/api-${{ github.ref_name }}
       - name: Download website package
         uses: actions/download-artifact@v2
         with:
           name: website
-          path: ${{ github.workspace }}/website-${{ github.head_ref }}
+          path: ${{ github.workspace }}/website-${{ github.ref_name }}
       - name: Login via Azure CLI
         uses: azure/login@v1
         with:
