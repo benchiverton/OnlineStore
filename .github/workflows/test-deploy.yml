@@ -78,13 +78,13 @@ jobs:
       - name: Download API package
         uses: actions/download-artifact@v2
         with:
-          name: api-${{ github.ref_name }}
-          path: ${{ github.workspace }}/api
+          name: api
+          path: ${{ github.workspace }}/api-${{ github.ref_name }}
       - name: Download website package
         uses: actions/download-artifact@v2
         with:
-          name: website-${{ github.ref_name }}
-          path: ${{ github.workspace }}/website
+          name: website
+          path: ${{ github.workspace }}/website-${{ github.ref_name }}
       - name: Login via Azure CLI
         uses: azure/login@v1
         with:
@@ -93,9 +93,9 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ steps.vars.outputs.azure_webapp_name_api }}
-          package: ${{ github.workspace }}/api
+          package: ${{ github.workspace }}/api-${{ github.ref_name }}
       - name: Run Azure webapp deploy for website
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ steps.vars.outputs.azure_webapp_name_website }}
-          package: ${{ github.workspace }}/website
+          package: ${{ github.workspace }}/website-${{ github.ref_name }}
