@@ -2,10 +2,10 @@ resource "azurerm_app_service_plan" "default" {
   name                = "${var.name}-plan"
   location            = azurerm_resource_group.default.location
   resource_group_name = azurerm_resource_group.default.name
-  kind                = "Linux"
+  kind                = "Windows"
 
-  # Reserved must be set to true for Linux App Service Plans
-  reserved = true
+  # Reserved must be set to false for Windows App Service Plans
+  reserved = false
 
   sku {
     tier = var.plan_tier
