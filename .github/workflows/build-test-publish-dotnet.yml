@@ -31,10 +31,10 @@ jobs:
       - name: Test
         run: dotnet test ${{ inputs.solution_file }} --no-restore --verbosity normal
       - name: Publish
-        if: ${{ inputs.artifact_name != "" }}
+        if: ${{ inputs.artifact_name != null }}
         run: dotnet publish ${{ inputs.project_file }} -c Release -o publish/${{ inputs.artifact_name }} --runtime linux-x64 --self-contained
       - name: Publish artifact
-        if: ${{ inputs.artifact_name != "" }}
+        if: ${{ inputs.artifact_name != null }}
         uses: actions/upload-artifact@v2
         with:
           name: ${{ inputs.artifact_name }}
