@@ -1,27 +1,11 @@
-name: "Test - deploy"
+name: "Deploy - prod"
 on:
-  workflow_dispatch:
+  push:
+    branches: [main]
 
 jobs:
-  build-api:
-    uses: benchiverton/OnlineStore/.github/workflows/workflow-build-test-publish-dotnet.yml@main
-    with:
-      solution_file: "src/Api/Company.Api.sln"
-      project_file: "src/Api/Company.Api/Company.Api.csproj"
-      dotnet_version: 6.0.100
-      artifact_name: "api"
-
-  build-website:
-    uses: benchiverton/OnlineStore/.github/workflows/workflow-build-test-publish-dotnet.yml@main
-    with:
-      solution_file: "src/Website/Company.Website.sln"
-      project_file: "src/Website/Company.Website/Company.Website.csproj"
-      dotnet_version: 6.0.100
-      artifact_name: "website"
-
-  deploy-terraform-test:
-    needs: [build-api, build-website]
-    environment: test
+  deploy-terraform-prod:
+    environment: prod
     env:
       ARM_CLIENT_ID: ${{ secrets.TF_VAR_AGENT_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.TF_VAR_AGENT_CLIENT_SECRET }}
@@ -43,7 +27,7 @@ jobs:
         run: terraform fmt
       - name: Terraform Init
         id: init
-        run: terraform init -backend-config="container_name=onlinestoretfstate-test"
+        run: terraform init -backend-config="container_name=onlinestoretfstate-prod"
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
@@ -52,32 +36,27 @@ jobs:
         run: terraform plan -no-color
         env:
           TF_VAR_location: "East US"
-          TF_VAR_environment: test
+          TF_VAR_environment: prod
       - name: Terraform Apply
         id: apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve
         env:
-          TF_VAR_location: "East US"
-          TF_VAR_environment: test
-      - name: Set Application Names
+          TF_VAR_location: "North Europe"
+          TF_VAR_environment: prod
+      - name: Set Application Name
         shell: bash
         run: |
-          terraform output -raw app_service_name_api > application-name-test-api.txt
-          terraform output -raw app_service_name_website > application-name-test-website.txt
-      - name: Upload API application name for deploy job
+          terraform output -raw app_service_name > application-name-prod.txt
+      - name: Upload application name for deploy job
         uses: actions/upload-artifact@v2
         with:
-          name: application-name-test
-          path: terraform/application-name-test-api.txt
-      - name: Upload website application name for deploy job
-        uses: actions/upload-artifact@v2
-        with:
-          name: application-name-test
-          path: terraform/application-name-test-website.txt
+          name: application-name-prod
+          path: terraform/application-name-prod.txt
 
-  deploy-app-test:
-    needs: [deploy-terraform-test]
-    environment: test
+  app-deploy-prod:
+    needs: [deploy-terraform-prod]
+    environment: prod
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -85,18 +64,12 @@ jobs:
       - name: Download application name
         uses: actions/download-artifact@v2
         with:
-          name: application-name-test
-      - name: Load application names
+          name: application-name-prod
+      - name: Load application name
         id: vars
         shell: bash
         run: |
-          echo ::set-output name=azure_webapp_name_api::$(cat application-name-test-api.txt)
-          echo ::set-output name=azure_webapp_name_website::$(cat application-name-test-website.txt)
-      - name: Download API package
-        uses: actions/download-artifact@v2
-        with:
-          name: api
-          path: ${{ github.workspace }}/api
+          echo ::set-output name=azure_webapp_name::$(cat application-name-prod.txt)
       - name: Download website package
         uses: actions/download-artifact@v2
         with:

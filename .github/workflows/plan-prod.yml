@@ -1,4 +1,4 @@
-name: "Prod - plan"
+name: "Plan - prod"
 on:
   pull_request:
     branches: [main]
