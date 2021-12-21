@@ -25,7 +25,7 @@ resource "azurerm_app_service" "api" {
 
   site_config {
     # always_on = false
-    linux_fx_version          = "DOTNETCORE|6.0"
+    windows_fx_version        = "DOTNETCORE|6.0"
     use_32_bit_worker_process = true
   }
 
@@ -46,7 +46,7 @@ resource "azurerm_app_service" "website" {
 
   site_config {
     # always_on = false
-    linux_fx_version          = "DOTNETCORE|6.0"
+    windows_fx_version        = "DOTNETCORE|6.0"
     use_32_bit_worker_process = true
   }
 
