@@ -2,8 +2,29 @@ name: "Test - deploy"
 on:
   workflow_dispatch:
 
+env:
+  API_ARTIFACT_LOCATION: "api"
+  WEBSITE_ARTIFACT_LOCATION: "website"
+
 jobs:
+  build-api:
+    uses: benchiverton/OnlineStore/.github/workflows/build-and-publish-dotnet.yml@main
+    with:
+      solution_file: "src/Api/Company.Api.sln"
+      project_file: "src/Api/Company.Api/Company.Api.csproj"
+      dotnet_version: 6.0.100
+      artifact_name: ${{ env.API_ARTIFACT_LOCATION }}
+
+  build-website:
+    uses: benchiverton/OnlineStore/.github/workflows/build-and-publish-dotnet.yml@main
+    with:
+      solution_file: "src/Website/Company.Website.sln"
+      project_file: "src/Website/Company.Website/Company.Website.csproj"
+      dotnet_version: 6.0.100
+      artifact_name: ${{ env.WEBSITE_ARTIFACT_LOCATION }}
+
   deploy-terraform-test:
+    needs: [build-api, build-website]
     environment: test
     env:
       ARM_CLIENT_ID: ${{ secrets.TF_VAR_AGENT_CLIENT_ID }}
@@ -78,13 +99,13 @@ jobs:
       - name: Download API package
         uses: actions/download-artifact@v2
         with:
-          name: api-${{github.event.number}}
-          path: ${{ github.workspace }}/api
+          name: api
+          path: ${{ github.workspace }}/api-${{ github.ref_name }}
       - name: Download website package
         uses: actions/download-artifact@v2
         with:
-          name: website-${{github.event.number}}
-          path: ${{ github.workspace }}/website
+          name: website
+          path: ${{ github.workspace }}/${{ env.API_ARTIFACT_LOCATION }}
       - name: Login via Azure CLI
         uses: azure/login@v1
         with:
@@ -93,9 +114,9 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ steps.vars.outputs.azure_webapp_name_api }}
-          package: ${{ github.workspace }}/api
+          package: ${{ github.workspace }}/api-${{ github.ref_name }}
       - name: Run Azure webapp deploy for website
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ steps.vars.outputs.azure_webapp_name_website }}
-          package: ${{ github.workspace }}/website
+          package: ${{ github.workspace }}/${{ env.WEBSITE_ARTIFACT_LOCATION }}
