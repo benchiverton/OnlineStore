@@ -20,7 +20,7 @@ public class Startup
 
         services.AddSwaggerGen(c =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "OutboxPatternDemo Publisher", Version = "v1" });
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Online Store API", Version = "v1" });
         });
     }
 
@@ -33,7 +33,7 @@ public class Startup
         // specifying the Swagger JSON endpoint.
         app.UseSwaggerUI(c =>
         {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "OutboxPatternDemo Publisher v1");
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Online Store API v1");
         });
 
         if (env.IsDevelopment())
