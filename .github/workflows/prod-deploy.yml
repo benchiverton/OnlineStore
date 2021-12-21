@@ -35,7 +35,7 @@ jobs:
         id: plan
         run: terraform plan -no-color
         env:
-          TF_VAR_location: "North Europe"
+          TF_VAR_location: "East US"
           TF_VAR_environment: prod
       - name: Terraform Apply
         id: apply
