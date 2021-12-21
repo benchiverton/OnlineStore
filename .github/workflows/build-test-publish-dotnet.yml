@@ -1,0 +1,40 @@
+name: "Build, test and publish a dotnet app"
+on:
+  workflow_call:
+    inputs:
+      solution_file:
+        required: true
+        type: string
+      project_file:
+        required: true
+        type: string
+      dotnet_version:
+        required: true
+        type: string
+      artifact_name:
+        type: string
+
+jobs:
+  build-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: {{ $inputs.dotnet_version }}
+      - name: Install dependencies
+        run: dotnet restore ${{ solution_file }}
+      - name: Build
+        run: dotnet build ${{ solution_file }} --configuration Release --no-restore
+      - name: Test
+        run: dotnet test ${{ solution_file }} --no-restore --verbosity normal
+      - name: Publish
+        run: dotnet publish ${{ project_file }} -c Release -o publish/${{ artifact_name }} --runtime linux-x64 --self-contained
+      - name: Publish artifact
+        if: ${{ artifact_name != "" }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ artifact_name }}
+          path: publish/${{ artifact_name }}
