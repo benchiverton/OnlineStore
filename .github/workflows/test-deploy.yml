@@ -24,7 +24,7 @@ jobs:
       artifact_name: ${{ env.WEBSITE_ARTIFACT_LOCATION }}
 
   deploy-terraform-test:
-    needs: [build-api, build-website ]
+    needs: [build-api, build-website]
     environment: test
     env:
       ARM_CLIENT_ID: ${{ secrets.TF_VAR_AGENT_CLIENT_ID }}
