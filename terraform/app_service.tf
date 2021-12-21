@@ -24,9 +24,9 @@ resource "azurerm_app_service" "api" {
   }
 
   site_config {
-    # always_on = false
-    windows_fx_version        = "DOTNETCORE|6.0"
-    use_32_bit_worker_process = true
+    always_on = false // free tier
+    dotnet_framework_version  = "v6.0"
+    use_32_bit_worker_process = true // free tier
   }
 
   app_settings = {
@@ -45,9 +45,9 @@ resource "azurerm_app_service" "website" {
   }
 
   site_config {
-    # always_on = false
-    windows_fx_version        = "DOTNETCORE|6.0"
-    use_32_bit_worker_process = true
+    always_on = false // free tier
+    dotnet_framework_version  = "v6.0"
+    use_32_bit_worker_process = true // free tier
   }
 
   app_settings = {
