@@ -1,4 +1,4 @@
-name: "Workflow - Build, test and (optionally) publish a dotnet app"
+name: "Workflow - build, test and (optionally) publish a dotnet app"
 on:
   workflow_call:
     inputs:
