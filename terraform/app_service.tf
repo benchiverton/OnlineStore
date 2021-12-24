@@ -2,6 +2,7 @@ resource "azurerm_app_service_plan" "default" {
   name                = "${var.name}-plan"
   location            = azurerm_resource_group.default.location
   resource_group_name = azurerm_resource_group.default.name
+  os_type             = "Windows"
   kind                = "Windows"
 
   # Reserved must be set to false for Windows App Service Plans
