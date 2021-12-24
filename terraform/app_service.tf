@@ -7,6 +7,9 @@ resource "azurerm_app_service_plan" "default" {
   # Reserved must be set to false for Windows App Service Plans
   reserved = false
 
+  # Should the app service send session affinity cookies?
+  client_affinity_enabled = false
+
   sku {
     tier = var.plan_tier
     size = var.plan_sku
