@@ -10,6 +10,7 @@ jobs:
       project_file: "src/Api/Company.Api/Company.Api.csproj"
       dotnet_version: 6.0.100
       artifact_name: "api"
+      self_contained: true
 
   build-website:
     uses: benchiverton/OnlineStore/.github/workflows/workflow-build-test-publish-dotnet.yml@main
@@ -18,6 +19,7 @@ jobs:
       project_file: "src/Website/Company.Website/Company.Website.csproj"
       dotnet_version: 6.0.100
       artifact_name: "website"
+      self_contained: false
 
   deploy-terraform-test:
     needs: [build-api, build-website]

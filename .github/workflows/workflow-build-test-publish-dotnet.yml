@@ -11,11 +11,13 @@ on:
       dotnet_version:
         required: true
         type: string
+      self_contained:
+        type: boolean
       artifact_name:
         type: string
 
 jobs:
-  build-api:
+  build-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -29,12 +31,16 @@ jobs:
       - name: Build
         run: dotnet build ${{ inputs.solution_file }} --configuration Release --no-restore
       - name: Test
-        run: dotnet test ${{ inputs.solution_file }} --no-restore --verbosity normal
+        run: dotnet test ${{ inputs.solution_file }} --no-build --verbosity normal
+
+  publish:
+    needs: [build-test]
+    if: ${{ inputs.artifact_name != null }}
+    runs-on: ubuntu-latest
+    steps:
       - name: Publish
-        if: ${{ inputs.artifact_name != null }}
-        run: dotnet publish ${{ inputs.project_file }} -c Release -o publish/${{ inputs.artifact_name }} --runtime linux-x64 --self-contained
+        run: dotnet publish ${{ inputs.project_file }} --configuration --no-build Release --output publish/${{ inputs.artifact_name }} --self-contained ${{ inputs.self_contained }}
       - name: Publish artifact
-        if: ${{ inputs.artifact_name != null }}
         uses: actions/upload-artifact@v2
         with:
           name: ${{ inputs.artifact_name }}

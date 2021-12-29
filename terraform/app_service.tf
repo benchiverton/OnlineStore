@@ -2,10 +2,10 @@ resource "azurerm_app_service_plan" "default" {
   name                = "${var.name}-plan"
   location            = azurerm_resource_group.default.location
   resource_group_name = azurerm_resource_group.default.name
-  kind                = "Linux"
+  kind                = "Windows"
 
-  # Reserved must be set to true for Linux App Service Plans
-  reserved = true
+  # Reserved must be set to false for Windows App Service Plans
+  reserved = false
 
   sku {
     tier = var.plan_tier
@@ -24,9 +24,9 @@ resource "azurerm_app_service" "api" {
   }
 
   site_config {
-    # always_on = false
-    linux_fx_version          = "DOTNETCORE|6.0"
-    use_32_bit_worker_process = true
+    dotnet_framework_version  = "v6.0"
+    always_on = false // free tier
+    use_32_bit_worker_process = true // free tier
   }
 
   app_settings = {
@@ -40,14 +40,18 @@ resource "azurerm_app_service" "website" {
   resource_group_name = azurerm_resource_group.default.name
   app_service_plan_id = azurerm_app_service_plan.default.id
 
+  # Should the app service send session affinity cookies?
+  client_affinity_enabled = false
+
   identity {
     type = "SystemAssigned"
   }
 
   site_config {
-    # always_on = false
-    linux_fx_version          = "DOTNETCORE|6.0"
-    use_32_bit_worker_process = true
+    dotnet_framework_version  = "v6.0"
+    default_documents = [ "index.html" ]
+    always_on = false // free tier
+    use_32_bit_worker_process = true // free tier
   }
 
   app_settings = {
