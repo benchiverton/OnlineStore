@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Publish
-        run: dotnet publish ${{ inputs.project_file }} --configuration --no-build Release --output publish/${{ inputs.artifact_name }} --self-contained ${{ inputs.self_contained }}
+        run: dotnet publish ${{ inputs.project_file }} --configuration Release --no-build --output publish/${{ inputs.artifact_name }} --self-contained ${{ inputs.self_contained }}
       - name: Publish artifact
         uses: actions/upload-artifact@v2
         with:
