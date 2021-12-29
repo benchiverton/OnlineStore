@@ -34,7 +34,7 @@ jobs:
         run: dotnet test ${{ inputs.solution_file }} --no-build --verbosity normal
       - name: Publish
         if: ${{ inputs.artifact_name != null }}        
-        run: dotnet publish ${{ inputs.project_file }} --configuration --no-build --output publish/${{ inputs.artifact_name }} --self-contained ${{ inputs.self_contained }}
+        run: dotnet publish ${{ inputs.project_file }} --configuration Release --no-build --output publish/${{ inputs.artifact_name }} --self-contained ${{ inputs.self_contained }}
       - name: Publish artifact
         if: ${{ inputs.artifact_name != null }}
         uses: actions/upload-artifact@v2
