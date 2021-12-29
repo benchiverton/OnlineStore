@@ -25,6 +25,7 @@ resource "azurerm_app_service" "api" {
 
   site_config {
     dotnet_framework_version  = "v6.0"
+    default_documents = [ "index.html" ] // swagger
     always_on = false // free tier
     use_32_bit_worker_process = true // free tier
   }
