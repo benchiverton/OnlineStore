@@ -4,7 +4,26 @@ on:
     branches: [main]
 
 jobs:
+  build-api:
+    uses: benchiverton/OnlineStore/.github/workflows/workflow-build-test-publish-dotnet.yml@main
+    with:
+      solution_file: "src/Api/Company.Api.sln"
+      project_file: "src/Api/Company.Api/Company.Api.csproj"
+      dotnet_version: 6.0.100
+      artifact_name: "api"
+      self_contained: false
+
+  build-website:
+    uses: benchiverton/OnlineStore/.github/workflows/workflow-build-test-publish-dotnet.yml@main
+    with:
+      solution_file: "src/Website/Company.Website.sln"
+      project_file: "src/Website/Company.Website/Company.Website.csproj"
+      dotnet_version: 6.0.100
+      artifact_name: "website"
+      self_contained: true
+
   deploy-terraform-prod:
+    needs: [build-api, build-website]
     environment: prod
     env:
       ARM_CLIENT_ID: ${{ secrets.TF_VAR_AGENT_CLIENT_ID }}
@@ -39,22 +58,27 @@ jobs:
           TF_VAR_environment: prod
       - name: Terraform Apply
         id: apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve
         env:
-          TF_VAR_location: "North Europe"
+          TF_VAR_location: "East US"
           TF_VAR_environment: prod
-      - name: Set Application Name
+      - name: Set Application Names
         shell: bash
         run: |
-          terraform output -raw app_service_name > application-name-prod.txt
-      - name: Upload application name for deploy job
+          terraform output -raw app_service_name_api > application-name-prod-api.txt
+          terraform output -raw app_service_name_website > application-name-prod-website.txt
+      - name: Upload API application name for deploy job
         uses: actions/upload-artifact@v2
         with:
           name: application-name-prod
-          path: terraform/application-name-prod.txt
+          path: terraform/application-name-prod-api.txt
+      - name: Upload website application name for deploy job
+        uses: actions/upload-artifact@v2
+        with:
+          name: application-name-prod
+          path: terraform/application-name-prod-website.txt
 
-  app-deploy-prod:
+  deploy-app-prod:
     needs: [deploy-terraform-prod]
     environment: prod
     runs-on: ubuntu-latest
@@ -65,11 +89,17 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: application-name-prod
-      - name: Load application name
+      - name: Load application names
         id: vars
         shell: bash
         run: |
-          echo ::set-output name=azure_webapp_name::$(cat application-name-prod.txt)
+          echo ::set-output name=azure_webapp_name_api::$(cat application-name-prod-api.txt)
+          echo ::set-output name=azure_webapp_name_website::$(cat application-name-prod-website.txt)
+      - name: Download API package
+        uses: actions/download-artifact@v2
+        with:
+          name: api
+          path: ${{ github.workspace }}/api
       - name: Download website package
         uses: actions/download-artifact@v2
         with:
