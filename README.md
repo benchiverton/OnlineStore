@@ -17,7 +17,7 @@ This app is deployed via GitHub Actions using Terraform into Azure.
 
 ### GitHub runner
 
-The GitHub runner needs to connect to Azure Storage (Terraform state file) and other services (app deployment) to execute this repositories Actions. Sensitive connection properties are stored in the repository secrets.
+The GitHub runner needs to connect to Azure Storage (Terraform state file) and other Azure services (app deployment) to execute this repositories Actions. Sensitive connection properties are stored in the repository secrets.
 
 #### Creating the service principal
 
