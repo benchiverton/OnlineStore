@@ -32,7 +32,7 @@ The GitHub runner needs to connect to Azure Storage (Terraform state file) and o
 For more information, read ['Azure Provider: Authenticating using a Service Principal with a Client Secret'](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_client_secret).
 
 #### Repository secrets
-
+aa
 `az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/SUBSCRIPTION_ID"`
 
 | Name                         | Description                                               | Example value                                 |
