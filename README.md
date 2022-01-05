@@ -6,6 +6,7 @@ Blazor WebAssembly website backed by a RESTful API for a generic online store.
 ![Deploy - prod](https://github.com/benchiverton/OnlineStore/actions/workflows/deploy-prod.yml/badge.svg)
 
 This app is deployed via GitHub Actions using Terraform into Azure.
+aa
 
 ### Local terraform environment
 1. Install terraform CLI (https://learn.hashicorp.com/tutorials/terraform/install-cli).
