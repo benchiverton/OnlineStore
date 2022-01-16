@@ -23,5 +23,7 @@ jobs:
         uses: hashicorp/setup-terraform@v1
         with:
           terraform_wrapper: false
+      - name: Terraform Init
+        run: terraform init -backend-config="container_name=onlinestoretfstate-test"
       - name: Terraform Destroy
         run: terraform destroy -target "azurerm_resource_group.${{ github.head_ref }}"
