@@ -46,7 +46,7 @@ jobs:
         run: terraform fmt
       - name: Terraform Init
         id: init
-        run: terraform init -backend-config="container_name=onlinestoretfstate-test"
+        run: terraform init -backend-config="container_name=onlinestoretfstate-test" -backend-config="key=terraform.tfstate.${{ github.head_ref }}"
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
