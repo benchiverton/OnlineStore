@@ -1,6 +1,7 @@
 name: "Deploy - test"
 on:
-  workflow_dispatch:
+  pull_request:
+    branches: [main]
 
 jobs:
   build-api:
@@ -54,13 +55,13 @@ jobs:
         run: terraform plan -no-color
         env:
           TF_VAR_location: "East US"
-          TF_VAR_environment: test
+          TF_VAR_environment: ${{ github.head_ref }}
       - name: Terraform Apply
         id: apply
         run: terraform apply -auto-approve
         env:
           TF_VAR_location: "East US"
-          TF_VAR_environment: test
+          TF_VAR_environment: ${{ github.head_ref }}
       - name: Set Application Names
         shell: bash
         run: |
