@@ -1,0 +1,25 @@
+name: "Destroy - test"
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  destroy-terraform-test:
+    environment: test
+    env:
+      ARM_CLIENT_ID: ${{ secrets.TF_VAR_AGENT_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.TF_VAR_AGENT_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.TF_VAR_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.TF_VAR_TENANT_ID }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "./terraform"
+    steps:
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_wrapper: false
+      - name: Terraform Destroy
+        run: terraform destroy -backend-config="container_name=onlinestoretfstate-test"

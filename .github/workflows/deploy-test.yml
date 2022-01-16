@@ -111,11 +111,33 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Run Azure webapp deploy for API
         uses: azure/webapps-deploy@v2
+        id: apideploy
         with:
           app-name: ${{ steps.vars.outputs.azure_webapp_name_api }}
           package: ${{ github.workspace }}/api
       - name: Run Azure webapp deploy for website
         uses: azure/webapps-deploy@v2
+        id: websitedeploy
         with:
           app-name: ${{ steps.vars.outputs.azure_webapp_name_website }}
           package: ${{ github.workspace }}/website
+      - name: Post test environment information on PR
+        uses: actions/github-script@0.9.0
+        if: github.event_name == 'pull_request'
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `### Test environment information
+            #### Website url 🔗\`${{ steps.apideploy.outcome }}\`
+            #### API url 🔗\`${{ steps.websitedeploy.outcome }}\`
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
