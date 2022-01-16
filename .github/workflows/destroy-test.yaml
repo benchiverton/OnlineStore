@@ -25,5 +25,9 @@ jobs:
           terraform_wrapper: false
       - name: Terraform Init
         run: terraform init -backend-config="container_name=onlinestoretfstate-test"
+      - name: Terraform List
+        run: terraform state list
       - name: Terraform Destroy
-        run: terraform destroy -target "azurerm_resource_group.${{ github.head_ref }}"
+        run: terraform destroy -target "azurerm_resource_group.default.${{ github.head_ref }}"
+      - name: Terraform List #2
+        run: terraform state list
