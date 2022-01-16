@@ -24,4 +24,4 @@ jobs:
         with:
           terraform_wrapper: false
       - name: Terraform Destroy
-        run: terraform destroy -backend-config="container_name=onlinestoretfstate-test"
+        run: terraform destroy -target "azurerm_resource_group.${{ github.head_ref }}"
