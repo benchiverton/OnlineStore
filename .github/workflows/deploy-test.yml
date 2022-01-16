@@ -130,8 +130,8 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const output = `### Test environment information
-            #### Website url 🔗\`${{ steps.apideploy.outcome }}\`
-            #### API url 🔗\`${{ steps.websitedeploy.outcome }}\`
+            #### 🔗[Visit website](http://os-onlinestore-${{ github.head_ref }}-website.azurewebsites.net/)
+            #### 🔗[Visit API](https://os-onlinestore-${{ github.head_ref }}-api.azurewebsites.net/swagger/)
 
             *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
 
