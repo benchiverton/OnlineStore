@@ -105,6 +105,8 @@ jobs:
         with:
           name: website
           path: ${{ github.workspace }}/website
+      - name: Update website config
+        run: echo "`jq '.Api.BasePath="https://os-onlinestore-prod-api.azurewebsites.net"' ${{ github.workspace }}/website/wwwroot/appsettings.json`" > ${{ github.workspace }}/website/wwwroot/appsettings.json
       - name: Login via Azure CLI
         uses: azure/login@v1
         with:

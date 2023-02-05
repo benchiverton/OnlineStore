@@ -18,6 +18,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{C4ACE61F-A609-4C53-9389-F8CBF05D8CB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Company.Contract", "Shared\Company.Contract\Company.Contract.csproj", "{C5C54A48-2E4F-4B16-A587-8C5092A1E9E9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +40,10 @@ Global
 		{C5187474-7423-49D5-88B9-478ADEB5452F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5187474-7423-49D5-88B9-478ADEB5452F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5187474-7423-49D5-88B9-478ADEB5452F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5C54A48-2E4F-4B16-A587-8C5092A1E9E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5C54A48-2E4F-4B16-A587-8C5092A1E9E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5C54A48-2E4F-4B16-A587-8C5092A1E9E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5C54A48-2E4F-4B16-A587-8C5092A1E9E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +52,7 @@ Global
 		{2D98EB2F-83C5-4EB3-A4E3-43DF7C2FDD69} = {6EE7F10D-A332-4297-8B5D-64BE03F9DF05}
 		{7B1CA70B-7FE8-467F-B949-4C57F2CC5C60} = {B6430E59-3930-4FF5-85FC-78ECF95E94AA}
 		{C5187474-7423-49D5-88B9-478ADEB5452F} = {B6430E59-3930-4FF5-85FC-78ECF95E94AA}
+		{C5C54A48-2E4F-4B16-A587-8C5092A1E9E9} = {C4ACE61F-A609-4C53-9389-F8CBF05D8CB9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7540E67A-1D0A-4BD1-B87F-401EB4FDCB0B}

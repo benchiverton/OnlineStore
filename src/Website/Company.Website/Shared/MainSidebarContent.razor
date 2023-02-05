@@ -10,12 +10,12 @@
     <SidebarNavigation>
         <SidebarItem>
             <SidebarLink To="" Title="Home">
-                <Icon Name="IconName.Home" Margin="Margin.Is3.FromRight" />Home
+                <Icon Name="IconName.Home" Margin="Margin.Is3.FromEnd" />Home
             </SidebarLink>
         </SidebarItem>
         <SidebarItem>
             <SidebarLink Toggled="(isOpen)=> productsSubItems.Toggle(isOpen)" IsShow="true">
-                <Icon Name="IconName.Heart" Margin="Margin.Is3.FromRight" />Products
+                <Icon Name="IconName.Heart" Margin="Margin.Is3.FromEnd" />Products
             </SidebarLink>
             <SidebarSubItem @ref="productsSubItems" IsShow="true">
                 @if (productLinkAndNames != null)
@@ -31,7 +31,7 @@
         </SidebarItem>
         <SidebarItem>
             <SidebarLink To="cart" Title="My Cart">
-                <Icon Name="IconName.ShoppingCart" Margin="Margin.Is3.FromRight" />My Cart
+                <Icon Name="IconName.ShoppingCart" Margin="Margin.Is3.FromEnd" />My Cart
             </SidebarLink>
         </SidebarItem>
     </SidebarNavigation>

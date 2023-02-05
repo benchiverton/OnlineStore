@@ -1,8 +1,10 @@
 @inject ProductInformationService ProductInformationService
 
-<Tooltip Text="@_productInformation.Description1">
-    <a href="products/@ProductId">@_productInformation.Name</a>
-</Tooltip>
+@if (_productInformation != null)
+{
+    <h2>@_productInformation.Name</h2>
+    <Divider />
+}
 
 @code {
     [Parameter]

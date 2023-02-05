@@ -12,6 +12,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Company.Website", "Company.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Company.Website.Components", "Company.Website.Components\Company.Website.Components.csproj", "{7D9AE625-BE80-4933-A70A-9C3AF715FBD1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{ABD2017F-ABE5-48D9-A482-56A266F936DC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Company.Contract", "..\Shared\Company.Contract\Company.Contract.csproj", "{BEE9318E-4BD0-4721-947A-97A6AAD15DC5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,9 +30,16 @@ Global
 		{7D9AE625-BE80-4933-A70A-9C3AF715FBD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D9AE625-BE80-4933-A70A-9C3AF715FBD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D9AE625-BE80-4933-A70A-9C3AF715FBD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEE9318E-4BD0-4721-947A-97A6AAD15DC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEE9318E-4BD0-4721-947A-97A6AAD15DC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEE9318E-4BD0-4721-947A-97A6AAD15DC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEE9318E-4BD0-4721-947A-97A6AAD15DC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BEE9318E-4BD0-4721-947A-97A6AAD15DC5} = {ABD2017F-ABE5-48D9-A482-56A266F936DC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7540E67A-1D0A-4BD1-B87F-401EB4FDCB0B}

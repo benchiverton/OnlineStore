@@ -16,6 +16,15 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+        // allow any traffic for now
+        services.AddCors(policy =>
+        {
+            policy.AddPolicy("CorsPolicy", opt => opt
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod());
+        });
+
         services.AddControllers();
 
         services.AddSwaggerGen(c =>
@@ -42,6 +51,8 @@ public class Startup
         }
 
         app.UseHttpsRedirection();
+
+        app.UseCors("CorsPolicy");
 
         app.UseRouting();
 
