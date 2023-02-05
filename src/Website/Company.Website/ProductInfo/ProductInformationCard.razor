@@ -1,12 +1,14 @@
 @inject ProductInformationService ProductInformationService
 
-<HoverCard
-    BackgroundImageLocation="@ProductInformation.Images.FirstOrDefault()"
-    Title="@ProductInformation.Name"
-    Description1="@ProductInformation.Description1"
-    Description2="@ProductInformation.Description2"
-    PageLocation="@($"products/{ProductId}")">
-</HoverCard>
+@if (ProductInformation != null)
+{
+    <HoverCard BackgroundImageLocation="@ProductInformation.Images.FirstOrDefault()"
+           Title="@ProductInformation.Name"
+           Description1="@ProductInformation.Description1"
+           Description2="@ProductInformation.Description2"
+           PageLocation="@($"products/{ProductId}")">
+    </HoverCard>
+}
 
 @code {
     [Parameter]

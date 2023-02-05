@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Company.Website.Pricing;
 
@@ -9,9 +8,6 @@ public class CurrencyService
         {
             { "GBP", "£" }
         };
-
-    // TODO
-    public async Task<decimal> ConvertCurrency(string currencyCode, decimal amount) => amount;
 
     public string GetCurrencyCharacter(string currencyCode) => _currencySymbols[currencyCode];
 }

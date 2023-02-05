@@ -1,7 +1,12 @@
 @inject ProductInformationService ProductInformationService
 
-<h2>@_productInformation.Name</h2>
-<Divider />
+<br />
+
+@if (_productInformation != null)
+{
+    <Heading Size="HeadingSize.Is6">@_productInformation.Description1</Heading>
+    <Paragraph>@_productInformation.Description2</Paragraph>
+}
 
 @code {
     [Parameter]

@@ -12,7 +12,7 @@
 
 @code {
     [Parameter]
-    public List<(string, int, int)> ProductVariantIdAndQuantities { get; set; }
+    public List<(string productId, int productVarientId, int quantity)> ProductVariantIdAndQuantities { get; set; }
     [Parameter]
     public string CurrencyCode { get; set; }
 
@@ -33,9 +33,9 @@
         DealTotalPrice = 0m;
         foreach (var productVariantIdAndQuantity in ProductVariantIdAndQuantities)
         {
-            var pricing = await PricingService.GetPricingByProductTypeId(productVariantIdAndQuantity.Item1, productVariantIdAndQuantity.Item2);
-            FullTotalPrice += pricing.ListPriceGBP * productVariantIdAndQuantity.Item3;
-            DealTotalPrice += pricing.DealPriceGBP * productVariantIdAndQuantity.Item3;
+            var price = await PricingService.GetPriceByProductTypeId(productVariantIdAndQuantity.productVarientId);
+            FullTotalPrice += price.FullPriceGBP * productVariantIdAndQuantity.quantity;
+            DealTotalPrice += price.DealPriceGBP * productVariantIdAndQuantity.Item3;
         }
     }
 

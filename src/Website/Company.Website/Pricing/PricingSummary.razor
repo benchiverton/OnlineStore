@@ -1,7 +1,10 @@
 @inject PricingService PricingService
 @inject CurrencyService CurrencyService
 
-<h5>@GetFormattedAmount(DealPrice)</h5>
+@if(Price != null)
+{
+    <h5>@GetFormattedAmount(Price.DealPriceGBP)</h5>
+}
 
 @code {
     [Parameter]
@@ -12,15 +15,13 @@
     public string CurrencyCode { get; set; }
 
     private string CurrencySymbol { get; set; }
-    private Pricing Pricing { get; set; }
-    public decimal DealPrice { get; set; }
+    private Price Price { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
         CurrencySymbol = CurrencyService.GetCurrencyCharacter(CurrencyCode);
 
-        Pricing = await PricingService.GetPricingByProductTypeId(ProductId, ProductVariantId);
-        DealPrice = await CurrencyService.ConvertCurrency(CurrencyCode, Pricing.DealPriceGBP);
+        Price = await PricingService.GetPriceByProductTypeId(ProductVariantId);
     }
 
     private string GetFormattedAmount(decimal amount) => $"{CurrencySymbol}{amount:0.00} {CurrencyCode}";

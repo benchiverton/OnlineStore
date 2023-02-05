@@ -8,11 +8,12 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Company.Website.Cart;
 using Company.Website.Pricing;
-using Company.Website.Product;
-using Company.Website.ProductInformation;
+using Company.Website.Products;
+using Company.Website.ProductInfo;
 using Company.Website.ProductVariants;
 using Serilog;
 using Company.Website;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("app");
@@ -30,9 +31,10 @@ builder.Services
   .AddFontAwesomeIcons();
 
 // services
-builder.Services.AddTransient<ProductService>();
-builder.Services.AddTransient<ProductInformationService>();
-builder.Services.AddTransient<PricingService>();
+var apiBaseAddress = builder.Configuration.GetValue<string>("Api:BasePath");
+builder.Services.AddHttpClient<ProductService>(client => client.BaseAddress = new Uri(apiBaseAddress));
+builder.Services.AddHttpClient<ProductInformationService>(client => client.BaseAddress = new Uri(apiBaseAddress));
+builder.Services.AddHttpClient<PricingService>(client => client.BaseAddress = new Uri(apiBaseAddress));
 builder.Services.AddTransient<CurrencyService>();
 builder.Services.AddTransient<ProductVariantsService>();
 builder.Services.AddScoped<CartService>();
