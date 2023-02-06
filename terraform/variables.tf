@@ -22,12 +22,6 @@ variable "dns_prefix" {
   default     = "os"
 }
 
-variable "plan_tier" {
-  type        = string
-  description = "The tier of app service plan to create"
-  default     = "Free"
-}
-
 variable "plan_sku" {
   type        = string
   description = "The sku of app service plan to create"
