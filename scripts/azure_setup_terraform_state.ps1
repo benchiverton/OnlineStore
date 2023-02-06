@@ -2,7 +2,7 @@
 
 $RESOURCE_GROUP_NAME = "onlinestoretfstate"
 $STORAGE_ACCOUNT_NAME = "onlinestoretfstate"
-$CONTAINER_NAME = "onlinestoretfstate-ENV" # update ENV to local/test/prod
+$CONTAINER_NAME = "onlinestoretfstate-local" # update ENV to local/test/prod
 
 # Create resource group
 az group create --name $RESOURCE_GROUP_NAME --location eastus --subscription "Online Store"
