@@ -1,10 +1,10 @@
-# resource "azurerm_service_plan" "linux" {
-#   name                = "${var.name}-plan-linux"
-#   resource_group_name = azurerm_resource_group.default.name
-#   location            = azurerm_resource_group.default.location
-#   os_type             = "Linux"
-#   sku_name            = var.plan_sku
-# }
+resource "azurerm_service_plan" "linux" {
+  name                = "${var.name}-plan-linux"
+  resource_group_name = azurerm_resource_group.default.name
+  location            = azurerm_resource_group.default.location
+  os_type             = "Linux"
+  sku_name            = var.plan_sku
+}
 
 # resource "azurerm_linux_web_app" "jaeger" {
 #   name                = "${var.dns_prefix}-${var.name}-${var.environment}-jaeger"
