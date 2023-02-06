@@ -31,7 +31,7 @@ resource "azurerm_container_group" "jaeger" {
   image_registry_credential {
     username = var.dockerhub_username
     password = var.dockerhub_password
-    server   = "https://index.docker.io/v1"
+    server   = "index.docker.io"
   }
 
   tags = {
