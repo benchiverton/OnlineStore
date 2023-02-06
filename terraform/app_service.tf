@@ -78,7 +78,7 @@ resource "azurerm_app_service" "jaeger" {
   name                = "${var.dns_prefix}-${var.name}-${var.environment}-jaeger"
   location            = azurerm_resource_group.default.location
   resource_group_name = azurerm_resource_group.default.name
-  app_service_plan_id = azurerm_app_service_plan.windows.id
+  app_service_plan_id = azurerm_app_service_plan.linux.id
 
   client_affinity_enabled = false
 
