@@ -17,9 +17,12 @@ resource "azurerm_windows_web_app" "api" {
   }
 
   site_config {
-    dotnet_version  = "v6.0"
-    default_documents         = ["index.html"] // swagger
-    always_on                 = false          // free tier
+    default_documents = ["index.html"] // swagger
+    always_on         = false          // free tier
+    application_stack {
+      current_stack  = "dotnet"
+      dotnet_version = "v6.0"
+    }
   }
 
   app_settings = {
@@ -41,9 +44,12 @@ resource "azurerm_windows_web_app" "website" {
   }
 
   site_config {
-    dotnet_version  = "v6.0"
-    default_documents         = ["index.html"]
-    always_on                 = false // free tier
+    default_documents = ["index.html"]
+    always_on         = false // free tier
+    application_stack {
+      current_stack  = "dotnet"
+      dotnet_version = "v6.0"
+    }
   }
 
   app_settings = {
