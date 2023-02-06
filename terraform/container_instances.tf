@@ -7,7 +7,7 @@ resource "azurerm_container_group" "jaeger" {
 
   container {
     name   = "hello-world"
-    image  = "registry.hub.docker.com/library/jaegertracing/all-in-one:1.42"
+    image  = "docker.io/jaegertracing/all-in-one:1.42"
     cpu    = "0.5"
     memory = "1.5"
 
