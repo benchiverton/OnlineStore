@@ -19,8 +19,7 @@ resource "azurerm_app_service_plan" "linux" {
   resource_group_name = azurerm_resource_group.default.name
   kind                = "Linux"
 
-  # Reserved must be set to false for Windows App Service Plans
-  reserved = false
+  reserved = true
 
   sku {
     tier = var.plan_tier
