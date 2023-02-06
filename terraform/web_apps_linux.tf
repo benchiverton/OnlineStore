@@ -25,6 +25,7 @@ resource "azurerm_linux_web_app" "jaeger" {
   }
 
   app_settings = {
+    "WEBSITES_PORT"              = "16686"
     "COLLECTOR_OTLP_ENABLED"     = "true",
     "COLLECTOR_ZIPKIN_HOST_PORT" = ":9411"
   }
