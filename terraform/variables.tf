@@ -27,3 +27,15 @@ variable "plan_sku" {
   description = "The sku of app service plan to create"
   default     = "F1"
 }
+
+variable "dockerhub_username" {
+  type        = string
+  description = "Username to authenticate with dockerhub"
+  sensitive   = true
+}
+
+variable "dockerhub_password" {
+  type        = string
+  description = "Password to authenticate with dockerhub"
+  sensitive   = true
+}
