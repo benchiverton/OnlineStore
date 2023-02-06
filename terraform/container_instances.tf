@@ -6,8 +6,8 @@ resource "azurerm_container_group" "jaeger" {
   os_type             = "Linux"
 
   container {
-    name   = "hello-world"
-    image  = "docker.io/jaegertracing/all-in-one:1.42"
+    name   = "jaegertracing-all-in-one"
+    image  = "jaegertracing/all-in-one:1.42"
     cpu    = "0.5"
     memory = "1.5"
 
