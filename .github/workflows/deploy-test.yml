@@ -56,16 +56,12 @@ jobs:
         env:
           TF_VAR_location: "East US"
           TF_VAR_environment: ${{ github.head_ref }}
-          TF_VAR_dockerhub_username: ${{ secrets.TF_VAR_DOCKERHUB_USERNAME }}
-          TF_VAR_dockerhub_password: ${{ secrets.TF_VAR_DOCKERHUB_PASSWORD }}
       - name: Terraform Apply
         id: apply
         run: terraform apply -auto-approve
         env:
           TF_VAR_location: "East US"
           TF_VAR_environment: ${{ github.head_ref }}
-          TF_VAR_dockerhub_username: ${{ secrets.TF_VAR_DOCKERHUB_USERNAME }}
-          TF_VAR_dockerhub_password: ${{ secrets.TF_VAR_DOCKERHUB_PASSWORD }}
       - name: Set Application Names
         shell: bash
         run: |
