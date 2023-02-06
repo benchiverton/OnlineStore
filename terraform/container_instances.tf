@@ -1,0 +1,36 @@
+resource "azurerm_container_group" "jaeger" {
+  name                = "${var.name}-containergroup-jaeger"
+  resource_group_name = azurerm_resource_group.default.name
+  location            = azurerm_resource_group.default.location
+  ip_address_type     = "Public"
+  os_type             = "Linux"
+
+  container {
+    name   = "hello-world"
+    image  = "registry.hub.docker.com/library/jaegertracing/all-in-one:1.42"
+    cpu    = "0.5"
+    memory = "1.5"
+
+    ports = [
+      {
+        # front end
+        port     = 16686
+        protocol = "TCP"
+      },
+      {
+        # OTLP over HTTP
+        port     = 4317
+        protocol = "TCP"
+      }
+    ]
+
+    environment_variables {
+      COLLECTOR_ZIPKIN_HOST_PORT = ":9411"
+      COLLECTOR_OTLP_ENABLED     = "true"
+    }
+  }
+
+  tags = {
+    environment = var.environment
+  }
+}
