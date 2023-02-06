@@ -11,18 +11,16 @@ resource "azurerm_container_group" "jaeger" {
     cpu    = "0.5"
     memory = "1.5"
 
-    ports = [
-      {
-        # front end
-        port     = 16686
-        protocol = "TCP"
-      },
-      {
-        # OTLP over HTTP
-        port     = 4317
-        protocol = "TCP"
-      }
-    ]
+    # serve frontend
+    ports {
+      port     = 16686
+      protocol = "TCP"
+    }
+    # OTLP over HTTP
+    ports {
+      port     = 4317
+      protocol = "TCP"
+    }
 
     environment_variables {
       COLLECTOR_ZIPKIN_HOST_PORT = ":9411"
