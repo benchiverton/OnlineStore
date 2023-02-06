@@ -22,7 +22,7 @@ resource "azurerm_container_group" "jaeger" {
       protocol = "TCP"
     }
 
-    environment_variables {
+    environment_variables = {
       COLLECTOR_ZIPKIN_HOST_PORT = ":9411"
       COLLECTOR_OTLP_ENABLED     = "true"
     }
