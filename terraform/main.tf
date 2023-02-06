@@ -25,13 +25,13 @@ resource "azurerm_resource_group" "default" {
 }
 
 output "app_service_name_api" {
-  value       = azurerm_app_service.api.name
-  description = "Online Store API app name."
+  value       = azurerm_windows_web_app.api.name
+  description = "Online Store API app."
   sensitive   = false
 }
 
 output "app_service_name_website" {
-  value       = azurerm_app_service.website.name
-  description = "Online Store website app name."
+  value       = azurerm_windows_web_app.website.name
+  description = "Online Store website app."
   sensitive   = false
 }
