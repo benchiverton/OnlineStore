@@ -18,7 +18,7 @@ resource "azurerm_linux_web_app" "jaeger" {
 
   site_config {
     always_on = false // free tier
-    application_stack = {
+    application_stack {
       docker_image     = "jaegertracing/all-in-one"
       docker_image_tag = "1.42"
     }
