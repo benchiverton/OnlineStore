@@ -6,13 +6,37 @@ on:
       - 'terraform/shared/**'
 
 jobs:
-  plan-terraform-prod:
+  plan-terraform-shared:
     environment: prod
+    env:
+      ARM_CLIENT_ID: ${{ secrets.TF_VAR_AGENT_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.TF_VAR_AGENT_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.TF_VAR_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.TF_VAR_TENANT_ID }}
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: "./terraform"
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+      - name: Terraform Format
+        id: fmt
+        run: terraform -chdir=shared fmt
+      - name: Terraform Init
+        id: init
+        run: terraform -chdir=shared init -backend-config="container_name=onlinestoretfstate-prod"
+      - name: Terraform Validate
+        id: validate
+        run: terraform -chdir=shared validate -no-color
+      - name: Terraform Plan
+        id: plan
+        run: terraform -chdir=shared plan -no-color
+        env:
+          TF_VAR_location: "East US"
+          TF_VAR_environment: prod
       - uses: actions/github-script@0.9.0
         if: github.event_name == 'pull_request'
         env:
@@ -20,4 +44,23 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            works!
+            const output = `### Terraform plan for shared
+            #### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Validation 🤖${{ steps.validate.outputs.stdout }}
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
+            <details><summary>Show Plan</summary>
+
+            \`\`\`${process.env.PLAN}\`\`\`
+
+            </details>
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+              
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
