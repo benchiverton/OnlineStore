@@ -46,19 +46,19 @@ jobs:
         run: terraform fmt
       - name: Terraform Init
         id: init
-        run: terraform init -backend-config="container_name=onlinestoretfstate-prod"
+        run: terraform -chdir=instance init -backend-config="container_name=onlinestoretfstate-prod"
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
       - name: Terraform Plan
         id: plan
-        run: terraform plan -target="instance" -no-color
+        run: terraform -chdir=instance plan -no-color
         env:
           TF_VAR_location: "East US"
           TF_VAR_environment: prod
       - name: Terraform Apply
         id: apply
-        run: terraform apply -target="instance" -auto-approve
+        run: terraform -chdir=instance apply -auto-approve
         env:
           TF_VAR_location: "East US"
           TF_VAR_environment: prod

@@ -52,13 +52,13 @@ jobs:
         run: terraform validate -no-color
       - name: Terraform Plan
         id: plan
-        run: terraform plan -target="instance" -no-color
+        run: terraform -chdir=instance plan -no-color
         env:
           TF_VAR_location: "East US"
           TF_VAR_environment: ${{ github.head_ref }}
       - name: Terraform Apply
         id: apply
-        run: terraform apply -target="instance" -auto-approve
+        run: terraform -chdir=instance apply -auto-approve
         env:
           TF_VAR_location: "East US"
           TF_VAR_environment: ${{ github.head_ref }}
