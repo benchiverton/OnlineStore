@@ -1,6 +1,6 @@
-name: "Deploy - test"
+name: "Instance - deploy prod"
 on:
-  pull_request:
+  push:
     branches: [main]
 
 jobs:
@@ -22,9 +22,9 @@ jobs:
       artifact_name: "website"
       self_contained: true
 
-  deploy-terraform-test:
+  deploy-terraform-prod:
     needs: [build-api, build-website]
-    environment: test
+    environment: prod
     env:
       ARM_CLIENT_ID: ${{ secrets.TF_VAR_AGENT_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.TF_VAR_AGENT_CLIENT_SECRET }}
@@ -46,41 +46,41 @@ jobs:
         run: terraform fmt
       - name: Terraform Init
         id: init
-        run: terraform init -backend-config="container_name=onlinestoretfstate-test" -backend-config="key=terraform.tfstate.${{ github.head_ref }}"
+        run: terraform init -backend-config="container_name=onlinestoretfstate-prod"
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color
+        run: terraform plan -target="instance" -no-color
         env:
           TF_VAR_location: "East US"
-          TF_VAR_environment: ${{ github.head_ref }}
+          TF_VAR_environment: prod
       - name: Terraform Apply
         id: apply
-        run: terraform apply -auto-approve
+        run: terraform apply -target="instance" -auto-approve
         env:
           TF_VAR_location: "East US"
-          TF_VAR_environment: ${{ github.head_ref }}
+          TF_VAR_environment: prod
       - name: Set Application Names
         shell: bash
         run: |
-          terraform output -raw app_service_name_api > application-name-test-api.txt
-          terraform output -raw app_service_name_website > application-name-test-website.txt
+          terraform output -raw app_service_name_api > application-name-prod-api.txt
+          terraform output -raw app_service_name_website > application-name-prod-website.txt
       - name: Upload API application name for deploy job
         uses: actions/upload-artifact@v2
         with:
-          name: application-name-test
-          path: terraform/application-name-test-api.txt
+          name: application-name-prod
+          path: terraform/application-name-prod-api.txt
       - name: Upload website application name for deploy job
         uses: actions/upload-artifact@v2
         with:
-          name: application-name-test
-          path: terraform/application-name-test-website.txt
+          name: application-name-prod
+          path: terraform/application-name-prod-website.txt
 
-  deploy-app-test:
-    needs: [deploy-terraform-test]
-    environment: test
+  deploy-app-prod:
+    needs: [deploy-terraform-prod]
+    environment: prod
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -88,13 +88,13 @@ jobs:
       - name: Download application name
         uses: actions/download-artifact@v2
         with:
-          name: application-name-test
+          name: application-name-prod
       - name: Load application names
         id: vars
         shell: bash
         run: |
-          echo ::set-output name=azure_webapp_name_api::$(cat application-name-test-api.txt)
-          echo ::set-output name=azure_webapp_name_website::$(cat application-name-test-website.txt)
+          echo ::set-output name=azure_webapp_name_api::$(cat application-name-prod-api.txt)
+          echo ::set-output name=azure_webapp_name_website::$(cat application-name-prod-website.txt)
       - name: Download API package
         uses: actions/download-artifact@v2
         with:
@@ -106,40 +106,18 @@ jobs:
           name: website
           path: ${{ github.workspace }}/website
       - name: Update website config
-        run: echo "`jq '.Api.BasePath="https://os-onlinestore-${{ github.head_ref }}-api.azurewebsites.net"' ${{ github.workspace }}/website/wwwroot/appsettings.json`" > ${{ github.workspace }}/website/wwwroot/appsettings.json
+        run: echo "`jq '.Api.BasePath="https://os-onlinestore-prod-api.azurewebsites.net"' ${{ github.workspace }}/website/wwwroot/appsettings.json`" > ${{ github.workspace }}/website/wwwroot/appsettings.json
       - name: Login via Azure CLI
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Run Azure webapp deploy for API
         uses: azure/webapps-deploy@v2
-        id: apideploy
         with:
           app-name: ${{ steps.vars.outputs.azure_webapp_name_api }}
           package: ${{ github.workspace }}/api
       - name: Run Azure webapp deploy for website
         uses: azure/webapps-deploy@v2
-        id: websitedeploy
         with:
           app-name: ${{ steps.vars.outputs.azure_webapp_name_website }}
           package: ${{ github.workspace }}/website
-      - name: Post test environment information on PR
-        uses: actions/github-script@0.9.0
-        if: github.event_name == 'pull_request'
-        env:
-          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const output = `### Test environment information
-            #### 🔗[Visit website](http://os-onlinestore-${{ github.head_ref }}-website.azurewebsites.net/)
-            #### 🔗[Visit API](https://os-onlinestore-${{ github.head_ref }}-api.azurewebsites.net/swagger/)
-
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
-
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            })

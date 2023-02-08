@@ -1,4 +1,4 @@
-name: "Plan - prod"
+name: "Instance - plan prod"
 on:
   pull_request:
     branches: [main]
@@ -31,7 +31,7 @@ jobs:
         run: terraform validate -no-color
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color
+        run: terraform plan -target="instance" -no-color
         env:
           TF_VAR_location: "East US"
           TF_VAR_environment: prod

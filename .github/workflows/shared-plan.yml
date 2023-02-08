@@ -1,0 +1,22 @@
+name: "Shared - plan"
+on:
+  pull_request:
+    branches: [main]
+    paths: [terraform/shared/**]
+
+jobs:
+  plan-terraform-prod:
+    environment: prod
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "./terraform"
+    steps:
+      - uses: actions/github-script@0.9.0
+        if: github.event_name == 'pull_request'
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            works!

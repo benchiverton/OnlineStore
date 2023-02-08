@@ -1,4 +1,4 @@
-name: "Destroy - test"
+name: "Instance - destroy test"
 on:
   pull_request:
     types: [closed]
@@ -24,6 +24,6 @@ jobs:
         with:
           terraform_wrapper: false
       - name: Terraform Init
-        run: terraform init -backend-config="container_name=onlinestoretfstate-test" -backend-config="key=terraform.tfstate.${{ github.head_ref }}"
+        run: terraform init -target="instance" -backend-config="container_name=onlinestoretfstate-test" -backend-config="key=terraform.tfstate.${{ github.head_ref }}"
       - name: Terraform Destroy
         run: terraform destroy -auto-approve
