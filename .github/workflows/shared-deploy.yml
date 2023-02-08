@@ -1,0 +1,47 @@
+name: "Shared - deploy"
+on:
+  push:
+    branches: [main]
+    paths: 
+      - 'terraform/shared/**'
+
+jobs:
+  deploy-terraform-shared:
+    environment: prod
+    env:
+      ARM_CLIENT_ID: ${{ secrets.TF_VAR_AGENT_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.TF_VAR_AGENT_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.TF_VAR_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.TF_VAR_TENANT_ID }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "./terraform"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_wrapper: false
+      - name: Terraform Format
+        id: fmt
+        run: terraform -chdir=instance fmt
+      - name: Terraform Init
+        id: init
+        run: terraform -chdir=shared init -backend-config="container_name=onlinestoretfstate-prod"
+      - name: Terraform Validate
+        id: validate
+        run: terraform -chdir=shared validate -no-color
+      - name: Terraform Plan
+        id: plan
+        run: terraform -chdir=shared plan -no-color
+        env:
+          TF_VAR_location: "East US"
+          TF_VAR_environment: prod
+      - name: Terraform Apply
+        id: apply
+        run: terraform -chdir=shared apply -auto-approve
+        env:
+          TF_VAR_location: "East US"
+          TF_VAR_environment: prod
