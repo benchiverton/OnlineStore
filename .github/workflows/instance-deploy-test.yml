@@ -65,8 +65,8 @@ jobs:
       - name: Set Application Names
         shell: bash
         run: |
-          terraform output -raw app_service_name_api > application-name-test-api.txt
-          terraform output -raw app_service_name_website > application-name-test-website.txt
+          terraform -chdir=instance output -raw app_service_name_api > application-name-test-api.txt
+          terraform -chdir=instance output -raw app_service_name_website > application-name-test-website.txt
       - name: Upload API application name for deploy job
         uses: actions/upload-artifact@v2
         with:
