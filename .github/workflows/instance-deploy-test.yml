@@ -1,4 +1,4 @@
-name: "Deploy - test"
+name: "Instance - deploy test"
 on:
   pull_request:
     branches: [main]
@@ -43,22 +43,22 @@ jobs:
           terraform_wrapper: false
       - name: Terraform Format
         id: fmt
-        run: terraform fmt
+        run: terraform -chdir=instance fmt
       - name: Terraform Init
         id: init
-        run: terraform init -backend-config="container_name=onlinestoretfstate-test" -backend-config="key=terraform.tfstate.${{ github.head_ref }}"
+        run: terraform -chdir=instance init -backend-config="container_name=onlinestoretfstate-test" -backend-config="key=terraform.tfstate.${{ github.head_ref }}"
       - name: Terraform Validate
         id: validate
-        run: terraform validate -no-color
+        run: terraform -chdir=instance validate -no-color
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color
+        run: terraform -chdir=instance -chdir=instance plan -no-color
         env:
           TF_VAR_location: "East US"
           TF_VAR_environment: ${{ github.head_ref }}
       - name: Terraform Apply
         id: apply
-        run: terraform apply -auto-approve
+        run: terraform -chdir=instance -chdir=instance apply -auto-approve
         env:
           TF_VAR_location: "East US"
           TF_VAR_environment: ${{ github.head_ref }}

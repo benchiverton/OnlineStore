@@ -1,4 +1,4 @@
-name: "Deploy - prod"
+name: "Instance - deploy prod"
 on:
   push:
     branches: [main]
@@ -43,22 +43,22 @@ jobs:
           terraform_wrapper: false
       - name: Terraform Format
         id: fmt
-        run: terraform fmt
+        run: terraform -chdir=instance fmt
       - name: Terraform Init
         id: init
-        run: terraform init -backend-config="container_name=onlinestoretfstate-prod"
+        run: terraform -chdir=instance init -backend-config="container_name=onlinestoretfstate-prod"
       - name: Terraform Validate
         id: validate
-        run: terraform validate -no-color
+        run: terraform -chdir=instance validate -no-color
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color
+        run: terraform -chdir=instance plan -no-color
         env:
           TF_VAR_location: "East US"
           TF_VAR_environment: prod
       - name: Terraform Apply
         id: apply
-        run: terraform apply -auto-approve
+        run: terraform -chdir=instance apply -auto-approve
         env:
           TF_VAR_location: "East US"
           TF_VAR_environment: prod
