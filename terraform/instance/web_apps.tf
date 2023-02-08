@@ -1,7 +1,7 @@
 resource "azurerm_service_plan" "windows" {
   name                = "${var.name}-plan-windows"
   resource_group_name = azurerm_resource_group.instance.name
-  location            = azurerm_resource_group.default.location
+  location            = azurerm_resource_group.instance.location
   os_type             = "Windows"
   sku_name            = var.plan_sku
 }

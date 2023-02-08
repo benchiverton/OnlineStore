@@ -43,13 +43,13 @@ jobs:
           terraform_wrapper: false
       - name: Terraform Format
         id: fmt
-        run: terraform fmt
+        run: terraform -chdir=instance fmt
       - name: Terraform Init
         id: init
         run: terraform -chdir=instance init -backend-config="container_name=onlinestoretfstate-prod"
       - name: Terraform Validate
         id: validate
-        run: terraform validate -no-color
+        run: terraform -chdir=instance validate -no-color
       - name: Terraform Plan
         id: plan
         run: terraform -chdir=instance plan -no-color

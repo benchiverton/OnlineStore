@@ -1,7 +1,7 @@
 resource "azurerm_container_group" "jaeger" {
   name                = "${var.name}-containergroup-jaeger"
-  resource_group_name = azurerm_resource_group.default.name
-  location            = azurerm_resource_group.default.location
+  resource_group_name = azurerm_resource_group.instance.name
+  location            = azurerm_resource_group.instance.location
   ip_address_type     = "Public"
   os_type             = "Linux"
 
