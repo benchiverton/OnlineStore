@@ -27,7 +27,7 @@ jobs:
         run: terraform -chdir=shared fmt
       - name: Terraform Init
         id: init
-        run: terraform -chdir=shared init -backend-config="container_name=onlinestoretfstate-prod"
+        run: terraform -chdir=shared init -backend-config="container_name=onlinestoretfstate-shared"
       - name: Terraform Validate
         id: validate
         run: terraform -chdir=shared validate -no-color
