@@ -26,7 +26,7 @@ jobs:
           terraform_wrapper: false
       - name: Terraform Format
         id: fmt
-        run: terraform -chdir=instance fmt
+        run: terraform -chdir=shared fmt
       - name: Terraform Init
         id: init
         run: terraform -chdir=shared init -backend-config="container_name=onlinestoretfstate-shared"
