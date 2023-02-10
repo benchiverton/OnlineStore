@@ -1,0 +1,33 @@
+
+name: Docker image import from DockerHub
+
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        required: true
+
+jobs:
+  import-image-from-dockerhub:
+    name: Build sqltools docker image and push to GitHub package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to Github Packages
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull image
+        run: |
+          docker pull docker.io/${{ github.event.inputs.image }} .
+      - name: Publish image
+        run: |
+          docker push ghcr.io/benchiverton/OnlineStore/${{ github.event.inputs.image }}
