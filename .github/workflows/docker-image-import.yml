@@ -6,6 +6,8 @@ on:
     inputs:
       image:
         required: true
+      target_acr:
+        required: true
 
 jobs:
   import-image-from-dockerhub:
@@ -18,19 +20,19 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Login to Github Packages
+      - name: Login to ACR
         uses: docker/login-action@v2
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ${{ github.event.inputs.target_acr }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_TOKEN }}
 
       - name: Pull image
         run: |
           docker pull docker.io/${{ github.event.inputs.image }}
       - name: Re-tag image
         run: |
-          docker tag docker.io/${{ github.event.inputs.image }} ghcr.io/benchiverton/onlinestore/${{ github.event.inputs.image }}
+          docker tag docker.io/${{ github.event.inputs.image }} ${{ github.event.inputs.target_acr }}/${{ github.event.inputs.image }}
       - name: Publish image
         run: |
-          docker push ghcr.io/benchiverton/onlinestore/${{ github.event.inputs.image }}
+          docker push ${{ github.event.inputs.target_acr }}/${{ github.event.inputs.image }}
