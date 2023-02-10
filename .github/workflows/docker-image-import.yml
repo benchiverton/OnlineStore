@@ -9,7 +9,7 @@ on:
 
 jobs:
   import-image-from-dockerhub:
-    name: Build sqltools docker image and push to GitHub package
+    name: Docker image import from DockerHub
     runs-on: ubuntu-latest
 
     steps:
