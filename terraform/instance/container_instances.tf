@@ -8,8 +8,8 @@ resource "azurerm_container_group" "jaeger" {
   container {
     name   = "jaegertracing-all-in-one"
     image  = "onlinestorecontainerregistry.azurecr.io/jaegertracing/all-in-one:1.42"
-    cpu    = "0.5"
-    memory = "1.5"
+    cpu    = "0.1"
+    memory = "0.5"
 
     # serve frontend
     ports {
