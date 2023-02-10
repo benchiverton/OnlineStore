@@ -27,3 +27,15 @@ variable "plan_sku" {
   description = "The sku of app service plan to create"
   default     = "F1"
 }
+
+variable "acr_username" {
+  type        = string
+  description = "The username to log in to ACR"
+  sensitive   = true
+}
+
+variable "acr_password" {
+  type        = string
+  description = "The password to log in to ACR"
+  sensitive   = true
+}

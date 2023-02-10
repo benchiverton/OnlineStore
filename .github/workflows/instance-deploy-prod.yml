@@ -56,12 +56,16 @@ jobs:
         env:
           TF_VAR_location: "East US"
           TF_VAR_environment: prod
+          TF_VAR_acr_username: ${{ secrets.ACR_USERNAME }}
+          TF_VAR_acr_password: ${{ secrets.ACR_TOKEN }}
       - name: Terraform Apply
         id: apply
         run: terraform -chdir=instance apply -auto-approve
         env:
           TF_VAR_location: "East US"
           TF_VAR_environment: prod
+          TF_VAR_acr_username: ${{ secrets.ACR_USERNAME }}
+          TF_VAR_acr_password: ${{ secrets.ACR_TOKEN }}
       - name: Set Application Names
         shell: bash
         run: |
