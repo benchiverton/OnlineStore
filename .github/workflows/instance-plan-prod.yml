@@ -35,6 +35,8 @@ jobs:
         env:
           TF_VAR_location: "East US"
           TF_VAR_environment: prod
+          TF_VAR_acr_username: ${{ secrets.ACR_USERNAME }}
+          TF_VAR_acr_password: ${{ secrets.ACR_TOKEN }}
       - uses: actions/github-script@0.9.0
         if: github.event_name == 'pull_request'
         env:
