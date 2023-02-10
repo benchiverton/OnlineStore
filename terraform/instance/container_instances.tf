@@ -28,7 +28,7 @@ resource "azurerm_container_group" "jaeger" {
     }
   }
 
-  image_registry_credential = {
+  image_registry_credential {
     server   = "onlinestorecontainerregistry.azurecr.io"
     username = var.acr_username
     password = var.acr_password
