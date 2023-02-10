@@ -6,19 +6,19 @@ namespace Company.Website.ProductVariants;
 
 public class ProductVariantsService
 {
-    public async Task<ProductVariants> GetProductVariants(string productId) => _productVariantsList.First(pt => pt.ProductId == productId);
+    public Task<ProductVariants> GetProductVariants(string productId) => Task.FromResult(_productVariantsList.First(pt => pt.ProductId == productId));
 
-    public async Task<ProductVariant> GetProductVariant(string productId, string index1, string index2, string index3) =>
-        _productVariantList.FirstOrDefault(pv =>
+    public Task<ProductVariant> GetProductVariant(string productId, string index1, string index2, string index3) =>
+        Task.FromResult(_productVariantList.FirstOrDefault(pv =>
             pv.ProductId == productId
             && pv.Index1 == index1
             && pv.Index2 == index2
-            && pv.Index3 == index3);
+            && pv.Index3 == index3));
 
-    public async Task<ProductVariant> GetProductVariantById(string productId, int productVariantId) =>
-        _productVariantList.FirstOrDefault(pv =>
+    public Task<ProductVariant> GetProductVariantById(string productId, int productVariantId) =>
+        Task.FromResult(_productVariantList.FirstOrDefault(pv =>
             pv.ProductId == productId
-            && pv.Id == productVariantId);
+            && pv.Id == productVariantId));
 
     private readonly List<ProductVariants> _productVariantsList = new List<ProductVariants>
         {

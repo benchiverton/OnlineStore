@@ -26,7 +26,7 @@ resource "azurerm_windows_web_app" "api" {
   }
 
   app_settings = {
-    // environment variables for service
+    OTLPEXPORTER__ENDPOINT = "http://${azurerm_container_group.jaeger.ip_address}:4317"
   }
 }
 
