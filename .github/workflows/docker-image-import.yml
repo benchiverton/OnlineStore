@@ -27,7 +27,7 @@ jobs:
 
       - name: Pull image
         run: |
-          docker pull docker.io/${{ github.event.inputs.image }} .
+          docker pull docker.io/${{ github.event.inputs.image }}
       - name: Publish image
         run: |
           docker push ghcr.io/benchiverton/OnlineStore/${{ github.event.inputs.image }}
