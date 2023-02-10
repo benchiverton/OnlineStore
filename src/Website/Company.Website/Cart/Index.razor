@@ -79,11 +79,12 @@
 
 @code {
     private List<CartProduct> _cartProducts;
-    private int _totalCartProducts;
+    private int _totalCartProducts = 0;
 
-    private async Task OnReadData()
+    private Task OnReadData()
     {
         _cartProducts = CartService.GetCartFromStorage().CartProducts;
+        return Task.CompletedTask;
     }
 
     private void UpdateItemInCart(SavedRowItem<CartProduct, Dictionary<string, object>> e)

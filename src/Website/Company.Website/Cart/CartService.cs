@@ -93,7 +93,7 @@ public class CartService
         }
     }
 
-    private CartProduct? GetExistingCartProduct(Cart cart, string productId, int productVariantId)
+    private CartProduct GetExistingCartProduct(Cart cart, string productId, int productVariantId)
         => cart.CartProducts.FirstOrDefault(cp => cp.ProductId == productId && cp.ProductVariantId == productVariantId);
 
     private void SetCartInStorage(Cart cart)
