@@ -33,17 +33,18 @@ var serviceName = Assembly.GetExecutingAssembly().GetName().Name.ToString();
 var serviceVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 var appResourceBuilder = ResourceBuilder.CreateDefault()
     .AddService(serviceName: serviceName, serviceVersion: serviceVersion);
+var otlpExporterEndpoint = new Uri(builder.Configuration.GetValue<string>("OTLPExporter:Endpoint"));
 var meter = new Meter(serviceName);
 builder.Services.AddOpenTelemetry()
     .WithTracing(tracerProviderBuilder => tracerProviderBuilder
-        .AddOtlpExporter(opt => opt.Endpoint = new Uri(builder.Configuration.GetValue<string>("OTLPExporter:Endpoint")))
+        .AddOtlpExporter(opt => opt.Endpoint = otlpExporterEndpoint)
         .AddSource(serviceName)
         .SetResourceBuilder(
             ResourceBuilder.CreateDefault()
                 .AddService(serviceName: serviceName, serviceVersion: serviceVersion))
         .AddAspNetCoreInstrumentation())
     .WithMetrics(metricProviderBuilder => metricProviderBuilder
-        .AddOtlpExporter(opt => opt.Endpoint = new Uri(builder.Configuration.GetValue<string>("OTLPExporter:Endpoint")))
+        .AddOtlpExporter(opt => opt.Endpoint = otlpExporterEndpoint)
         .AddMeter(meter.Name)
         .SetResourceBuilder(appResourceBuilder)
         .AddAspNetCoreInstrumentation())
