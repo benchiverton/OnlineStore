@@ -27,3 +27,6 @@ jobs:
         run: terraform -chdir=instance init -backend-config="container_name=onlinestoretfstate-test" -backend-config="key=terraform.tfstate.${{ github.head_ref }}"
       - name: Terraform Destroy
         run: terraform -chdir=instance destroy -auto-approve
+        env:
+          TF_VAR_acr_username: "not-used"
+          TF_VAR_acr_password: "not-used"
