@@ -30,4 +30,4 @@ jobs:
           docker pull docker.io/${{ github.event.inputs.image }}
       - name: Publish image
         run: |
-          docker push ghcr.io/benchiverton/OnlineStore/${{ github.event.inputs.image }}
+          docker push ghcr.io/benchiverton/onlinestore/${{ github.event.inputs.image }}
