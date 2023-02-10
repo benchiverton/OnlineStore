@@ -31,7 +31,7 @@ jobs:
         run: terraform -chdir=instance validate -no-color
       - name: Terraform Plan
         id: plan
-        run: terraform -chdir=instance plan -no-color
+        run: terraform -chdir=instance plan -lock=false -no-color
         env:
           TF_VAR_location: "East US"
           TF_VAR_environment: prod
