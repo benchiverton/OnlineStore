@@ -28,6 +28,9 @@ jobs:
       - name: Pull image
         run: |
           docker pull docker.io/${{ github.event.inputs.image }}
+      - name: Re-tag image
+        run: |
+          docker tag docker.io/${{ github.event.inputs.image }} ghcr.io/benchiverton/onlinestore/${{ github.event.inputs.image }}
       - name: Publish image
         run: |
           docker push ghcr.io/benchiverton/onlinestore/${{ github.event.inputs.image }}
