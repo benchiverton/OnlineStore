@@ -3,13 +3,14 @@ resource "azurerm_container_group" "jaeger" {
   resource_group_name = azurerm_resource_group.instance.name
   location            = azurerm_resource_group.instance.location
   ip_address_type     = "Public"
+  dns_name_label      = "${var.name}-jaeger"
   os_type             = "Linux"
 
   container {
     name   = "jaegertracing-all-in-one"
     image  = "onlinestorecontainerregistry.azurecr.io/jaegertracing/all-in-one:1.42"
-    cpu    = "0.1"
-    memory = "0.5"
+    cpu    = "0.05"
+    memory = "0.20"
 
     # serve frontend
     ports {
