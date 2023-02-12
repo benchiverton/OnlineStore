@@ -1,6 +1,6 @@
 @implements IDisposable
 
-@inject CartService CartService
+@inject CartService _cartService
 
 <a href="cart" class="shopping-cart">
     <Icon Name="IconName.ShoppingCart" Margin="Margin.Is3.FromEnd" />
@@ -13,7 +13,7 @@
     protected override void OnInitialized()
     {
         _cartMonitor = new CartMonitor();
-        _cartMonitor.Subscribe(CartService, Refresh);
+        _cartMonitor.Subscribe(_cartService, Refresh);
     }
 
     public void Refresh()

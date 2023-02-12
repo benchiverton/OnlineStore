@@ -1,4 +1,4 @@
-@inject ProductService ProductService
+@inject ProductService _productService
 
 <SidebarContent>
     <SidebarBrand>
@@ -43,7 +43,7 @@
     protected override async Task OnInitializedAsync()
     {
         var productLinkAndNamesTemp = new List<(string link, string name)>();
-        var products = await ProductService.GetProducts();
+        var products = await _productService.GetProducts();
         foreach (var product in products)
         {
             productLinkAndNamesTemp.Add(($"products/{product.Id}", product.Name));
