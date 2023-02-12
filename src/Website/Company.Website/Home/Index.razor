@@ -9,7 +9,7 @@
         <CardDeck>
             @foreach (var product in products)
             {
-                <ProductInformationCard ProductId="@product.Id"></ProductInformationCard>
+                <ProductCard Product="@product"></ProductCard>
             }
         </CardDeck>
     }

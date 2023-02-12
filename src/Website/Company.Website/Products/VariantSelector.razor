@@ -1,0 +1,45 @@
+@inject ProductService _productService
+
+@foreach (var availableVariant in _availableVariants)
+{
+    <h5>@availableVariant.Key</h5>
+    <select class="form-control">
+        @foreach (var availableVariableType in availableVariant.Value)
+        {
+            <option value="@availableVariableType">@availableVariableType</option>
+        }
+    </select>
+}
+
+@code {
+    [Parameter]
+    public Product Product { get; set; }
+    [Parameter]
+    public List<Variant> Variants { get; set; }
+    [Parameter]
+    public Variant SelectedVariant { get; set; }
+
+    [Parameter]
+    public Action<Variant> NewProductVariantSelected { get; set; }
+
+    private Dictionary<string, List<string>> _availableVariants;  
+
+    protected override void OnParametersSet()
+    {
+        var availableVariants = new Dictionary<string, List<string>>();
+
+        foreach (var variantType in Product.VariantTypes)
+        {
+            availableVariants.Add(variantType, new List<string>());
+        }
+        foreach (var variant in Variants)
+        {
+            foreach(var variantTypeValue in variant.VariantTypeValues)
+            {
+                availableVariants[variantTypeValue.Key].Add(variantTypeValue.Value);
+            }
+        }
+
+        _availableVariants = availableVariants.ToDictionary(x => x.Key, x => x.Value.Distinct().ToList());
+    }
+}

@@ -12,5 +12,5 @@ public class PricingService
 
     public PricingService(HttpClient httpClient) => _httpClient = httpClient;
 
-    public Task<Price> GetPriceByProductTypeId(int productVariantId) => _httpClient.GetFromJsonAsync<Price>($"pricing/{productVariantId}");
+    public Task<Price> GetPriceByProductTypeId(string productVariantId) => _httpClient.GetFromJsonAsync<Price>($"pricing/{productVariantId}");
 }

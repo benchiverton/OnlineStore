@@ -15,4 +15,8 @@ public class ProductService
     public Task<List<Product>> GetProducts() => _httpClient.GetFromJsonAsync<List<Product>>("products");
 
     public Task<Product> GetProductById(string productId) => _httpClient.GetFromJsonAsync<Product>($"products/{productId}");
+
+    public Task<List<Variant>> GetProductVariants(string productId) => _httpClient.GetFromJsonAsync<List<Variant>>($"products/{productId}/variants");
+
+    public Task<Variant> GetProductVariantById(string productId, string variantId) => _httpClient.GetFromJsonAsync<Variant>($"products/{productId}/variants/{variantId}");
 }

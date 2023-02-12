@@ -17,4 +17,8 @@
     <ProjectReference Include="..\..\Shared\Company.Contract\Company.Contract.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Inventory\" />
+  </ItemGroup>
+
 </Project>

@@ -1,5 +1,4 @@
 @inject ProductService ProductService
-@inject ProductInformationService ProductInformationService
 
 <SidebarContent>
     <SidebarBrand>
@@ -47,8 +46,7 @@
         var products = await ProductService.GetProducts();
         foreach (var product in products)
         {
-            var productInformation = await ProductInformationService.GetProductInformationById(product.Id);
-            productLinkAndNamesTemp.Add(($"products/{product.Id}", productInformation.Name));
+            productLinkAndNamesTemp.Add(($"products/{product.Id}", product.Name));
         }
         productLinkAndNames = productLinkAndNamesTemp;
     }
