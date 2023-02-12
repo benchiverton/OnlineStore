@@ -2,6 +2,8 @@ name: "Instance - plan prod"
 on:
   pull_request:
     branches: [main]
+    paths: 
+      - 'terraform/instance/**'
 
 jobs:
   plan-terraform-prod:
