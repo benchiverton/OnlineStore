@@ -32,15 +32,9 @@
                         <PricingLabel CurrencyCode="GBP" ProductId="@context.ProductId" ProductVariantId="@context.VariantId" />
                     </DisplayTemplate>
                 </DataGridColumn>
-                <DataGridColumn TItem="CartProduct" Field="@nameof(CartProduct.Quantity)" Caption="Quantity" Editable="true">
+                <DataGridColumn TItem="CartProduct" Field="@nameof(CartProduct.Quantity)" Caption="Quantity" Editable>
                     <EditTemplate>
-                        <Validation UsePattern="true">
-                            <NumericEdit TValue="int" Pattern="^[1-9][0-9]{0,2}$" Value="@((int) context.CellValue)" ValueChanged="@(v => context.CellValue = (object) v)">
-                                <Feedback>
-                                    <ValidationError>Quantity must be greater than 0 and less than 1000.</ValidationError>
-                                </Feedback>
-                            </NumericEdit>
-                        </Validation>
+                        <NumericEdit TValue="int" Value="@((int) context.CellValue)" ValueChanged="@(v => context.CellValue = (object) v)" />
                     </EditTemplate>
                 </DataGridColumn>
                 <DataGridCommandColumn TItem="CartProduct" NewCommandAllowed="false">
