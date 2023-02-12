@@ -69,16 +69,16 @@ jobs:
       - name: Save terraform outputs
         shell: bash
         run: |
-          terraform -chdir=instance output -raw web_app_api_name > web_app_api_name.txt
-          terraform -chdir=instance output -raw web_app_api_hostname > web_app_api_hostname.txt
-          terraform -chdir=instance output -raw web_app_website_name > web_app_website_name.txt
-          terraform -chdir=instance output -raw web_app_website_hostname > web_app_website_hostname.txt
-          terraform -chdir=instance output -raw container_instance_jaeger_fqdn > container_instance_jaeger_fqdn.txt
+          terraform -chdir=instance output -raw web_app_api_name > ../terraform-outputs/web_app_api_name.txt
+          terraform -chdir=instance output -raw web_app_api_hostname > ../terraform-outputs/web_app_api_hostname.txt
+          terraform -chdir=instance output -raw web_app_website_name > ../terraform-outputs/web_app_website_name.txt
+          terraform -chdir=instance output -raw web_app_website_hostname > ../terraform-outputs/web_app_website_hostname.txt
+          terraform -chdir=instance output -raw container_instance_jaeger_fqdn > ../terraform-outputs/container_instance_jaeger_fqdn.txt
       - name: Upload terraform outputs for deploy job
         uses: actions/upload-artifact@v3
         with:
           name: terraform-outputs
-          path: terraform/
+          path: terraform-outputs/
 
   deploy-app-test:
     needs: [deploy-terraform-test]
