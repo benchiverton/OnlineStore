@@ -1,7 +1,7 @@
 @page "/"
 @using Company.Contract;
 
-@inject ProductService ProductService
+@inject ProductService _productService
 
 <div class="content px-4">
     @if (products != null)
@@ -9,7 +9,7 @@
         <CardDeck>
             @foreach (var product in products)
             {
-                <ProductInformationCard ProductId="@product.Id"></ProductInformationCard>
+                <ProductCard Product="@product"></ProductCard>
             }
         </CardDeck>
     }
@@ -20,6 +20,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        products = await ProductService.GetProducts();
+        products = await _productService.GetProducts();
     }
 }

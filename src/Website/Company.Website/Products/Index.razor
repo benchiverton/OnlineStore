@@ -1,31 +1,40 @@
 @page "/products/{ProductId}"
 
-<div class="container-fluid">
-    <br />
-    <div class="row">
-        <div class="col-md-6">
-            <ProductInformationHeader ProductId="@ProductId"></ProductInformationHeader>
-        </div>
-        <div class="col-md">
-            <ProductInformationTitle ProductId="@ProductId"></ProductInformationTitle>
+@inject ProductService _productService;
 
-            <PricingBreakdown CurrencyCode="GBP" ProductId="@ProductId" ProductVariantId="@_selectedProductVariantId"></PricingBreakdown>
+@if (_ready)
+{
+    <div class="container-fluid">
+        <br />
+        <div class="row">
+            <div class="col-md-6">
+                <div class="img-fluid" style="max-height:500px; overflow: hidden">
+                    <img class="img-top" src="@_product.Images.FirstOrDefault()" alt="image" style="width: 100%; height: 40vh; object-fit: cover">
+                </div>
+            </div>
+            <div class="col-md">
+                <h2>@_product.Name</h2>
+                <Divider />
 
-            <ProductVariantsSelector ProductId="@ProductId" ProductVariantChanged="@ProductVariantChanged"></ProductVariantsSelector>
+                <PricingBreakdown CurrencyCode="GBP" ProductId="@ProductId" ProductVariantId="@_selectedVariant.VariantId"></PricingBreakdown>
 
-            <ProductInformationDetails ProductId="@ProductId"></ProductInformationDetails>
-        </div>
-        <div class="col-md">
-            <Card>
-                <CardBody>
-                    <PricingSummary CurrencyCode="GBP" ProductId="@ProductId" ProductVariantId="@_selectedProductVariantId"></PricingSummary>
+                <VariantSelector Product="@_product" Variants="@_variants" SelectedVariant="@_selectedVariant" NewProductVariantSelected="@OnNewProductVariantSelected"></VariantSelector>
 
-                    <CartButtons ProductId="@ProductId" ProductVariantId="@_selectedProductVariantId" OnCartAddedToBasket="@(() => _snackbar.Show())"></CartButtons>
-                </CardBody>
-            </Card>
+                <Heading Size="HeadingSize.Is6">@_product.Headline</Heading>
+                <Paragraph>@_product.Description</Paragraph>
+            </div>
+            <div class="col-md">
+                <Card>
+                    <CardBody>
+                        <PricingSummary CurrencyCode="GBP" ProductId="@ProductId" ProductVariantId="@_selectedVariant.VariantId"></PricingSummary>
+
+                        <CartButtons ProductId="@ProductId" ProductVariantId="@_selectedVariant.VariantId" OnCartAddedToBasket="@(() => _snackbar.Show())"></CartButtons>
+                    </CardBody>
+                </Card>
+            </div>
         </div>
     </div>
-</div>
+}
 
 <Snackbar @ref="_snackbar" Color="SnackbarColor.Success">
     <SnackbarBody>
@@ -37,13 +46,25 @@
     [Parameter]
     public string ProductId { get; set; }
 
+    private Product _product;
+    private List<Variant> _variants;
+    private Variant _selectedVariant;
+    private bool _ready = false;
+
     Snackbar _snackbar;
 
-    private int _selectedProductVariantId;
-
-    private void ProductVariantChanged(int newProductVariantId)
+    protected override async Task OnParametersSetAsync()
     {
-        _selectedProductVariantId = newProductVariantId;
+        _product = await _productService.GetProductById(ProductId);
+        _variants = await _productService.GetProductVariants(ProductId);
+        _selectedVariant = _variants.FirstOrDefault();
+        _ready = true;
+        await base.OnParametersSetAsync();
+    }
+
+    private void OnNewProductVariantSelected(Variant selectedVariant)
+    {
+        _selectedVariant = selectedVariant;
         StateHasChanged();
     }
 }

@@ -1,5 +1,5 @@
-@inject CartService CartService
-@inject NavigationManager NavManager
+@inject CartService _cartService
+@inject NavigationManager _navManager
 
 <button class="btn btn-primary btn-block" @onclick="AddToCart">
     <Icon Name="IconName.CartPlus" Margin="Margin.Is3.FromEnd" />Add To Cart
@@ -14,20 +14,20 @@
     public string ProductId { get; set; }
 
     [Parameter]
-    public int ProductVariantId { get; set; }
+    public string ProductVariantId { get; set; }
 
     [Parameter]
     public Action OnCartAddedToBasket { get; set; }
 
     private void AddToCart()
     {
-        CartService.AddProductVariantToCart(ProductId, ProductVariantId);
+        _cartService.AddProductVariantToCart(ProductId, ProductVariantId);
         OnCartAddedToBasket.Invoke();
     }
 
     private void BuyNow()
     {
-        CartService.AddProductVariantToCart(ProductId, ProductVariantId);
-        NavManager.NavigateTo("cart");
+        _cartService.AddProductVariantToCart(ProductId, ProductVariantId);
+        _navManager.NavigateTo("cart");
     }
 }

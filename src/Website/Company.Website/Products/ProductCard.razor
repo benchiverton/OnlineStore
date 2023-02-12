@@ -1,0 +1,14 @@
+@if (Product != null)
+{
+    <HoverCard BackgroundImageLocation="@Product.Images.FirstOrDefault()"
+           Title="@Product.Name"
+           Headline="@Product.Headline"
+           Description="@Product.Description"
+           PageLocation="@($"products/{Product.Id}")">
+    </HoverCard>
+}
+
+@code {
+    [Parameter]
+    public Product Product { get; set; }
+}

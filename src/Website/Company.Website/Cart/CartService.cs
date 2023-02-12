@@ -38,7 +38,7 @@ public class CartService
 
     public Cart GetCartFromStorage() => _sessionStorage.GetItem<Cart>(CartKey) ?? new Cart();
 
-    public void AddProductVariantToCart(string productId, int productVariantId)
+    public void AddProductVariantToCart(string productId, string productVariantId)
     {
         var cart = GetCartFromStorage();
         var existingProduct = GetExistingCartProduct(cart, productId, productVariantId);
@@ -47,7 +47,7 @@ public class CartService
             cart.CartProducts.Add(new CartProduct
             {
                 ProductId = productId,
-                ProductVariantId = productVariantId,
+                VariantId = productVariantId,
                 Quantity = 1
             });
         }
@@ -58,7 +58,7 @@ public class CartService
         SetCartInStorage(cart);
     }
 
-    public void UpdateQuantity(string productId, int productVariantId, int desiredQuantity)
+    public void UpdateQuantity(string productId, string productVariantId, int desiredQuantity)
     {
         var cart = GetCartFromStorage();
         var existingProduct = GetExistingCartProduct(cart, productId, productVariantId);
@@ -67,7 +67,7 @@ public class CartService
             cart.CartProducts.Add(new CartProduct
             {
                 ProductId = productId,
-                ProductVariantId = productVariantId,
+                VariantId = productVariantId,
                 Quantity = desiredQuantity
             });
         }
@@ -82,7 +82,7 @@ public class CartService
         SetCartInStorage(cart);
     }
 
-    public void Delete(string productId, int productVariantId)
+    public void Delete(string productId, string productVariantId)
     {
         var cart = GetCartFromStorage();
         var existingProduct = GetExistingCartProduct(cart, productId, productVariantId);
@@ -93,8 +93,8 @@ public class CartService
         }
     }
 
-    private CartProduct GetExistingCartProduct(Cart cart, string productId, int productVariantId)
-        => cart.CartProducts.FirstOrDefault(cp => cp.ProductId == productId && cp.ProductVariantId == productVariantId);
+    private CartProduct GetExistingCartProduct(Cart cart, string productId, string productVariantId)
+        => cart.CartProducts.FirstOrDefault(cp => cp.ProductId == productId && cp.VariantId == productVariantId);
 
     private void SetCartInStorage(Cart cart)
     {

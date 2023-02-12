@@ -1,5 +1,5 @@
-@inject PricingService PricingService
-@inject CurrencyService CurrencyService
+@inject PricingService _pricingService
+@inject CurrencyService _currencyService
 
 <p>
     Subtotal:
@@ -12,7 +12,7 @@
 
 @code {
     [Parameter]
-    public List<(string productId, int productVarientId, int quantity)> ProductVariantIdAndQuantities { get; set; }
+    public List<(string productId, string productVarientId, int quantity)> ProductVariantIdAndQuantities { get; set; }
     [Parameter]
     public string CurrencyCode { get; set; }
 
@@ -22,7 +22,7 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        CurrencySymbol = CurrencyService.GetCurrencyCharacter(CurrencyCode);
+        CurrencySymbol = _currencyService.GetCurrencyCharacter(CurrencyCode);
 
         if (ProductVariantIdAndQuantities == null)
         {
@@ -33,7 +33,7 @@
         DealTotalPrice = 0m;
         foreach (var productVariantIdAndQuantity in ProductVariantIdAndQuantities)
         {
-            var price = await PricingService.GetPriceByProductTypeId(productVariantIdAndQuantity.productVarientId);
+            var price = await _pricingService.GetPriceByProductTypeId(productVariantIdAndQuantity.productVarientId);
             FullTotalPrice += price.FullPriceGBP * productVariantIdAndQuantity.quantity;
             DealTotalPrice += price.DealPriceGBP * productVariantIdAndQuantity.Item3;
         }

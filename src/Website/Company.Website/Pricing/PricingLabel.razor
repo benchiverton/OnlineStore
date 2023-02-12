@@ -1,5 +1,5 @@
-@inject PricingService PricingService
-@inject CurrencyService CurrencyService
+@inject PricingService _pricingService
+@inject CurrencyService _currencyService
 
 @if (Price != null)
 {
@@ -14,7 +14,7 @@
     [Parameter]
     public string ProductId { get; set; }
     [Parameter]
-    public int ProductVariantId { get; set; }
+    public string ProductVariantId { get; set; }
     [Parameter]
     public string CurrencyCode { get; set; }
 
@@ -23,9 +23,9 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        CurrencySymbol = CurrencyService.GetCurrencyCharacter(CurrencyCode);
+        CurrencySymbol = _currencyService.GetCurrencyCharacter(CurrencyCode);
 
-        Price = await PricingService.GetPriceByProductTypeId(ProductVariantId);
+        Price = await _pricingService.GetPriceByProductTypeId(ProductVariantId);
     }
 
     private string GetFormattedAmount(decimal amount) => $"{CurrencySymbol}{amount:0.00} {CurrencyCode}";
