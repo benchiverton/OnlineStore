@@ -36,7 +36,7 @@ jobs:
         working-directory: "./terraform"
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
@@ -66,21 +66,19 @@ jobs:
           TF_VAR_environment: ${{ github.head_ref }}
           TF_VAR_acr_username: ${{ secrets.ACR_USERNAME }}
           TF_VAR_acr_password: ${{ secrets.ACR_TOKEN }}
-      - name: Set Application Names
+      - name: Save terraform outputs
         shell: bash
         run: |
-          terraform -chdir=instance output -raw app_service_name_api > application-name-test-api.txt
-          terraform -chdir=instance output -raw app_service_name_website > application-name-test-website.txt
-      - name: Upload API application name for deploy job
-        uses: actions/upload-artifact@v2
+          terraform -chdir=instance output -raw web_app_api_name > web_app_api_name.txt
+          terraform -chdir=instance output -raw web_app_api_hostname > web_app_api_hostname.txt
+          terraform -chdir=instance output -raw web_app_website_name > web_app_website_name.txt
+          terraform -chdir=instance output -raw web_app_website_hostname > web_app_website_hostname.txt
+          terraform -chdir=instance output -raw container_instance_jaeger_fqdn > container_instance_jaeger_fqdn.txt
+      - name: Upload terraform outputs for deploy job
+        uses: actions/upload-artifact@v3
         with:
-          name: application-name-test
-          path: terraform/application-name-test-api.txt
-      - name: Upload website application name for deploy job
-        uses: actions/upload-artifact@v2
-        with:
-          name: application-name-test
-          path: terraform/application-name-test-website.txt
+          name: terraform-outputs
+          path: terraform/
 
   deploy-app-test:
     needs: [deploy-terraform-test]
@@ -88,17 +86,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      - name: Download application name
-        uses: actions/download-artifact@v2
+        uses: actions/checkout@v3
+      - name: Download terraform outputs
+        uses: actions/download-artifact@v3
         with:
-          name: application-name-test
-      - name: Load application names
+          name: terraform-outputs
+      - name: Set terraform outputs as env variables
         id: vars
         shell: bash
         run: |
-          echo ::set-output name=azure_webapp_name_api::$(cat application-name-test-api.txt)
-          echo ::set-output name=azure_webapp_name_website::$(cat application-name-test-website.txt)
+          echo "web_app_api_name=$(cat web_app_api_name.txt)" >> $GITHUB_ENV
+          echo "web_app_api_hostname=$(cat web_app_api_hostname.txt)" >> $GITHUB_ENV
+          echo "web_app_website_name=$(cat web_app_website_name.txt)" >> $GITHUB_ENV
+          echo "web_app_website_hostname=$(cat web_app_website_hostname.txt)" >> $GITHUB_ENV
+          echo "container_instance_jaeger_fqdn=$(cat container_instance_jaeger_fqdn.txt)" >> $GITHUB_ENV
       - name: Download API package
         uses: actions/download-artifact@v2
         with:
@@ -110,7 +111,7 @@ jobs:
           name: website
           path: ${{ github.workspace }}/website
       - name: Update website config
-        run: echo "`jq '.Api.BasePath="https://os-onlinestore-${{ github.head_ref }}-api.azurewebsites.net"' ${{ github.workspace }}/website/wwwroot/appsettings.json`" > ${{ github.workspace }}/website/wwwroot/appsettings.json
+        run: echo "`jq '.Api.BasePath="https://${{ env.web_app_api_hostname }}"' ${{ github.workspace }}/website/wwwroot/appsettings.json`" > ${{ github.workspace }}/website/wwwroot/appsettings.json
       - name: Login via Azure CLI
         uses: azure/login@v1
         with:
@@ -119,13 +120,13 @@ jobs:
         uses: azure/webapps-deploy@v2
         id: apideploy
         with:
-          app-name: ${{ steps.vars.outputs.azure_webapp_name_api }}
+          app-name: ${{ env.web_app_api_name }}
           package: ${{ github.workspace }}/api
       - name: Run Azure webapp deploy for website
         uses: azure/webapps-deploy@v2
         id: websitedeploy
         with:
-          app-name: ${{ steps.vars.outputs.azure_webapp_name_website }}
+          app-name: ${{ env.web_app_website_name }}
           package: ${{ github.workspace }}/website
       - name: Post test environment information on PR
         uses: actions/github-script@0.9.0
@@ -136,8 +137,9 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const output = `### Test environment information
-            #### 🔗[Visit website](http://os-onlinestore-${{ github.head_ref }}-website.azurewebsites.net/)
-            #### 🔗[Visit API](https://os-onlinestore-${{ github.head_ref }}-api.azurewebsites.net/swagger/)
+            #### 🔗[Visit website](https://${{ env.web_app_website_hostname }}/)
+            #### 🔗[Visit API](https://${{ env.web_app_api_hostname }}/swagger/)
+            #### 🔗[Visit Jaeger UI](https://${{ env.container_instance_jaeger_fqdn }}:16686)
 
             *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
 
