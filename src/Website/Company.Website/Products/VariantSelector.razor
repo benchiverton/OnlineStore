@@ -1,12 +1,12 @@
 @inject ProductService _productService
 
-@foreach (var availableVariant in _availableVariants)
+@foreach (var availableVariantType in _availableVariantTypes)
 {
-    <h5>@availableVariant.Key</h5>
-    <select class="form-control">
-        @foreach (var availableVariableType in availableVariant.Value)
+    <h5>@availableVariantType.Key</h5>
+    <select class="form-control" @onchange="e => OnNewValueSelected(availableVariantType.Key, e)">
+        @foreach (var availableVariableValue in availableVariantType.Value)
         {
-            <option value="@availableVariableType">@availableVariableType</option>
+            <option value="@availableVariableValue" selected="@(SelectedVariant.VariantTypeValues[availableVariantType.Key] == availableVariableValue)">@availableVariableValue</option>
         }
     </select>
 }
@@ -18,11 +18,10 @@
     public List<Variant> Variants { get; set; }
     [Parameter]
     public Variant SelectedVariant { get; set; }
-
     [Parameter]
     public Action<Variant> NewProductVariantSelected { get; set; }
 
-    private Dictionary<string, List<string>> _availableVariants;  
+    private Dictionary<string, List<string>> _availableVariantTypes;  
 
     protected override void OnParametersSet()
     {
@@ -40,6 +39,19 @@
             }
         }
 
-        _availableVariants = availableVariants.ToDictionary(x => x.Key, x => x.Value.Distinct().ToList());
+        _availableVariantTypes = availableVariants.ToDictionary(x => x.Key, x => x.Value.Distinct().ToList());
+    }
+
+    private void OnNewValueSelected(string changedVariantType, Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        var selectedVariantReduceList = Variants;
+        foreach(var variantType in _availableVariantTypes)
+        {
+            var selectedVariantType = variantType.Key == changedVariantType
+                ? (string)e.Value
+                : SelectedVariant.VariantTypeValues[variantType.Key];
+            selectedVariantReduceList = selectedVariantReduceList.Where(v => v.VariantTypeValues[variantType.Key] == selectedVariantType).ToList();
+        }
+        NewProductVariantSelected(selectedVariantReduceList.Single());
     }
 }
