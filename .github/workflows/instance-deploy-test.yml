@@ -38,7 +38,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
+        uses: hashicorp/setup-terraform@v2
         with:
           terraform_wrapper: false
       - name: Terraform Format
@@ -101,12 +101,12 @@ jobs:
           echo "web_app_website_hostname=$(cat web_app_website_hostname.txt)" >> $GITHUB_ENV
           echo "container_instance_jaeger_fqdn=$(cat container_instance_jaeger_fqdn.txt)" >> $GITHUB_ENV
       - name: Download API package
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: api
           path: ${{ github.workspace }}/api
       - name: Download website package
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: website
           path: ${{ github.workspace }}/website
@@ -139,7 +139,7 @@ jobs:
             const output = `### Test environment information
             #### 🔗[Visit website](https://${{ env.web_app_website_hostname }}/)
             #### 🔗[Visit API](https://${{ env.web_app_api_hostname }}/swagger/)
-            #### 🔗[Visit Jaeger UI](https://${{ env.container_instance_jaeger_fqdn }}:16686)
+            #### 🔗[Visit jaeger](http://${{ env.container_instance_jaeger_fqdn }}:16686)
 
             *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
 
