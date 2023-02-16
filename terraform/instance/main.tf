@@ -44,7 +44,7 @@ output "web_app_website_hostname" {
   sensitive   = false
 }
 
-output "container_instance_jaeger_fqdn" {
-  value       = azurerm_container_group.jaeger.fqdn
+output "container_instance_monitoring_fqdn" {
+  value       = azurerm_container_group.monitoring.fqdn
   sensitive   = false
 }

@@ -1,9 +1,9 @@
-resource "azurerm_container_group" "jaeger" {
-  name                = "${var.name}-containergroup-jaeger"
+resource "azurerm_container_group" "monitoring" {
+  name                = "${var.name}-containergroup-monitoring"
   resource_group_name = azurerm_resource_group.instance.name
   location            = azurerm_resource_group.instance.location
   ip_address_type     = "Public"
-  dns_name_label      = "${var.name}-${lower(var.environment)}-jaeger"
+  dns_name_label      = "${var.name}-${lower(var.environment)}-monitoring"
   os_type             = "Linux"
 
   container {
