@@ -73,7 +73,7 @@ jobs:
           terraform -chdir=instance output -raw web_app_api_hostname > web_app_api_hostname.txt
           terraform -chdir=instance output -raw web_app_website_name > web_app_website_name.txt
           terraform -chdir=instance output -raw web_app_website_hostname > web_app_website_hostname.txt
-          terraform -chdir=instance output -raw container_instance_jaeger_fqdn > container_instance_jaeger_fqdn.txt
+          terraform -chdir=instance output -raw container_instance_monitoring_fqdn > container_instance_monitoring_fqdn.txt
       - name: Upload terraform outputs for deploy job
         uses: actions/upload-artifact@v3
         with:
@@ -99,7 +99,7 @@ jobs:
           echo "web_app_api_hostname=$(cat web_app_api_hostname.txt)" >> $GITHUB_ENV
           echo "web_app_website_name=$(cat web_app_website_name.txt)" >> $GITHUB_ENV
           echo "web_app_website_hostname=$(cat web_app_website_hostname.txt)" >> $GITHUB_ENV
-          echo "container_instance_jaeger_fqdn=$(cat container_instance_jaeger_fqdn.txt)" >> $GITHUB_ENV
+          echo "container_instance_monitoring_fqdn=$(cat container_instance_monitoring_fqdn.txt)" >> $GITHUB_ENV
       - name: Download API package
         uses: actions/download-artifact@v3
         with:

@@ -26,7 +26,7 @@ resource "azurerm_windows_web_app" "api" {
   }
 
   app_settings = {
-    OTLPEXPORTER__ENDPOINT = "http://${azurerm_container_group.jaeger.fqdn}:4317"
+    OTLPEXPORTER__ENDPOINT = "http://${azurerm_container_group.monitoring.fqdn}:4317"
   }
 }
 

@@ -74,7 +74,7 @@ jobs:
           terraform -chdir=instance output -raw web_app_api_hostname > terraform-outputs/web_app_api_hostname.txt
           terraform -chdir=instance output -raw web_app_website_name > terraform-outputs/web_app_website_name.txt
           terraform -chdir=instance output -raw web_app_website_hostname > terraform-outputs/web_app_website_hostname.txt
-          terraform -chdir=instance output -raw container_instance_jaeger_fqdn > terraform-outputs/container_instance_jaeger_fqdn.txt
+          terraform -chdir=instance output -raw container_instance_monitoring_fqdn > terraform-outputs/container_instance_monitoring_fqdn.txt
       - name: Upload terraform outputs for deploy job
         uses: actions/upload-artifact@v3
         with:
@@ -100,7 +100,7 @@ jobs:
           echo "web_app_api_hostname=$(cat web_app_api_hostname.txt)" >> $GITHUB_ENV
           echo "web_app_website_name=$(cat web_app_website_name.txt)" >> $GITHUB_ENV
           echo "web_app_website_hostname=$(cat web_app_website_hostname.txt)" >> $GITHUB_ENV
-          echo "container_instance_jaeger_fqdn=$(cat container_instance_jaeger_fqdn.txt)" >> $GITHUB_ENV
+          echo "container_instance_monitoring_fqdn=$(cat container_instance_monitoring_fqdn.txt)" >> $GITHUB_ENV
       - name: Download API package
         uses: actions/download-artifact@v3
         with:
@@ -140,7 +140,7 @@ jobs:
             const output = `### Test environment information
             #### 🔗[Visit website](https://${{ env.web_app_website_hostname }}/)
             #### 🔗[Visit API](https://${{ env.web_app_api_hostname }}/swagger/)
-            #### 🔗[Visit jaeger](http://${{ env.container_instance_jaeger_fqdn }}:16686)
+            #### 🔗[Visit monitoring UI](http://${{ env.container_instance_monitoring_fqdn }}:16686)
 
             *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
 
