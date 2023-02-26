@@ -14,32 +14,32 @@
             </div>
             <div class="col-md">
                 <h2>@_product.Name</h2>
-                <Divider />
+                <hr class="divider divider-solid">
 
                 <PricingBreakdown CurrencyCode="GBP" ProductId="@ProductId" ProductVariantId="@_selectedVariant.VariantId"></PricingBreakdown>
 
                 <VariantSelector Product="@_product" Variants="@_variants" SelectedVariant="@_selectedVariant" NewProductVariantSelected="@OnNewProductVariantSelected"></VariantSelector>
 
-                <Heading Size="HeadingSize.Is6">@_product.Headline</Heading>
-                <Paragraph>@_product.Description</Paragraph>
+                <h6>@_product.Headline</h6>
+                <p>@_product.Description</p>
             </div>
             <div class="col-md">
-                <Card>
-                    <CardBody>
+                <div class="card">
+                    <div class="card-body">
                         <PricingSummary CurrencyCode="GBP" ProductId="@ProductId" ProductVariantId="@_selectedVariant.VariantId"></PricingSummary>
 
                         <CartButtons ProductId="@ProductId" ProductVariantId="@_selectedVariant.VariantId" OnCartAddedToBasket="@(() => _snackbar.Show())"></CartButtons>
-                    </CardBody>
-                </Card>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 }
 
 <Snackbar @ref="_snackbar" Color="SnackbarColor.Success">
-    <SnackbarBody>
-        <Icon Name="IconName.Check" Margin="Margin.Is3.FromEnd" />Added to cart
-    </SnackbarBody>
+    <div class="snackbar-body">
+        <i class="fas fa-check mr-3"></i>Added to cart
+    </div>
 </Snackbar>
 
 @code {
