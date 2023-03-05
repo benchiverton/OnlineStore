@@ -1,0 +1,33 @@
+@inject ShoppingBasketService _shoppingBasketService
+@inject NavigationManager _navManager
+
+<button class="btn btn-primary btn-block" @onclick="AddToBasket">
+    <i class="fas fa-cart-plus mr-3" />Add to basket
+</button>
+<button class="btn btn-success btn-block" @onclick="BuyNow">
+    <i class="fas fa-arrow-right mr-3" />Buy now
+</button>
+
+@code {
+
+    [Parameter]
+    public string ProductId { get; set; }
+
+    [Parameter]
+    public string ProductVariantId { get; set; }
+
+    [Parameter]
+    public Action OnProductAddedToBasket { get; set; }
+
+    private void AddToBasket()
+    {
+        _shoppingBasketService.AddProductVariantToBasket(ProductId, ProductVariantId);
+        OnProductAddedToBasket.Invoke();
+    }
+
+    private void BuyNow()
+    {
+        _shoppingBasketService.AddProductVariantToBasket(ProductId, ProductVariantId);
+        _navManager.NavigateTo("basket");
+    }
+}

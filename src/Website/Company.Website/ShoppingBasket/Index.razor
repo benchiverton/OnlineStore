@@ -1,0 +1,61 @@
+@page "/basket"
+
+@inject ShoppingBasketService _shoppingBasketService
+
+<div style="padding: 20px;">
+    @if (_shoppingBasket != null)
+    {
+        <h2>Shopping Basket</h2>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Item</th>
+                    <th scope="col">Price/unit</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in _shoppingBasket.Products)
+                {
+                    <tr>
+                        <td>
+                            @product.ProductId
+                            </td>
+                        <td>
+                            <PricingLabel CurrencyCode="GBP" ProductId="@product.ProductId" ProductVariantId="@product.VariantId" />
+                            </td>
+                        <td>
+                            @product.Quantity
+                        </td>
+                        <td>
+                            TBC
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <PricingTotal CurrencyCode="GBP" ProductVariantIdAndQuantities="@_shoppingBasket.Products?.Select(cp => (cp.ProductId, cp.VariantId, cp.Quantity))?.ToList()"></PricingTotal>
+    }
+</div>
+
+@code {
+    private ShoppingBasket _shoppingBasket;
+
+    protected override void OnInitialized()
+    {
+        _shoppingBasket = _shoppingBasketService.GetShoppingBasketFromStorage();
+    }
+
+    private void UpdateItemInShoppingBasket()
+    {
+        // TODO
+    }
+
+    private void RemoveItemFromShoppingBasket()
+    {
+        // TODO
+    }
+}

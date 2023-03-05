@@ -2,9 +2,9 @@
 
 <div class="top-row pl-4 navbar navbar-light">
     <button class="sidebar-opener btn btn-primary" @onclick="OpenSidebar">
-        <i class="fas fa-home mr-3"></i>
+        <i class="fas fa-bars mr-3"></i>
     </button>
-    <CartSummary></CartSummary>
+    <ShoppingBasketSummary></ShoppingBasketSummary>
 </div>
 
 <Sidebar @ref="_sidebar" Visible="@_isVisible">

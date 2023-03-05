@@ -1,6 +1,6 @@
-namespace Company.Website.Cart;
+namespace Company.Website.ShoppingBasket;
 
-public class CartProduct
+public class ShoppingBasketProduct
 {
     public string ProductId { get; set; }
     public string VariantId { get; set; }

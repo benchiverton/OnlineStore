@@ -28,7 +28,7 @@
                     <div class="card-body">
                         <PricingSummary CurrencyCode="GBP" ProductId="@ProductId" ProductVariantId="@_selectedVariant.VariantId"></PricingSummary>
 
-                        <CartButtons ProductId="@ProductId" ProductVariantId="@_selectedVariant.VariantId" OnCartAddedToBasket="@(() => _snackbar.Show())"></CartButtons>
+                        <ShoppingBasketButtons ProductId="@ProductId" ProductVariantId="@_selectedVariant.VariantId" OnProductAddedToBasket="@(() => _snackbar.Show())"></ShoppingBasketButtons>
                     </div>
                 </div>
             </div>
@@ -38,7 +38,7 @@
 
 <Snackbar @ref="_snackbar" Color="SnackbarColor.Success">
     <div class="snackbar-body">
-        <i class="fas fa-check mr-3"></i>Added to cart
+        <i class="fas fa-check mr-3"></i>Added to shopping basket
     </div>
 </Snackbar>
 
