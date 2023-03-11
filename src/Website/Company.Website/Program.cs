@@ -1,9 +1,6 @@
 using System;
 using System.Net.Http;
 using Blazored.SessionStorage;
-using Blazorise;
-using Blazorise.Bootstrap;
-using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Company.Website.ShoppingBasket;
@@ -21,12 +18,6 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-
-// Blazorise, bootstrap, font awesome
-builder.Services
-  .AddBlazorise()
-  .AddBootstrapProviders()
-  .AddFontAwesomeIcons();
 
 // services
 var apiBaseAddress = builder.Configuration.GetValue<string>("Api:BasePath");

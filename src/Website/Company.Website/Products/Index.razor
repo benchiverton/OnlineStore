@@ -28,19 +28,15 @@
                     <div class="card-body">
                         <PricingSummary CurrencyCode="GBP" ProductId="@ProductId" ProductVariantId="@_selectedVariant.VariantId"></PricingSummary>
 
-                        <ShoppingBasketButtons ProductId="@ProductId" ProductVariantId="@_selectedVariant.VariantId" OnProductAddedToBasket="@(() => _snackbar.Show())"></ShoppingBasketButtons>
+                        <ShoppingBasketButtons ProductId="@ProductId" ProductVariantId="@_selectedVariant.VariantId" OnProductAddedToBasket="OnProductAddedToBasket"></ShoppingBasketButtons>
+
+                        <div hidden="@(!_addedToBasket)">Added to basket!</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 }
-
-<Snackbar @ref="_snackbar" Color="SnackbarColor.Success">
-    <div class="snackbar-body">
-        <i class="fas fa-check mr-3"></i>Added to shopping basket
-    </div>
-</Snackbar>
 
 @code {
     [Parameter]
@@ -50,8 +46,7 @@
     private List<Variant> _variants;
     private Variant _selectedVariant;
     private bool _ready = false;
-
-    Snackbar _snackbar;
+    private bool _addedToBasket;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -65,6 +60,12 @@
     private void OnNewProductVariantSelected(Variant selectedVariant)
     {
         _selectedVariant = selectedVariant;
+        StateHasChanged();
+    }
+
+    private void OnProductAddedToBasket()
+    {
+        _addedToBasket = true;
         StateHasChanged();
     }
 }

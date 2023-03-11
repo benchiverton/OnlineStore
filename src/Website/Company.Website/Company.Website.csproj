@@ -7,12 +7,6 @@
 
   <ItemGroup>
     <PackageReference Include="Blazored.SessionStorage" Version="2.3.0" />
-    <PackageReference Include="Blazorise" Version="1.2.0" />
-    <PackageReference Include="Blazorise.Bootstrap" Version="1.2.0" />
-    <PackageReference Include="Blazorise.DataGrid" Version="1.2.0" />
-    <PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.2.0" />
-    <PackageReference Include="Blazorise.Sidebar" Version="1.2.0" />
-    <PackageReference Include="Blazorise.Snackbar" Version="1.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.13" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.13" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
@@ -28,10 +22,6 @@
 
   <ItemGroup>
     <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <BlazorWebAssemblyLazyLoad Include="Blazorise.DataGrid.dll" />
   </ItemGroup>
 
 </Project>

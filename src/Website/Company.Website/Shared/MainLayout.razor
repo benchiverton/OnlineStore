@@ -1,33 +1,19 @@
 @inherits LayoutComponentBase
 
+@inject NavigationManager _navigationManager
+
 <div class="top-row pl-4 navbar navbar-light">
-    <button class="sidebar-opener btn btn-primary" @onclick="OpenSidebar">
-        <i class="fas fa-bars mr-3"></i>
-    </button>
+    <h2 class="companyname" @onclick="NavigateHome">Company website</h2>
     <ShoppingBasketSummary></ShoppingBasketSummary>
 </div>
 
-<Sidebar @ref="_sidebar" Visible="@_isVisible">
-    <MainSidebarContent />
-</Sidebar>
-
-<div class="main" style="opacity: @MainOpacity" @onclick="CloseNavbar">
+<div class="main">
     @Body
 </div>
 
 @code {
-    private Sidebar _sidebar;
-
-    private bool _isVisible = false;
-    private string MainOpacity => _isVisible ? "0.5" : "1";
-
-    private void OpenSidebar()
+    private void NavigateHome()
     {
-        _isVisible = true;
-    }
-
-    private void CloseNavbar()
-    {
-        _isVisible = false;
+        _navigationManager.NavigateTo("/");
     }
 }
