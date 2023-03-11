@@ -1,0 +1,28 @@
+@implements IDisposable
+
+@inject ShoppingBasketService _shoppingBasketService
+
+<a href="basket" class="shopping-cart">
+    <i class="fas fa-shopping-cart mr-3"></i>
+    <b>@_shoppingBasketMonitor?.ShoppingBasketSize</b>
+</a>
+
+@code {
+    private ShoppingBasketMonitor _shoppingBasketMonitor;
+
+    protected override void OnInitialized()
+    {
+        _shoppingBasketMonitor = new ShoppingBasketMonitor();
+        _shoppingBasketMonitor.Subscribe(_shoppingBasketService, Refresh);
+    }
+
+    public void Refresh()
+    {
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        _shoppingBasketMonitor.Unsubscribe();
+    }
+}

@@ -1,16 +1,16 @@
 using System;
 using System.Linq;
 
-namespace Company.Website.Cart;
+namespace Company.Website.ShoppingBasket;
 
-public class CartMonitor : IObserver<Cart>
+public class ShoppingBasketMonitor : IObserver<ShoppingBasket>
 {
     private IDisposable _cancellation;
     private Action _updateAction;
 
-    public int CartSize { get; private set; }
+    public int ShoppingBasketSize { get; private set; }
 
-    public virtual void Subscribe(CartService provider, Action onNext = null)
+    public virtual void Subscribe(ShoppingBasketService provider, Action onNext = null)
     {
         _updateAction = onNext;
         _cancellation = provider.Subscribe(this);
@@ -28,9 +28,9 @@ public class CartMonitor : IObserver<Cart>
         // do nothing
     }
 
-    public void OnNext(Cart value)
+    public void OnNext(ShoppingBasket value)
     {
-        CartSize = value.CartProducts.Sum(cp => cp.Quantity);
+        ShoppingBasketSize = value.Products.Sum(cp => cp.Quantity);
         _updateAction?.Invoke();
     }
 }

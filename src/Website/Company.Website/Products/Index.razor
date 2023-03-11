@@ -14,33 +14,29 @@
             </div>
             <div class="col-md">
                 <h2>@_product.Name</h2>
-                <Divider />
+                <hr class="divider divider-solid">
 
                 <PricingBreakdown CurrencyCode="GBP" ProductId="@ProductId" ProductVariantId="@_selectedVariant.VariantId"></PricingBreakdown>
 
                 <VariantSelector Product="@_product" Variants="@_variants" SelectedVariant="@_selectedVariant" NewProductVariantSelected="@OnNewProductVariantSelected"></VariantSelector>
 
-                <Heading Size="HeadingSize.Is6">@_product.Headline</Heading>
-                <Paragraph>@_product.Description</Paragraph>
+                <h6>@_product.Headline</h6>
+                <p>@_product.Description</p>
             </div>
             <div class="col-md">
-                <Card>
-                    <CardBody>
+                <div class="card">
+                    <div class="card-body">
                         <PricingSummary CurrencyCode="GBP" ProductId="@ProductId" ProductVariantId="@_selectedVariant.VariantId"></PricingSummary>
 
-                        <CartButtons ProductId="@ProductId" ProductVariantId="@_selectedVariant.VariantId" OnCartAddedToBasket="@(() => _snackbar.Show())"></CartButtons>
-                    </CardBody>
-                </Card>
+                        <ShoppingBasketButtons ProductId="@ProductId" ProductVariantId="@_selectedVariant.VariantId" OnProductAddedToBasket="OnProductAddedToBasket"></ShoppingBasketButtons>
+
+                        <div hidden="@(!_addedToBasket)">Added to basket!</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 }
-
-<Snackbar @ref="_snackbar" Color="SnackbarColor.Success">
-    <SnackbarBody>
-        <Icon Name="IconName.Check" Margin="Margin.Is3.FromEnd" />Added to cart
-    </SnackbarBody>
-</Snackbar>
 
 @code {
     [Parameter]
@@ -50,8 +46,7 @@
     private List<Variant> _variants;
     private Variant _selectedVariant;
     private bool _ready = false;
-
-    Snackbar _snackbar;
+    private bool _addedToBasket;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -65,6 +60,12 @@
     private void OnNewProductVariantSelected(Variant selectedVariant)
     {
         _selectedVariant = selectedVariant;
+        StateHasChanged();
+    }
+
+    private void OnProductAddedToBasket()
+    {
+        _addedToBasket = true;
         StateHasChanged();
     }
 }

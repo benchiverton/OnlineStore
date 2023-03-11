@@ -6,12 +6,12 @@
 <div class="content px-4">
     @if (products != null)
     {
-        <CardDeck>
+        <div class="card-deck">
             @foreach (var product in products)
             {
                 <ProductCard Product="@product"></ProductCard>
             }
-        </CardDeck>
+        </div>
     }
 </div>
 

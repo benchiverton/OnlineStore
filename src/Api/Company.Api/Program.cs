@@ -27,7 +27,7 @@ builder.Services.AddCors(policy => policy.AddPolicy("CorsPolicy", opt => opt
         .AllowAnyHeader()
         .AllowAnyMethod()));
 builder.Services.AddControllers();
-builder.Services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo { Title = "Online Store API", Version = "v1" }));
+builder.Services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo { Title = "Company Website API", Version = "v1" }));
 
 var serviceName = Assembly.GetExecutingAssembly().GetName().Name.ToString();
 var serviceVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
@@ -55,7 +55,7 @@ var host = builder.Build();
 host.UseSwagger();
 // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
 // specifying the Swagger JSON endpoint.
-host.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Online Store API v1"));
+host.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Company Website API v1"));
 
 if (host.Environment.IsDevelopment())
 {

@@ -30,6 +30,11 @@
         text-overflow: ellipsis;
     }
 
+.companyname {
+    color: white;
+    cursor: pointer;
+}
+
 ::deep .btn-primary {
     color: #fff;
     background-color: deepskyblue;
