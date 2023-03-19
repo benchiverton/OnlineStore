@@ -25,20 +25,3 @@ app {
         right: 0.75rem;
         top: 0.5rem;
     }
-
-/* Blazorise doesn't support CSS isolation, so CSS must be overridden here */
-.sidebar {
-    /* Blazorise sidebar theme variables */
-    --bsb-dark: deepskyblue !important;
-    --bsb-dark-dark: deepskyblue !important;
-    --bsb-dark-light: white !important;
-}
-
-    /* override css from blazorise so sidebar is consistent between large/small screens */
-    .sidebar:not(.sidebar-collapsed) {
-        margin-left: calc(var(--b-sidebar-width, 220px) * -1);
-    }
-
-        .sidebar:not(.sidebar-collapsed).show {
-            margin-left: 0;
-        }
