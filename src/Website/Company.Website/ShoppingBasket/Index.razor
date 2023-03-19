@@ -1,8 +1,10 @@
 @page "/basket"
+@using System.Collections.Concurrent;
 
 @inject ShoppingBasketService _shoppingBasketService
+@inject ProductService _productService
 
-<div style="padding: 20px;">
+<div class="basket-container">
     @if (_shoppingBasket != null)
     {
         <h2>Shopping Basket</h2>
@@ -19,13 +21,22 @@
             <tbody>
                 @foreach (var product in _shoppingBasket.Products)
                 {
+                    _variantDetails.TryGetValue(product.VariantId, out var productAndVariant);
                     <tr>
                         <td>
-                            @product.ProductId
-                            </td>
+                            @if (productAndVariant != default)
+                            {
+                                <div><b>@productAndVariant.product.Name</b></div>
+                                <div>@(string.Join(", ", productAndVariant.variant.VariantTypeValues.Values))</div>
+                            }
+                            else
+                            {
+                                <b>-</b>
+                            }
+                        </td>
                         <td>
                             <PricingLabel CurrencyCode="GBP" ProductId="@product.ProductId" ProductVariantId="@product.VariantId" />
-                            </td>
+                        </td>
                         <td>
                             @product.Quantity
                         </td>
@@ -37,16 +48,25 @@
             </tbody>
         </table>
 
-        <PricingTotal CurrencyCode="GBP" ProductVariantIdAndQuantities="@_shoppingBasket.Products?.Select(cp => (cp.ProductId, cp.VariantId, cp.Quantity))?.ToList()"></PricingTotal>
+        <PricingTotal TotalType="Final total" CurrencyCode="GBP" ProductVariantIdAndQuantities="@_shoppingBasket.Products?.Select(cp => (cp.ProductId, cp.VariantId, cp.Quantity))?.ToList()"></PricingTotal>
     }
 </div>
 
 @code {
+    private readonly ConcurrentDictionary<string, (Product product, Variant variant)> _variantDetails = new ConcurrentDictionary<string, (Product product, Variant variant)>();
+
     private ShoppingBasket _shoppingBasket;
 
     protected override void OnInitialized()
     {
         _shoppingBasket = _shoppingBasketService.GetShoppingBasketFromStorage();
+        Parallel.ForEach(_shoppingBasket.Products, async p =>
+        {
+            var productDetails = await _productService.GetProductById(p.ProductId);
+            var variantDetails = await _productService.GetProductVariantById(p.ProductId, p.VariantId);
+            _variantDetails.AddOrUpdate(p.VariantId, _ => (productDetails, variantDetails), (_, _) => (productDetails, variantDetails));
+            StateHasChanged();
+        });
     }
 
     private void UpdateItemInShoppingBasket()

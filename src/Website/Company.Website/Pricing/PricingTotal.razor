@@ -2,15 +2,17 @@
 @inject CurrencyService _currencyService
 
 <p>
-    Subtotal:
+    @TotalType:
     @if (FullTotalPrice > DealTotalPrice)
     {
-        <span style="text-decoration: line-through;">@GetFormattedAmount(FullTotalPrice)</span>
+        <span class="total-span">@GetFormattedAmount(FullTotalPrice)</span>
     }
     <b>@GetFormattedAmount(DealTotalPrice)</b>
 </p>
 
 @code {
+    [Parameter]
+    public string TotalType { get; set; }
     [Parameter]
     public List<(string productId, string productVarientId, int quantity)> ProductVariantIdAndQuantities { get; set; }
     [Parameter]
