@@ -5,6 +5,7 @@ app {
     position: relative;
     display: flex;
     flex-direction: column;
+    font-family: Arial;
 }
 
 #blazor-error-ui {
