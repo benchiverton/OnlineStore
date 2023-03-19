@@ -19,7 +19,7 @@ resource "azurerm_container_group" "monitoring" {
     }
     # OTLP over HTTP
     ports {
-      port     = 4317
+      port     = 4318
       protocol = "TCP"
     }
 
