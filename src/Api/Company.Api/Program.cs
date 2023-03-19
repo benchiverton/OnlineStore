@@ -47,8 +47,7 @@ builder.Services.AddOpenTelemetry()
         .AddOtlpExporter(opt => opt.Endpoint = otlpExporterEndpoint)
         .AddMeter(meter.Name)
         .SetResourceBuilder(appResourceBuilder)
-        .AddAspNetCoreInstrumentation())
-    .StartWithHost();
+        .AddAspNetCoreInstrumentation());
 
 var host = builder.Build();
 
