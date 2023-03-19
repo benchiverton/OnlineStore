@@ -5,6 +5,11 @@
     text-align: center;
 }
 
+    .hover-card .card-img-top {
+        max-height: 40vh;
+        object-fit: cover
+    }
+
     .hover-card .card-img-overlay {
         text-shadow: 0 0 4px rgba(0,0,0,0.4);
     }
@@ -23,3 +28,8 @@
     .hover-card:hover .card-img-overlay-hover {
         height: 100%;
     }
+
+.browse-button {
+    color: #121212;
+    background-color: white
+}

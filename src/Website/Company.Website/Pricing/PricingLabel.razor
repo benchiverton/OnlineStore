@@ -5,7 +5,7 @@
 {
     if (Price.FullPriceGBP > Price.DealPriceGBP)
     {
-        <span style="text-decoration: line-through;">@GetFormattedAmount(Price.FullPriceGBP)</span>
+        <span class="price-span">@GetFormattedAmount(Price.FullPriceGBP)</span>
     }
     <b>@GetFormattedAmount(Price.DealPriceGBP)</b>
 }
