@@ -17,7 +17,7 @@ resource "azurerm_container_group" "monitoring" {
       port     = 16686
       protocol = "TCP"
     }
-    # OTLP over HTTP
+    # OTLP over GRPC
     ports {
       port     = 4317
       protocol = "TCP"
