@@ -77,7 +77,7 @@ jobs:
           TF_VAR_environment: prod
           TF_VAR_acr_username: ${{ secrets.ACR_USERNAME }}
           TF_VAR_acr_password: ${{ secrets.ACR_TOKEN }}
-          TF_VAR_monitoring_enabled: ${{ steps.variables.outputs.monitoring_enabled }}
+          TF_VAR_monitoring_enabled: ${{ needs.variables.outputs.monitoring_enabled }}
       - name: Terraform Apply
         id: apply
         run: terraform -chdir=instance apply -auto-approve
@@ -86,7 +86,7 @@ jobs:
           TF_VAR_environment: prod
           TF_VAR_acr_username: ${{ secrets.ACR_USERNAME }}
           TF_VAR_acr_password: ${{ secrets.ACR_TOKEN }}
-          TF_VAR_monitoring_enabled: ${{ steps.variables.outputs.monitoring_enabled }}
+          TF_VAR_monitoring_enabled: ${{ needs.variables.outputs.monitoring_enabled }}
       - name: Save terraform outputs
         shell: bash
         run: |
