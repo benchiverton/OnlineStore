@@ -2,7 +2,7 @@ name: "Instance - deploy prod"
 on:
   push:
     branches: [main]
-  workflow_dispach:
+  workflow_dispatch:
     inputs:
       monitoring_enabled:
         description: Deploy jaeger instance for monitoring (£20/month)
