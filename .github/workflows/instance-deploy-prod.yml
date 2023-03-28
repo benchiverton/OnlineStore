@@ -42,7 +42,7 @@ jobs:
       self_contained: true
 
   deploy-terraform-prod:
-    needs: [build-api, build-website]
+    needs: [variables, build-api, build-website]
     environment: prod
     env:
       ARM_CLIENT_ID: ${{ secrets.TF_VAR_AGENT_CLIENT_ID }}

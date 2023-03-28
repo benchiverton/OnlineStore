@@ -45,6 +45,6 @@ output "web_app_website_hostname" {
 }
 
 output "container_instance_monitoring_fqdn" {
-  value       = azurerm_container_group.monitoring.fqdn
+  value       = azurerm_container_group.monitoring[0].fqdn
   sensitive   = false
 }
