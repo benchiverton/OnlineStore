@@ -12,6 +12,7 @@ on:
 
 jobs:
   variables:
+    runs-on: ubuntu-latest
     steps:
       - name: Set variables needed for workflow
         run: |
