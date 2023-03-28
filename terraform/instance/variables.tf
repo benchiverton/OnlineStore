@@ -39,3 +39,9 @@ variable "acr_password" {
   description = "The password to log in to ACR"
   sensitive   = true
 }
+
+variable "monitoring_enabled" {
+  type        = bool
+  description = "Location to deploy the resoruce group"
+  default     = true
+}
