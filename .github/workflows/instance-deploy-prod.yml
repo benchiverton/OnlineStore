@@ -12,16 +12,17 @@ on:
 
 jobs:
   variables:
-    id: variables
-    run: |
-      if [[ "${{ inputs.monitoring_enabled}}" == "" ]]
-      then
-        echo "monitoring_enabled=false"
-        echo "monitoring_enabled=false" >> $GITHUB_OUTPUT
-      else
-        echo "monitoring_enabled=${{ inputs.monitoring_enabled}}"
-        echo "monitoring_enabled=${{ inputs.monitoring_enabled}}" >> $GITHUB_OUTPUT
-      fi
+    steps:
+      - name: Set variables needed for workflow
+        run: |
+          if [[ "${{ inputs.monitoring_enabled}}" == "" ]]
+          then
+            echo "monitoring_enabled=false"
+            echo "monitoring_enabled=false" >> $GITHUB_OUTPUT
+          else
+            echo "monitoring_enabled=${{ inputs.monitoring_enabled}}"
+            echo "monitoring_enabled=${{ inputs.monitoring_enabled}}" >> $GITHUB_OUTPUT
+          fi
 
   build-api:
     uses: benchiverton/OnlineStore/.github/workflows/workflow-build-test-publish-dotnet.yml@main
