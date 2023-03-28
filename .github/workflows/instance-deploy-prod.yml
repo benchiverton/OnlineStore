@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       monitoring_enabled:
-        description: Deploy jaeger instance for monitoring (£20/month)
+        description: Deploy monitoring infrastructure (£20/month)
         type: boolean
         required: true
         default: false
@@ -99,6 +99,7 @@ jobs:
           terraform -chdir=instance output -raw web_app_api_hostname > web_app_api_hostname.txt
           terraform -chdir=instance output -raw web_app_website_name > web_app_website_name.txt
           terraform -chdir=instance output -raw web_app_website_hostname > web_app_website_hostname.txt
+          # -raw cannot handle null values - https://github.com/hashicorp/terraform/issues/32384
           terraform -chdir=instance show -json | jq -r '.values.outputs.container_instance_monitoring_fqdn.value // ""' > container_instance_monitoring_fqdn.txt
       - name: Upload terraform outputs for deploy job
         uses: actions/upload-artifact@v3

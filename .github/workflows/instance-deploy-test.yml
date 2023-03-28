@@ -76,6 +76,7 @@ jobs:
           terraform -chdir=instance output -raw web_app_api_hostname > terraform-outputs/web_app_api_hostname.txt
           terraform -chdir=instance output -raw web_app_website_name > terraform-outputs/web_app_website_name.txt
           terraform -chdir=instance output -raw web_app_website_hostname > terraform-outputs/web_app_website_hostname.txt
+          # -raw cannot handle null values - https://github.com/hashicorp/terraform/issues/32384
           terraform -chdir=instance show -json | jq -r '.values.outputs.container_instance_monitoring_fqdn.value // ""' > container_instance_monitoring_fqdn.txt
       - name: Upload terraform outputs for deploy job
         uses: actions/upload-artifact@v3
