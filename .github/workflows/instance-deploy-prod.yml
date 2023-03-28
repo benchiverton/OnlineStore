@@ -13,8 +13,11 @@ on:
 jobs:
   variables:
     runs-on: ubuntu-latest
+    outputs:
+      monitoring_enabled: $${{ steps.setvars.outputs.monitoring_enabled }}
     steps:
       - name: Set variables needed for workflow
+        id: setvars
         run: |
           if [[ "${{ inputs.monitoring_enabled}}" == "" ]]
           then
