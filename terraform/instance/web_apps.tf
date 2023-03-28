@@ -26,7 +26,7 @@ resource "azurerm_windows_web_app" "api" {
   }
 
   app_settings = {
-    OTLPEXPORTER__ENDPOINT = "http://${azurerm_container_group.monitoring[0].fqdn}:4317"
+    OTLPEXPORTER__ENDPOINT = var.monitoring_enabled ? "http://${azurerm_container_group.monitoring[0].fqdn}:4317" : null
   }
 }
 
