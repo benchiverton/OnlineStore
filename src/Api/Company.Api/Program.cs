@@ -33,10 +33,10 @@ var serviceName = Assembly.GetExecutingAssembly().GetName().Name.ToString();
 var serviceVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 var appResourceBuilder = ResourceBuilder.CreateDefault()
     .AddService(serviceName: serviceName, serviceVersion: serviceVersion);
-var oltpExporterEndpoint = builder.Configuration.GetValue<string>("OTLPExporter:Endpoint");
+var otlpExporterEndpoint = builder.Configuration.GetValue<string>("OTLPExporter:Endpoint");
 if (!string.IsNullOrEmpty(otlpExporterEndpoint))
 {
-    var otlpExporterEndpointUri = new Uri(oltpExporterEndpoint);
+    var otlpExporterEndpointUri = new Uri(otlpExporterEndpoint);
     var meter = new Meter(serviceName);
     builder.Services.AddOpenTelemetry()
         .WithTracing(tracerProviderBuilder => tracerProviderBuilder
