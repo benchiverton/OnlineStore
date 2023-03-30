@@ -1,0 +1,29 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build-api",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/Api/Company.Api/Company.Api.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build-website",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/Website/Company.Website/Company.Website.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}
