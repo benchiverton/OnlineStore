@@ -1,0 +1,41 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Company.Api",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build-api",
+      "program": "${workspaceFolder}/Api/Company.Api/bin/Debug/net6.0/Company.Api.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/Api/Company.Api",
+      "stopAtEntry": false,
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+        "uriFormat": "%s/swagger"
+      },
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    {
+      "name": "Company.Website",
+      "type": "blazorwasm",
+      "request": "launch",
+      "preLaunchTask": "build-website",
+      "program": "${workspaceFolder}/Website/Company.Website/bin/Debug/net6.0/Company.Website.dll",
+      "cwd": "${workspaceFolder}/Website/Company.Website",
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+      },
+      "timeout": 30000,
+      "url": "https://localhost:6001",
+      "webRoot": "${workspaceFolder}/Website/Company.Website",
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  ]
+}
