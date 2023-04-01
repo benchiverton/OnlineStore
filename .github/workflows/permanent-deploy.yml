@@ -1,0 +1,47 @@
+name: "Permanent - deploy"
+on:
+  push:
+    branches: [main]
+    paths: 
+      - 'terraform/permanent/**'
+
+jobs:
+  deploy-terraform-permanent:
+    environment: prod
+    env:
+      ARM_CLIENT_ID: ${{ secrets.TF_VAR_AGENT_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.TF_VAR_AGENT_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.TF_VAR_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.TF_VAR_TENANT_ID }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "./terraform"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_wrapper: false
+      - name: Terraform Format
+        id: fmt
+        run: terraform -chdir=permanent fmt
+      - name: Terraform Init
+        id: init
+        run: terraform -chdir=permanent init -backend-config="container_name=onlinestoretfstate-permanent"
+      - name: Terraform Validate
+        id: validate
+        run: terraform -chdir=permanent validate -no-color
+      - name: Terraform Plan
+        id: plan
+        run: terraform -chdir=permanent plan -no-color
+        env:
+          TF_VAR_location: "East US"
+          TF_VAR_environment: prod
+      - name: Terraform Apply
+        id: apply
+        run: terraform -chdir=permanent apply -auto-approve
+        env:
+          TF_VAR_location: "East US"
+          TF_VAR_environment: prod

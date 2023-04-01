@@ -1,5 +1,4 @@
-
-name: Shared - import image to ACR
+name: Permanent - import image to ACR
 
 on:
   workflow_dispatch:
