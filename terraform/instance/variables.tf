@@ -1,6 +1,6 @@
 variable "name" {
   type        = string
-  description = "Location of the azure resource group."
+  description = "Name (/prefix) of the resource group"
   default     = "onlinestore"
 }
 
