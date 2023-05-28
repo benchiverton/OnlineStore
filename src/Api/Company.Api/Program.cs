@@ -68,6 +68,6 @@ host.UseHttpsRedirection();
 host.UseCors("CorsPolicy");
 host.UseRouting();
 host.UseAuthorization();
-host.UseEndpoints(endpoints => endpoints.MapControllers());
+host.MapControllers();
 
 await host.RunAsync();
