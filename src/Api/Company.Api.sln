@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{52E28D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Company.Contract", "..\Shared\Company.Contract\Company.Contract.csproj", "{2F1B0F45-DE2F-45AB-904E-E028166B5ACD}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Company.Api.Tests", "Company.Api.Tests\Company.Api.Tests.csproj", "{A3B1C091-19A0-4717-99CC-A92F87EC0D91}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +30,10 @@ Global
 		{2F1B0F45-DE2F-45AB-904E-E028166B5ACD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F1B0F45-DE2F-45AB-904E-E028166B5ACD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F1B0F45-DE2F-45AB-904E-E028166B5ACD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3B1C091-19A0-4717-99CC-A92F87EC0D91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3B1C091-19A0-4717-99CC-A92F87EC0D91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3B1C091-19A0-4717-99CC-A92F87EC0D91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3B1C091-19A0-4717-99CC-A92F87EC0D91}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
