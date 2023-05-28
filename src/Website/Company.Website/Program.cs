@@ -4,7 +4,6 @@ using Blazored.SessionStorage;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Company.Website.ShoppingBasket;
-using Company.Website.Pricing;
 using Company.Website.Products;
 using Serilog;
 using Company.Website;
@@ -22,7 +21,6 @@ builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(build
 // services
 var apiBaseAddress = builder.Configuration.GetValue<string>("Api:BasePath");
 builder.Services.AddHttpClient<ProductService>(client => client.BaseAddress = new Uri(apiBaseAddress));
-builder.Services.AddHttpClient<PricingService>(client => client.BaseAddress = new Uri(apiBaseAddress));
 builder.Services.AddTransient<CurrencyService>();
 builder.Services.AddScoped<ShoppingBasketService>();
 

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Company.Website.Pricing;
+namespace Company.Website.Products;
 
 public class CurrencyService
 {
