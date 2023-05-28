@@ -21,7 +21,7 @@ resource "azurerm_windows_web_app" "api" {
     always_on         = false          // free tier
     application_stack {
       current_stack  = "dotnet"
-      dotnet_version = "v6.0"
+      dotnet_version = "v7.0"
     }
   }
 
@@ -48,7 +48,7 @@ resource "azurerm_windows_web_app" "website" {
     always_on         = false // free tier
     application_stack {
       current_stack  = "dotnet"
-      dotnet_version = "v6.0"
+      dotnet_version = "v7.0"
     }
   }
 
