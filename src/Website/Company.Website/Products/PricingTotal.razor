@@ -1,4 +1,4 @@
-@inject PricingService _pricingService
+@inject ProductService _productService
 @inject CurrencyService _currencyService
 
 <p>
@@ -31,14 +31,16 @@
             return;
         }
 
-        FullTotalPrice = 0m;
-        DealTotalPrice = 0m;
+        var fullTotalPrice = 0m;
+        var dealTotalPrice = 0m;
         foreach (var productVariantIdAndQuantity in ProductVariantIdAndQuantities)
         {
-            var price = await _pricingService.GetPriceByProductTypeId(productVariantIdAndQuantity.productVarientId);
-            FullTotalPrice += price.FullPriceGBP * productVariantIdAndQuantity.quantity;
-            DealTotalPrice += price.DealPriceGBP * productVariantIdAndQuantity.Item3;
+            var price = (await _productService.GetProductVariantById(productVariantIdAndQuantity.productId, productVariantIdAndQuantity.productVarientId)).Price;
+            fullTotalPrice += price.FullPriceGBP * productVariantIdAndQuantity.quantity;
+            dealTotalPrice += price.DealPriceGBP * productVariantIdAndQuantity.Item3;
         }
+        FullTotalPrice = fullTotalPrice;
+        DealTotalPrice = dealTotalPrice;
     }
 
     private string GetFormattedAmount(decimal amount) => $"{CurrencySymbol}{amount:0.00} {CurrencyCode}";

@@ -1,14 +1,15 @@
 using System;
-using System.Diagnostics;
 using System.Diagnostics.Metrics;
 using System.Reflection;
+using Company.Api.Products;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using OpenTelemetry;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -28,6 +29,13 @@ builder.Services.AddCors(policy => policy.AddPolicy("CorsPolicy", opt => opt
         .AllowAnyMethod()));
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo { Title = "Company Website API", Version = "v1" }));
+
+var sqlLiteConnectionStringBuilder = new SqliteConnectionStringBuilder()
+{
+    DataSource = "CompanyApi.db",
+    Mode = SqliteOpenMode.ReadWriteCreate,
+};
+builder.Services.AddDbContext<ProductContext>(options => options.UseSqlite(sqlLiteConnectionStringBuilder.ConnectionString));
 
 var serviceName = Assembly.GetExecutingAssembly().GetName().Name.ToString();
 var serviceVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
@@ -69,5 +77,11 @@ host.UseCors("CorsPolicy");
 host.UseRouting();
 host.UseAuthorization();
 host.MapControllers();
+
+using (var scope = host.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ProductContext>();
+    db.Database.Migrate();
+}
 
 await host.RunAsync();

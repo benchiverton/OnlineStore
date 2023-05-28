@@ -1,6 +1,7 @@
 @page "/products/{ProductId}"
 
 @inject ProductService _productService;
+@inject CurrencyService _currencyService
 
 @if (_ready)
 {
@@ -16,7 +17,30 @@
                 <h2>@_product.Name</h2>
                 <hr class="divider divider-solid">
 
-                <PricingBreakdown CurrencyCode="GBP" ProductId="@ProductId" ProductVariantId="@_selectedVariant.VariantId"></PricingBreakdown>
+                @if (_selectedVariant.Price.FullPriceGBP > _selectedVariant.Price.DealPriceGBP)
+                {
+                    <table class="b-table table table-sm table-borderless">
+                        <tbody>
+                            <tr>
+                                <td>Full Price:</td>
+                            <td><span>@GetFormattedAmount(_selectedVariant.Price.FullPriceGBP)</span></td>
+                            </tr>
+                            <tr>
+                                <td>Price:</td>
+                            <td><span class="price-green">@GetFormattedAmount(_selectedVariant.Price.DealPriceGBP)</span></td>
+                            </tr>
+                            <tr>
+                                <td>You Save:</td>
+                            <td><span>@GetFormattedAmount(_selectedVariant.Price.FullPriceGBP - _selectedVariant.Price.DealPriceGBP) (@((_selectedVariant.Price.FullPriceGBP - _selectedVariant.Price.DealPriceGBP) / _selectedVariant.Price.FullPriceGBP * 100)%)</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                <h5>@GetFormattedAmount(_selectedVariant.Price.DealPriceGBP)</h5>
+                }
+                <p>@_selectedVariant.Price.Details</p>
 
                 <VariantSelector Product="@_product" Variants="@_variants" SelectedVariant="@_selectedVariant" NewProductVariantSelected="@OnNewProductVariantSelected"></VariantSelector>
 
@@ -26,7 +50,7 @@
             <div class="col-md">
                 <div class="card">
                     <div class="card-body">
-                        <PricingSummary CurrencyCode="GBP" ProductId="@ProductId" ProductVariantId="@_selectedVariant.VariantId"></PricingSummary>
+                        <h5>@GetFormattedAmount(_selectedVariant.Price.DealPriceGBP)</h5>
 
                         <ShoppingBasketButtons ProductId="@ProductId" ProductVariantId="@_selectedVariant.VariantId" OnProductAddedToBasket="OnProductAddedToBasket"></ShoppingBasketButtons>
 
@@ -45,6 +69,8 @@
     private Product _product;
     private List<Variant> _variants;
     private Variant _selectedVariant;
+    private string _currencyCode;
+    private string _currencySymbol;
     private bool _ready = false;
     private bool _addedToBasket;
 
@@ -53,9 +79,12 @@
         _product = await _productService.GetProductById(ProductId);
         _variants = await _productService.GetProductVariants(ProductId);
         _selectedVariant = _variants.FirstOrDefault();
+        _currencySymbol = _currencyService.GetCurrencyCharacter("GBP");
         _ready = true;
         await base.OnParametersSetAsync();
     }
+
+    private string GetFormattedAmount(decimal amount) => $"{_currencySymbol}{amount:0.00} {_currencyCode}";
 
     private void OnNewProductVariantSelected(Variant selectedVariant)
     {

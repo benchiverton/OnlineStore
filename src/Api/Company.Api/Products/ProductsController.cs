@@ -1,7 +1,9 @@
-using System.Collections.Generic;
+using System;
 using System.Linq;
-using Company.Contract;
+using System.Threading.Tasks;
+using Company.Api.Products.Dtos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Company.Api.Products;
@@ -11,155 +13,42 @@ namespace Company.Api.Products;
 public class ProductsController : ControllerBase
 {
     private readonly ILogger<ProductsController> _logger;
+    private readonly ProductContext _context;
 
-    public ProductsController(ILogger<ProductsController> logger) => _logger = logger;
+    public ProductsController(ILogger<ProductsController> logger, ProductContext context)
+    {
+        _logger = logger;
+        _context = context;
+    }
 
     [HttpGet("")]
-    public IActionResult GetProducts() => Ok(_products.Values);
+    public async Task<IActionResult> GetProducts() {
+        var productDtos = _context.Products;
+        var products = await productDtos.Select(p => p.FromProductDto()).ToListAsync();
+        return Ok(products);
+    }
 
     [HttpGet("{productId}")]
-    public IActionResult GetProductById(string productId) => Ok(_products[productId]);
+    public async Task<IActionResult> GetProductById(Guid productId)
+    {
+        var productDto = await _context.Products.FindAsync(productId);
+        var product = productDto.FromProductDto();
+        return Ok(product);
+    }
 
     [HttpGet("{productId}/variants")]
-    public IActionResult GetProductVariants(string productId) => Ok(_productVariants[productId]);
+    public async Task<IActionResult> GetProductVariants(Guid productId)
+    {
+        var variantDtos = await _context.Variants.Where(v => v.ProductId == productId).ToListAsync();
+        var variants = variantDtos.Select(v => v.FromVariantDto());
+        return Ok(variants);
+    }
 
     [HttpGet("{productId}/variants/{variantId}")]
-    public IActionResult GetProductVariantById(string productId, string variantId) => Ok(_productVariants[productId].First(pv => pv.VariantId == variantId));
-
-    private readonly Dictionary<string, Product> _products = new Dictionary<string, Product> {
-        {
-            "the_product_one",
-            new Product(
-                "the_product_one",
-                "The Product One",
-                "A great product for great people",
-                "Improve your well-being with Product One",
-                new List<string>{ "Size", "Colour" },
-                new List<string> { @"images\products\the_product_one.png" }
-            )
-        },
-        {
-            "the_product_two",
-            new Product(
-                "the_product_two",
-                "The Product Two",
-                "A brilliant product for brilliant people",
-                "Improve your mindfulness with Product Two",
-                new List<string>{ "Magnitude", "Emotion" },
-                new List<string>{ @"images\products\the_product_two.png" }
-            )
-        }
-    };
-
-    private readonly Dictionary<string, List<Variant>> _productVariants = new Dictionary<string, List<Variant>>
+    public async Task<IActionResult> GetProductVariantById(Guid variantId)
     {
-        {
-            "the_product_one",
-            new List<Variant>
-            {
-                new Variant(
-                    "the_product_one",
-                    "0",
-                    new Dictionary<string, string> {
-                        { "Size", "Small" },
-                        { "Colour", "Green" },
-                    }
-                ),
-                new Variant(
-                    "the_product_one",
-                    "1",
-                    new Dictionary<string, string> {
-                        { "Size", "Small" },
-                        { "Colour", "Greener" },
-                    }
-                ),
-                new Variant(
-                    "the_product_one",
-                    "2",
-                    new Dictionary<string, string> {
-                        { "Size", "Small" },
-                        { "Colour", "Greenest" },
-                    }
-                ),
-                new Variant(
-                    "the_product_one",
-                    "10",
-                    new Dictionary<string, string> {
-                        { "Size", "Big" },
-                        { "Colour", "Green" },
-                    }
-                ),
-                new Variant(
-                    "the_product_one",
-                    "11",
-                    new Dictionary<string, string> {
-                        { "Size", "Big" },
-                        { "Colour", "Greener" },
-                    }
-                ),
-                new Variant(
-                    "the_product_one",
-                    "12",
-                    new Dictionary<string, string> {
-                        { "Size", "Big" },
-                        { "Colour", "Greenest" },
-                    }
-                )
-            }
-        },
-        {
-            "the_product_two",
-            new List<Variant>
-            {
-                new Variant(
-                    "the_product_two",
-                    "20",
-                    new Dictionary<string, string> {
-                        { "Magnitude", "Small" },
-                        { "Emotion", "Excited" },
-                    }
-                ),
-                new Variant(
-                    "the_product_two",
-                    "21",
-                    new Dictionary<string, string> {
-                        { "Magnitude", "Small" },
-                        { "Emotion", "Happy" },
-                    }
-                ),
-                new Variant(
-                    "the_product_two",
-                    "22",
-                    new Dictionary<string, string> {
-                        { "Magnitude", "Small" },
-                        { "Emotion", "Flattered" },
-                    }
-                ),
-                new Variant(
-                    "the_product_two",
-                    "30",
-                    new Dictionary<string, string> {
-                        { "Magnitude", "Vast" },
-                        { "Emotion", "Excited" },
-                    }
-                ),
-                new Variant(
-                    "the_product_two",
-                    "31",
-                    new Dictionary<string, string> {
-                        { "Magnitude", "Vast" },
-                        { "Emotion", "Happy" },
-                    }
-                ),
-                new Variant(
-                    "the_product_two",
-                    "32",
-                    new Dictionary<string, string> {
-                        { "Magnitude", "Vast" },
-                        { "Emotion", "Flattered" },
-                    }
-                )
-            }
-        }
-    };
+        var variantDto = await _context.Variants.FindAsync(variantId);
+        var variant = variantDto.FromVariantDto();
+        return Ok(variant);
+    }
 }
