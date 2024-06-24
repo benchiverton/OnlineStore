@@ -10,7 +10,7 @@ jobs:
       solution_file: "src/Api/Company.Api.sln"
       project_file: "src/Api/Company.Api/Company.Api.csproj"
       dotnet_version: 8.0.203
-      dockerfile_dir: "src/Api/"
+      dockerfile_dir: "src/Api/Company.Api"
       image_name: "api"
     secrets: inherit
 
