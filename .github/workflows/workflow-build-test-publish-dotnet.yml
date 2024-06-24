@@ -58,5 +58,5 @@ jobs:
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_TOKEN }}
       - run: |
-          docker image build --file ${{ inputs.dockerfile_name }} --tag ${{ inputs.target_acr }}/${{ inputs.image_name }}:${{ github.run_number }} .
-          docker push ${{ inputs.target_acr }}/${{ inputs.image_name }}:${{ github.run_number }}
+          docker image build --file ${{ inputs.dockerfile_name }} --tag ${{ inputs.target_acr }}/${{ inputs.image_name }}:${{ github.sha }} .
+          docker push ${{ inputs.target_acr }}/${{ inputs.image_name }}:${{ github.sha }}
