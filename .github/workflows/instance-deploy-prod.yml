@@ -33,7 +33,7 @@ jobs:
     with:
       solution_file: "src/Api/Company.Api.sln"
       project_file: "src/Api/Company.Api/Company.Api.csproj"
-      dotnet_version: 7.0.302
+      dotnet_version: 8.0.203
       artifact_name: "api"
       self_contained: false
 
@@ -42,7 +42,7 @@ jobs:
     with:
       solution_file: "src/Website/Company.Website.sln"
       project_file: "src/Website/Company.Website/Company.Website.csproj"
-      dotnet_version: 7.0.302
+      dotnet_version: 8.0.203
       artifact_name: "website"
       self_contained: true
 

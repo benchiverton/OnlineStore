@@ -5,20 +5,19 @@ on:
 
 jobs:
   build-api:
-    uses: benchiverton/OnlineStore/.github/workflows/workflow-build-test-publish-dotnet.yml@main
+    uses: benchiverton/OnlineStore/.github/workflows/workflow-build-test-publish-dotnet.yml@container-apps
     with:
       solution_file: "src/Api/Company.Api.sln"
       project_file: "src/Api/Company.Api/Company.Api.csproj"
-      dotnet_version: 7.0.302
-      artifact_name: "api"
-      self_contained: false
+      dotnet_version: 8.0.203
+      image_name: "api"
 
   build-website:
     uses: benchiverton/OnlineStore/.github/workflows/workflow-build-test-publish-dotnet.yml@main
     with:
       solution_file: "src/Website/Company.Website.sln"
       project_file: "src/Website/Company.Website/Company.Website.csproj"
-      dotnet_version: 7.0.302
+      dotnet_version: 8.0.203
       artifact_name: "website"
       self_contained: true
 
@@ -72,10 +71,12 @@ jobs:
         shell: bash
         run: |
           mkdir terraform-outputs
+          terraform -chdir=instance output -raw resource_group_name > terraform-outputs/resource_group_name.txt
           terraform -chdir=instance output -raw web_app_api_name > terraform-outputs/web_app_api_name.txt
           terraform -chdir=instance output -raw web_app_api_hostname > terraform-outputs/web_app_api_hostname.txt
           terraform -chdir=instance output -raw web_app_website_name > terraform-outputs/web_app_website_name.txt
           terraform -chdir=instance output -raw web_app_website_hostname > terraform-outputs/web_app_website_hostname.txt
+          terraform -chdir=instance output -raw container_instance_monitoring_fqdn > terraform-outputs/container_instance_monitoring_fqdn.txt
           # -raw cannot handle null values - https://github.com/hashicorp/terraform/issues/32384
           terraform -chdir=instance show -json | jq -r '.values.outputs.container_instance_monitoring_fqdn.value // ""' > container_instance_monitoring_fqdn.txt
       - name: Upload terraform outputs for deploy job
@@ -99,33 +100,35 @@ jobs:
         id: vars
         shell: bash
         run: |
+          echo "resource_group_name=$(cat resource_group_name.txt)" >> $GITHUB_ENV
           echo "web_app_api_name=$(cat web_app_api_name.txt)" >> $GITHUB_ENV
           echo "web_app_api_hostname=$(cat web_app_api_hostname.txt)" >> $GITHUB_ENV
           echo "web_app_website_name=$(cat web_app_website_name.txt)" >> $GITHUB_ENV
           echo "web_app_website_hostname=$(cat web_app_website_hostname.txt)" >> $GITHUB_ENV
+          echo "container_app_api_fqdn=$(cat container_app_api_fqdn.txt)" >> $GITHUB_ENV
           echo "container_instance_monitoring_fqdn=$(cat container_instance_monitoring_fqdn.txt)" >> $GITHUB_ENV
-      - name: Download API package
-        uses: actions/download-artifact@v3
-        with:
-          name: api
-          path: ${{ github.workspace }}/api
       - name: Download website package
         uses: actions/download-artifact@v3
         with:
           name: website
           path: ${{ github.workspace }}/website
       - name: Update website config
-        run: echo "`jq '.Api.BasePath="https://${{ env.web_app_api_hostname }}"' ${{ github.workspace }}/website/wwwroot/appsettings.json`" > ${{ github.workspace }}/website/wwwroot/appsettings.json
+        run: echo "`jq '.Api.BasePath="https://${{ env.container_app_api_fqdn }}"' ${{ github.workspace }}/website/wwwroot/appsettings.json`" > ${{ github.workspace }}/website/wwwroot/appsettings.json
       - name: Login via Azure CLI
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: Run Azure webapp deploy for API
-        uses: azure/webapps-deploy@v2
-        id: apideploy
+      - name: 'Deploy to Azure Container Instances'
+        uses: 'azure/aci-deploy@v1'
         with:
-          app-name: ${{ env.web_app_api_name }}
-          package: ${{ github.workspace }}/api
+          resource-group: ${{ env.resource_group_name }}
+          dns-name-label: ${{ env.resource_group_name }}${{ github.run_number }}
+          image: onlinestorecontainerregistry.azurecr.io/api:${{ github.sha }}
+          registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          registry-username: ${{ secrets.ACR_USERNAME }}
+          registry-password: ${{ secrets.ACR_TOKEN }}
+          name: api
+          location: 'East US'
       - name: Run Azure webapp deploy for website
         uses: azure/webapps-deploy@v2
         id: websitedeploy

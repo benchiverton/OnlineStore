@@ -6,30 +6,6 @@ resource "azurerm_service_plan" "windows" {
   sku_name            = var.plan_sku
 }
 
-resource "azurerm_windows_web_app" "api" {
-  name                = "${var.dns_prefix}-${var.name}-${var.environment}-api"
-  resource_group_name = azurerm_resource_group.instance.name
-  location            = azurerm_resource_group.instance.location
-  service_plan_id     = azurerm_service_plan.windows.id
-
-  identity {
-    type = "SystemAssigned"
-  }
-
-  site_config {
-    default_documents = ["index.html"] // swagger
-    always_on         = false          // free tier
-    application_stack {
-      current_stack  = "dotnet"
-      dotnet_version = "v7.0"
-    }
-  }
-
-  app_settings = {
-    OTLPEXPORTER__ENDPOINT = var.monitoring_enabled ? "http://${azurerm_container_group.monitoring[0].fqdn}:4317" : null
-  }
-}
-
 resource "azurerm_windows_web_app" "website" {
   name                = "${var.dns_prefix}-${var.name}-${var.environment}-website"
   resource_group_name = azurerm_resource_group.instance.name
@@ -48,7 +24,7 @@ resource "azurerm_windows_web_app" "website" {
     always_on         = false // free tier
     application_stack {
       current_stack  = "dotnet"
-      dotnet_version = "v7.0"
+      dotnet_version = "v8.0"
     }
   }
 
