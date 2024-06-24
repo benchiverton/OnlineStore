@@ -11,6 +11,7 @@ jobs:
       project_file: "src/Api/Company.Api/Company.Api.csproj"
       dotnet_version: 8.0.203
       image_name: "api"
+    secrets: inherit
 
   build-website:
     uses: benchiverton/OnlineStore/.github/workflows/workflow-build-test-publish-dotnet.yml@main
