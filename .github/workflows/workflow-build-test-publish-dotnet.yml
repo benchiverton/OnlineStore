@@ -34,12 +34,12 @@ jobs:
       - name: Test
         run: dotnet test ${{ inputs.solution_file }} --configuration Release --no-build --verbosity normal
       - name: 'Build and push image'
-        if: ${{ github.event.inputs.image_name != null }}
+        if: ${{ inputs.image_name != null }}
         uses: docker/login-action@v2
         with:
           registry: ${{ github.event.inputs.target_acr }}
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_TOKEN }}
       - run: |
-          docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ github.event.inputs.image_name }}:${{ github.run_number }}
-          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ github.event.inputs.image_name }}:${{ github.run_number }}
+          docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ inputs.image_name }}:${{ github.run_number }}
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ inputs.image_name }}:${{ github.run_number }}
