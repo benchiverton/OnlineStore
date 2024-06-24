@@ -6,7 +6,7 @@ COPY . .
 
 WORKDIR "/app/src/Api/Company.Api"
 RUN dotnet restore "Company.Api.csproj"
-RUN dotnet publish "Company.Api.csproj" -c Release -o /out
+RUN dotnet publish "Company.Api.csproj" -c Release -o /app/out
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 
