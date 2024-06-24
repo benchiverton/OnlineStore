@@ -120,11 +120,11 @@ jobs:
         uses: azure/container-apps-deploy-action@v1
         with:
           acrName: onlinestorecontainerregistry
-          containerAppName: onlinestore-api
-          resourceGroup: ${{ env.resource_group_name }}
-          imageToDeploy: onlinestorecontainerregistry.azurecr.io/onlinestore-api:${{ github.sha }}
           acrUsername: ${{ secrets.ACR_USERNAME }}
           acrPassword: ${{ secrets.ACR_TOKEN }}
+          containerAppName: onlinestore-api
+          resourceGroup: ${{ env.resource_group_name }}
+          imageToDeploy: onlinestore-api:${{ github.sha }}
           location: 'East US'
       - name: Run Azure webapp deploy for website
         uses: azure/webapps-deploy@v2
