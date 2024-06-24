@@ -16,7 +16,7 @@ on:
         default: true
       artifact_name:
         type: string
-      dockerfile_dir:
+      dockerfile_name:
         type: string
         default: .
       image_name:
@@ -58,5 +58,5 @@ jobs:
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_TOKEN }}
       - run: |
-          docker build -f ${{ inputs.dockerfile_dir }} -t ${{ inputs.target_acr }}/${{ inputs.image_name }}:${{ github.run_number }}
+          docker build -f ${{ inputs.dockerfile_name }} -t ${{ inputs.target_acr }}/${{ inputs.image_name }}:${{ github.run_number }}
           docker push ${{ inputs.target_acr }}/${{ inputs.image_name }}:${{ github.run_number }}
