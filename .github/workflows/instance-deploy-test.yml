@@ -117,9 +117,9 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: 'Deploy to Azure Container Instances'
-        uses: 'azure/container-apps-deploy-action@v1'
+        uses: azure/container-apps-deploy-action@v1
         with:
-          acrName: onlinestorecontainerregistry.azurecr.io
+          acrName: onlinestorecontainerregistry
           containerAppName: onlinestore-api
           resourceGroup: ${{ env.resource_group_name }}
           imageToDeploy: onlinestorecontainerregistry.azurecr.io/onlinestore-api:${{ github.sha }}
