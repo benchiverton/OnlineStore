@@ -29,16 +29,6 @@ output "resource_group_name" {
   sensitive   = false
 }
 
-output "web_app_api_name" {
-  value       = azurerm_windows_web_app.api.name
-  sensitive   = false
-}
-
-output "web_app_api_hostname" {
-  value       = azurerm_windows_web_app.api.default_hostname
-  sensitive   = false
-}
-
 output "web_app_website_name" {
   value       = azurerm_windows_web_app.website.name
   sensitive   = false

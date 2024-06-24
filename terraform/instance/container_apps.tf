@@ -7,7 +7,7 @@ resource  "azurerm_container_app_environment" "apps" {
 resource "azurerm_container_app" "api" {
   name                         = "api"
   container_app_environment_id = azurerm_container_app_environment.apps.id
-  resource_group_name          = azurerm_resource_group.isntance.name
+  resource_group_name          = azurerm_resource_group.instance.name
   revision_mode                = "Single"
 
   template {
