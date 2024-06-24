@@ -11,7 +11,7 @@ jobs:
       project_file: "src/Api/Company.Api/Company.Api.csproj"
       dotnet_version: 8.0.203
       dockerfile_name: "src/Api/Company.Api/dockerfile"
-      image_name: "api"
+      image_name: "onlinestore-api"
     secrets: inherit
 
   build-website:
@@ -121,11 +121,11 @@ jobs:
         with:
           resource-group: ${{ env.resource_group_name }}
           dns-name-label: ${{ env.resource_group_name }}${{ github.run_number }}
-          image: onlinestorecontainerregistry.azurecr.io/api:${{ github.sha }}
+          image: onlinestorecontainerregistry.azurecr.io/onlinestore-api:${{ github.sha }}
           registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
           registry-username: ${{ secrets.ACR_USERNAME }}
           registry-password: ${{ secrets.ACR_TOKEN }}
-          name: api
+          name: onlinestore-api
           location: 'East US'
       - name: Run Azure webapp deploy for website
         uses: azure/webapps-deploy@v2
