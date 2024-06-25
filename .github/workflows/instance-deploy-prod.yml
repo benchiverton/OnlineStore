@@ -97,6 +97,7 @@ jobs:
       - name: Save terraform outputs
         shell: bash
         run: |
+          mkdir terraform-outputs
           terraform -chdir=instance output -raw resource_group_name > terraform-outputs/resource_group_name.txt
           terraform -chdir=instance output -raw container_app_api_fqdn > terraform-outputs/container_app_api_fqdn.txt
           terraform -chdir=instance output -raw container_app_website_fqdn > terraform-outputs/container_app_website_fqdn.txt
