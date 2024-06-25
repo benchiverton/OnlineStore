@@ -12,5 +12,6 @@ WORKDIR /var/www/web
 
 COPY --from=build-env /app/out/wwwroot .
 COPY /src/Website/Company.Website/nginx.conf /etc/nginx/nginx.conf
+COPY "/src/Website/Company.Website/overwrite-config.sh", "/docker-entrypoint.d/40-script.sh"]
 
 EXPOSE 80
