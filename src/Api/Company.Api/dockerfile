@@ -1,16 +1,15 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /app
 
-# Copy everything
 COPY . .
 
 WORKDIR "/app/src/Api/Company.Api"
 RUN dotnet restore "Company.Api.csproj"
 RUN dotnet publish "Company.Api.csproj" -c Release -o /app/out
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
-
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
+
 COPY --from=build-env /app/out .
 
 EXPOSE 80
