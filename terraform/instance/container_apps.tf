@@ -17,6 +17,7 @@ resource "azurerm_container_app" "api" {
       cpu    = 0.25
       memory = "0.5Gi"
     }
+    max_replicas = 1
   }
 
   ingress {
@@ -51,6 +52,7 @@ resource "azurerm_container_app" "website" {
       cpu    = 0.25
       memory = "0.5Gi"
     }
+    max_replicas = 1
   }
 
   ingress {
