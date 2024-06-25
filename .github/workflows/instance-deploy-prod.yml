@@ -107,7 +107,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: terraform-outputs
-          path: terraform/
+          path: terraform/terraform-outputs/
 
   deploy-app-prod:
     needs: [deploy-terraform-prod]
