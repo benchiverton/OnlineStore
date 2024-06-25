@@ -15,13 +15,13 @@ jobs:
     secrets: inherit
 
   build-website:
-    uses: benchiverton/OnlineStore/.github/workflows/workflow-build-test-publish-dotnet.yml@main
+    uses: benchiverton/OnlineStore/.github/workflows/workflow-build-test-publish-dotnet.yml@containerise-apps
     with:
       solution_file: "src/Website/Company.Website.sln"
       project_file: "src/Website/Company.Website/Company.Website.csproj"
       dotnet_version: 8.0.203
-      artifact_name: "website"
-      self_contained: true
+      dockerfile_name: "src/Website/Company.Website/dockerfile"
+      image_name: "onlinestore-website"
 
   deploy-terraform-test:
     needs: [build-api, build-website]
@@ -74,9 +74,8 @@ jobs:
         run: |
           mkdir terraform-outputs
           terraform -chdir=instance output -raw resource_group_name > terraform-outputs/resource_group_name.txt
-          terraform -chdir=instance output -raw web_app_website_name > terraform-outputs/web_app_website_name.txt
-          terraform -chdir=instance output -raw web_app_website_hostname > terraform-outputs/web_app_website_hostname.txt
           terraform -chdir=instance output -raw container_app_api_fqdn > terraform-outputs/container_app_api_fqdn.txt
+          terraform -chdir=instance output -raw container_app_website_fqdn > terraform-outputs/container_app_website_fqdn.txt
           terraform -chdir=instance output -raw container_instance_monitoring_fqdn > terraform-outputs/container_instance_monitoring_fqdn.txt
           # -raw cannot handle null values - https://github.com/hashicorp/terraform/issues/32384
           terraform -chdir=instance show -json | jq -r '.values.outputs.container_instance_monitoring_fqdn.value // ""' > container_instance_monitoring_fqdn.txt
@@ -102,22 +101,14 @@ jobs:
         shell: bash
         run: |
           echo "resource_group_name=$(cat resource_group_name.txt)" >> $GITHUB_ENV
-          echo "web_app_website_name=$(cat web_app_website_name.txt)" >> $GITHUB_ENV
-          echo "web_app_website_hostname=$(cat web_app_website_hostname.txt)" >> $GITHUB_ENV
           echo "container_app_api_fqdn=$(cat container_app_api_fqdn.txt)" >> $GITHUB_ENV
+          echo "container_app_website_fqdn=$(cat container_app_website_fqdn.txt)" >> $GITHUB_ENV
           echo "container_instance_monitoring_fqdn=$(cat container_instance_monitoring_fqdn.txt)" >> $GITHUB_ENV
-      - name: Download website package
-        uses: actions/download-artifact@v3
-        with:
-          name: website
-          path: ${{ github.workspace }}/website
-      - name: Update website config
-        run: echo "`jq '.Api.BasePath="https://${{ env.container_app_api_fqdn }}"' ${{ github.workspace }}/website/wwwroot/appsettings.json`" > ${{ github.workspace }}/website/wwwroot/appsettings.json
       - name: Login via Azure CLI
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: 'Deploy to Azure Container Instances'
+      - name: Deploy api
         uses: azure/container-apps-deploy-action@v1
         with:
           acrName: onlinestorecontainerregistry
@@ -128,12 +119,17 @@ jobs:
           location: 'East US'
           resourceGroup: ${{ env.resource_group_name }}
           targetPort: 8080
-      - name: Run Azure webapp deploy for website
-        uses: azure/webapps-deploy@v2
-        id: websitedeploy
+      - name: Deploy website
+        uses: azure/container-apps-deploy-action@v1
         with:
-          app-name: ${{ env.web_app_website_name }}
-          package: ${{ github.workspace }}/website
+          acrName: onlinestorecontainerregistry
+          acrUsername: ${{ secrets.ACR_USERNAME }}
+          acrPassword: ${{ secrets.ACR_TOKEN }}
+          containerAppName: onlinestore-website
+          imageToDeploy: onlinestorecontainerregistry.azurecr.io/onlinestore-website:${{ github.sha }}
+          location: 'East US'
+          resourceGroup: ${{ env.resource_group_name }}
+          targetPort: 8080
       - name: Post test environment information on PR
         uses: actions/github-script@0.9.0
         if: github.event_name == 'pull_request'
@@ -143,7 +139,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const output = `### Test environment information
-            #### 🔗[Visit website](https://${{ env.web_app_website_hostname }}/)
+            #### 🔗[Visit website](https://${{ env.container_app_website_fqdn }}/)
             #### 🔗[Visit API](https://${{ env.container_app_api_fqdn }}/swagger/)
             #### 🔗[Visit monitoring UI](http://${{ env.container_instance_monitoring_fqdn }}:16686)
 

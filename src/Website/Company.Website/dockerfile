@@ -1,0 +1,17 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+WORKDIR /app
+
+COPY . .
+
+WORKDIR "/app/src/Website/Company.Website"
+RUN dotnet restore "Company.Website.csproj"
+RUN dotnet publish "Company.Website.csproj" -c Release -o /app/out
+
+FROM nginx:alpine AS runtime
+WORKDIR /var/www/web
+
+COPY --from=build-env /app/out/wwwroot .
+
+EXPOSE 8080
+
+ENTRYPOINT ["dotnet", "Company.Website.dll"]

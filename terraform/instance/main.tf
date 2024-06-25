@@ -29,18 +29,13 @@ output "resource_group_name" {
   sensitive   = false
 }
 
-output "web_app_website_name" {
-  value       = azurerm_windows_web_app.website.name
-  sensitive   = false
-}
-
-output "web_app_website_hostname" {
-  value       = azurerm_windows_web_app.website.default_hostname
-  sensitive   = false
-}
-
 output "container_app_api_fqdn" {
   value       = azurerm_container_app.api.ingress[0].fqdn
+  sensitive   = false
+}
+
+output "container_app_website_fqdn" {
+  value       = azurerm_container_app.website.ingress[0].fqdn
   sensitive   = false
 }
 
