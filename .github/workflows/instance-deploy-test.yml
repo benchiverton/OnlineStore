@@ -130,7 +130,8 @@ jobs:
           imageToDeploy: onlinestorecontainerregistry.azurecr.io/onlinestore-website:${{ github.sha }}
           location: 'East US'
           resourceGroup: ${{ env.resource_group_name }}
-          targetPort: 8080
+          targetPort: 80
+          environmentVariables: "API__BASEPATH=https://${{ env.container_app_api_fqdn }}"
       - name: Post test environment information on PR
         uses: actions/github-script@0.9.0
         if: github.event_name == 'pull_request'

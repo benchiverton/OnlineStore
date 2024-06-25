@@ -12,6 +12,6 @@ WORKDIR /var/www/web
 
 COPY --from=build-env /app/out/wwwroot .
 
-EXPOSE 8080
+EXPOSE 80
 
 ENTRYPOINT ["dotnet", "Company.Website.dll"]
