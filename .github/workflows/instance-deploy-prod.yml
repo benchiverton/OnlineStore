@@ -101,7 +101,6 @@ jobs:
           terraform -chdir=instance output -raw resource_group_name > terraform-outputs/resource_group_name.txt
           terraform -chdir=instance output -raw container_app_api_fqdn > terraform-outputs/container_app_api_fqdn.txt
           terraform -chdir=instance output -raw container_app_website_fqdn > terraform-outputs/container_app_website_fqdn.txt
-          terraform -chdir=instance output -raw container_instance_monitoring_fqdn > terraform-outputs/container_instance_monitoring_fqdn.txt
           # -raw cannot handle null values - https://github.com/hashicorp/terraform/issues/32384
           terraform -chdir=instance show -json | jq -r '.values.outputs.container_instance_monitoring_fqdn.value // ""' > container_instance_monitoring_fqdn.txt
       - name: Upload terraform outputs for deploy job
