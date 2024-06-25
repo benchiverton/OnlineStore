@@ -127,7 +127,7 @@ jobs:
           imageToDeploy: onlinestorecontainerregistry.azurecr.io/onlinestore-api:${{ github.sha }}
           location: 'East US'
           resourceGroup: ${{ env.resource_group_name }}
-          targetPort: 80
+          targetPort: 8080
       - name: Run Azure webapp deploy for website
         uses: azure/webapps-deploy@v2
         id: websitedeploy
