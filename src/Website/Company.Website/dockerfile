@@ -11,6 +11,6 @@ FROM nginx:alpine AS runtime
 WORKDIR /var/www/web
 
 COPY --from=build-env /app/out/wwwroot .
-COPY /nginx.conf /etc/nginx/nginx.conf
+COPY --from=build-env /nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
