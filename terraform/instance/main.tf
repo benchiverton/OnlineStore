@@ -2,7 +2,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "=3.42.0"
+      version = "=3.109.0"
     }
   }
   backend "azurerm" {
@@ -24,23 +24,18 @@ resource "azurerm_resource_group" "instance" {
   location = var.location
 }
 
-output "web_app_api_name" {
-  value       = azurerm_windows_web_app.api.name
+output "resource_group_name" {
+  value       = azurerm_resource_group.instance.name
   sensitive   = false
 }
 
-output "web_app_api_hostname" {
-  value       = azurerm_windows_web_app.api.default_hostname
+output "container_app_api_fqdn" {
+  value       = azurerm_container_app.api.ingress[0].fqdn
   sensitive   = false
 }
 
-output "web_app_website_name" {
-  value       = azurerm_windows_web_app.website.name
-  sensitive   = false
-}
-
-output "web_app_website_hostname" {
-  value       = azurerm_windows_web_app.website.default_hostname
+output "container_app_website_fqdn" {
+  value       = azurerm_container_app.website.ingress[0].fqdn
   sensitive   = false
 }
 

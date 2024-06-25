@@ -25,9 +25,10 @@ The GitHub runner needs to connect to Azure Storage (Terraform state file) and o
 2. (powershell) Get your subscription id (`az account list`).
 3. (powershell) Specify which subscription you want to use (`az account set --subscription="SUBSCRIPTION_ID"`).
 4. (powershell) Create the service principal in the 'Online Store' subscription (`az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/SUBSCRIPTION_ID" --sdk-auth`). This will output some JSON that the runner will use to log into Azure (stored in repo secret `AZURE_CREDENTIALS`). In addition, the following repository secrets should be extracted from this JSON (which are needed for terraform steps):
-   * *appId* - `TF_VAR_AGENT_CLIENT_ID`
-   * *password* - `TF_VAR_AGENT_CLIENT_SECRET`
-   * *tenant* - `TF_VAR_TENANT_ID`
+   * *subscriptionId*
+   * *clientId* - `TF_VAR_AGENT_CLIENT_ID`
+   * *clientSecret* - `TF_VAR_AGENT_CLIENT_SECRET`
+   * *tenantId* - `TF_VAR_TENANT_ID`
 
 For more information, read ['Azure Provider: Authenticating using a Service Principal with a Client Secret'](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_client_secret).
 
