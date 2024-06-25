@@ -42,9 +42,8 @@ var serviceVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString(
 var appResourceBuilder = ResourceBuilder.CreateDefault()
     .AddService(serviceName: serviceName, serviceVersion: serviceVersion);
 var otlpExporterEndpoint = builder.Configuration.GetValue<string>("OTLPExporter:Endpoint");
-if (!string.IsNullOrEmpty(otlpExporterEndpoint))
+if (Uri.TryCreate(otlpExporterEndpoint, UriKind.Absolute, out var otlpExporterEndpointUri))
 {
-    var otlpExporterEndpointUri = new Uri(otlpExporterEndpoint);
     var meter = new Meter(serviceName);
     builder.Services.AddOpenTelemetry()
         .WithTracing(tracerProviderBuilder => tracerProviderBuilder
@@ -59,6 +58,10 @@ if (!string.IsNullOrEmpty(otlpExporterEndpoint))
             .AddMeter(meter.Name)
             .SetResourceBuilder(appResourceBuilder)
             .AddAspNetCoreInstrumentation());
+}
+else
+{
+    Log.Logger.Warning("Invalid OTLP URI: {uri}. Open Telemetry will not be configured.", otlpExporterEndpoint);
 }
 
 var host = builder.Build();
