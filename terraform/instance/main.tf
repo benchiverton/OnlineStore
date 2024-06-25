@@ -40,7 +40,7 @@ output "web_app_website_hostname" {
 }
 
 output "container_app_api_fqdn" {
-  value       = azurerm_container_app.api.latest_revision_fqdn
+  value       = azurerm_container_app.api.ingress[0].fqdn
   sensitive   = false
 }
 
