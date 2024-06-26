@@ -3,31 +3,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-    inputs:
-      monitoring_enabled:
-        description: Deploy monitoring infrastructure (£20/month)
-        type: boolean
-        required: true
-        default: false
 
 jobs:
-  variables:
-    runs-on: ubuntu-latest
-    outputs:
-      monitoring_enabled: ${{ steps.setvars.outputs.monitoring_enabled }}
-    steps:
-      - name: Set variables needed for workflow
-        id: setvars
-        run: |
-          if [[ "${{ inputs.monitoring_enabled}}" == "" ]]
-          then
-            echo "monitoring_enabled=false"
-            echo "monitoring_enabled=false" >> $GITHUB_OUTPUT
-          else
-            echo "monitoring_enabled=${{ inputs.monitoring_enabled}}"
-            echo "monitoring_enabled=${{ inputs.monitoring_enabled}}" >> $GITHUB_OUTPUT
-          fi
-
   build-api:
     uses: benchiverton/OnlineStore/.github/workflows/workflow-build-test-publish-dotnet.yml@main
     with:
@@ -49,7 +26,7 @@ jobs:
     secrets: inherit
 
   deploy-terraform-prod:
-    needs: [variables, build-api, build-website]
+    needs: [build-api, build-website]
     environment: prod
     env:
       ARM_CLIENT_ID: ${{ secrets.TF_VAR_AGENT_CLIENT_ID }}
@@ -84,7 +61,6 @@ jobs:
           TF_VAR_environment: prod
           TF_VAR_acr_username: ${{ secrets.ACR_USERNAME }}
           TF_VAR_acr_password: ${{ secrets.ACR_TOKEN }}
-          TF_VAR_monitoring_enabled: ${{ needs.variables.outputs.monitoring_enabled }}
       - name: Terraform Apply
         id: apply
         run: terraform -chdir=instance apply -auto-approve
@@ -93,7 +69,6 @@ jobs:
           TF_VAR_environment: prod
           TF_VAR_acr_username: ${{ secrets.ACR_USERNAME }}
           TF_VAR_acr_password: ${{ secrets.ACR_TOKEN }}
-          TF_VAR_monitoring_enabled: ${{ needs.variables.outputs.monitoring_enabled }}
       - name: Save terraform outputs
         shell: bash
         run: |

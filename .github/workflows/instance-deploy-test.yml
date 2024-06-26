@@ -60,7 +60,6 @@ jobs:
           TF_VAR_environment: ${{ github.head_ref }}
           TF_VAR_acr_username: ${{ secrets.ACR_USERNAME }}
           TF_VAR_acr_password: ${{ secrets.ACR_TOKEN }}
-          TF_VAR_monitoring_enabled: true # enabled for testing
       - name: Terraform Apply
         id: apply
         run: terraform -chdir=instance apply -auto-approve
@@ -69,7 +68,6 @@ jobs:
           TF_VAR_environment: ${{ github.head_ref }}
           TF_VAR_acr_username: ${{ secrets.ACR_USERNAME }}
           TF_VAR_acr_password: ${{ secrets.ACR_TOKEN }}
-          TF_VAR_monitoring_enabled: true # enabled for testing
       - name: Save terraform outputs
         shell: bash
         run: |
@@ -138,17 +136,11 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           comment-author: 'github-actions[bot]'
           body-includes: "### Test environment information"
-      - name: Create comment
-        if: steps.fc.outputs.comment-id == ''
-        uses: peter-evans/create-or-update-comment@v1
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body: "### Test environment information"
-      - name: Update comment 
-        if: steps.fc.outputs.comment-id != ''
+      - name: Create or update comment 
         uses: peter-evans/create-or-update-comment@v1
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
+          edit-mode: replace
           body: |
             ### Test environment information
             #### 🔗 [Company Website](https://${{ env.container_app_website_fqdn }}/)
