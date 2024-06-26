@@ -98,6 +98,7 @@ resource "azurerm_container_app" "monitoring" {
     external_enabled = true
     transport        = "http"
     target_port      = 18888
+    allow_insecure_connections = true
     traffic_weight {
       latest_revision = true
       percentage = 100
@@ -132,8 +133,7 @@ resource "azapi_update_resource" "container_app_api" {
           additionalPortMappings = [{
             exposedPort = 18889,
             targetPort = 18889,
-            external = false,
-            allowInsecure = true
+            external = false
           }]
         }
       }
