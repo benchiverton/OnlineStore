@@ -3,17 +3,33 @@ name: Permanent - import image to ACR
 on:
   workflow_dispatch:
     inputs:
+      source_registry:
+        type: choice
+        required: true
+        options:
+        - docker.io
+        - mcr.microsoft.com
       image:
+        type: choice
+        required: true
+        options:
+        - dotnet/aspire-dashboard
+        - jaegertracing/all-in-one
+      version:
+        type: string
         required: true
       target_acr:
+        type: string
         required: true
+        default: onlinestorecontainerregistry.azurecr.io
 
 jobs:
-  import-image-from-dockerhub:
+  import-image:
     runs-on: ubuntu-latest
     steps:
       - name: Login to Docker Hub
         uses: docker/login-action@v2
+        if: inputs.source_registry == 'docker.io'
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -25,10 +41,10 @@ jobs:
           password: ${{ secrets.ACR_TOKEN }}
       - name: Pull image
         run: |
-          docker pull docker.io/${{ inputs.image }}
+          docker pull ${{ inputs.source_registry }}/${{ inputs.image }}:${{ inputs.version }}
       - name: Re-tag image
         run: |
-          docker tag docker.io/${{ inputs.image }} ${{ inputs.target_acr }}/${{ inputs.image }}
+          docker tag ${{ inputs.source_registry }}/${{ inputs.image }}:${{ inputs.version }} ${{ inputs.target_acr }}/${{ inputs.image }}:${{ inputs.version }}
       - name: Publish image
         run: |
-          docker push ${{ inputs.target_acr }}/${{ inputs.image }}
+          docker push ${{ inputs.target_acr }}/${{ inputs.image }}:${{ inputs.version }}
