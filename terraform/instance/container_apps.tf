@@ -117,7 +117,7 @@ resource "azurerm_container_app" "monitoring" {
 }
 
 # update the container app with extra additionalPortMappings, as this is not supported by the existing TF provider
-resource "azapi_update_resource" "container_app_api" {
+resource "azapi_update_resource" "monitoring_portmappings" {
   type        = "Microsoft.App/containerApps@2023-11-02-preview"
   resource_id = azurerm_container_app.monitoring.id
 
