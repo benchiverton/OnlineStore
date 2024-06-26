@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Company.Api.Products.Dtos;
@@ -12,6 +13,8 @@ namespace Company.Api.Products;
 [Route("products")]
 public class ProductsController : ControllerBase
 {
+    private static readonly ActivitySource MyActivitySource = new(nameof(ProductsController), "1.0.0");
+
     private readonly ILogger<ProductsController> _logger;
     private readonly ProductContext _context;
 
@@ -24,6 +27,7 @@ public class ProductsController : ControllerBase
     [HttpGet("")]
     public async Task<IActionResult> GetProducts() {
         var productDtos = _context.Products;
+        using var activity = MyActivitySource.StartActivity("GetProductsActivity");
         var products = await productDtos.Select(p => p.FromProductDto()).ToListAsync();
         return Ok(products);
     }
