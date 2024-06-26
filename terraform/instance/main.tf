@@ -4,6 +4,10 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "=3.109.0"
     }
+    azapi = {
+      source  = "azure/azapi"
+      version = "=1.13.1"
+    }
   }
   backend "azurerm" {
     resource_group_name  = "onlinestoretfstate"
@@ -39,7 +43,7 @@ output "container_app_website_fqdn" {
   sensitive   = false
 }
 
-output "container_instance_monitoring_fqdn" {
-  value       = one(azurerm_container_group.monitoring[*].fqdn)
+output "container_app_monitoring_fqdn" {
+  value       = azurerm_container_app.monitoring.ingress[0].fqdn
   sensitive   = false
 }

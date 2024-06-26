@@ -131,7 +131,7 @@ builder.Services.Configure<OpenTelemetryLoggerOptions>(options => options.AddOtl
 
 ### CICD
 
-I copy the .NET Aspire Dashboard image to my Azure Container Registry [here](../../.github/workflows/permanent-image-import.yml), and deploy it using terraform [here](../../terraform/instance/container_instances.tf).
+I copy the .NET Aspire Dashboard image to my Azure Container Registry [here](../../.github/workflows/permanent-image-import.yml), and deploy it using terraform [here](../../terraform/instance/container_apps.tf#L77).
 
 ## Data visualisation (.NET Aspire)
 
