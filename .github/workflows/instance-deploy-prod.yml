@@ -102,7 +102,7 @@ jobs:
           terraform -chdir=instance output -raw container_app_api_fqdn > terraform-outputs/container_app_api_fqdn.txt
           terraform -chdir=instance output -raw container_app_website_fqdn > terraform-outputs/container_app_website_fqdn.txt
           # -raw cannot handle null values - https://github.com/hashicorp/terraform/issues/32384
-          terraform -chdir=instance show -json | jq -r '.values.outputs.container_instance_monitoring_fqdn.value // ""' > container_instance_monitoring_fqdn.txt
+          terraform -chdir=instance show -json | jq -r '.values.outputs.container_app_monitoring_fqdn.value // ""' > container_app_monitoring_fqdn.txt
       - name: Upload terraform outputs for deploy job
         uses: actions/upload-artifact@v3
         with:
@@ -127,7 +127,7 @@ jobs:
           echo "resource_group_name=$(cat resource_group_name.txt)" >> $GITHUB_ENV
           echo "container_app_api_fqdn=$(cat container_app_api_fqdn.txt)" >> $GITHUB_ENV
           echo "container_app_website_fqdn=$(cat container_app_website_fqdn.txt)" >> $GITHUB_ENV
-          echo "container_instance_monitoring_fqdn=$(cat container_instance_monitoring_fqdn.txt)" >> $GITHUB_ENV
+          echo "container_app_monitoring_fqdn=$(cat container_app_monitoring_fqdn.txt)" >> $GITHUB_ENV
       - name: Login via Azure CLI
         uses: azure/login@v1
         with:
@@ -143,7 +143,7 @@ jobs:
           location: 'East US'
           resourceGroup: ${{ env.resource_group_name }}
           targetPort: 8080
-          environmentVariables: "OTEL_EXPORTER_OTLP_ENDPOINT=http://${{ env.container_instance_monitoring_fqdn }}:18889"
+          environmentVariables: "OTEL_EXPORTER_OTLP_ENDPOINT=http://${{ env.container_app_monitoring_fqdn }}:18889"
       - name: Deploy website
         uses: azure/container-apps-deploy-action@v1
         with:
