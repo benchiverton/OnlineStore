@@ -143,7 +143,7 @@ jobs:
           location: 'East US'
           resourceGroup: ${{ env.resource_group_name }}
           targetPort: 8080
-          environmentVariables: "OTLPEXPORTER__ENDPOINT=http://${{ env.container_instance_monitoring_fqdn }}:4317"
+          environmentVariables: "OTLPEXPORTER__ENDPOINT=http://${{ env.container_instance_monitoring_fqdn }}:18889"
       - name: Deploy website
         uses: azure/container-apps-deploy-action@v1
         with:

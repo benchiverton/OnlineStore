@@ -70,7 +70,7 @@ Once I had a running instance of Jaeger, I configured my app to export it's data
 ```csharp
 builder.Services.AddOpenTelemetry()
     .WithTracing(
-        tracerProviderBuilder => tracerProviderBuilder.AddOtlpExporter(opt => opt.Endpoint = "http://<ip_address>:4317")
+        tracerProviderBuilder => tracerProviderBuilder.AddOtlpExporter(opt => opt.Endpoint = "http://<ip_address>:18889")
     );
 ```
 
@@ -78,7 +78,7 @@ Jaeger docs: https://www.jaegertracing.io/
 
 ### CICD
 
-I copied the Jaeger all-in-one public image to my Azure Container Registry using [this workflow](../../.github/workflows/shared-image-import.yml). I then deployed an Azure Container Instance using this image, opening the ports for the front end (16686) and the Open Telemetry Protocol via GRPC (4317). This is deployed by terraform so you can see the full configuration [here](../../terraform/instance/container_instances.tf).
+I copied the Jaeger all-in-one public image to my Azure Container Registry using [this workflow](../../.github/workflows/shared-image-import.yml). I then deployed an Azure Container Instance using this image, opening the ports for the front end (16686) and the Open Telemetry Protocol via GRPC (18889). This is deployed by terraform so you can see the full configuration [here](../../terraform/instance/container_instances.tf).
 
 ## Data visualisation (Jaeger tracing)
 

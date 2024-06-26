@@ -20,8 +20,12 @@ resource "azurerm_container_group" "monitoring" {
     }
     # OTLP over GRPC
     ports {
-      port     = 4317
+      port     = 18889
       protocol = "TCP"
+    }
+
+    environment_variables = {
+      DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS = "true"
     }
   }
 
