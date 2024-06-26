@@ -86,6 +86,10 @@ resource "azurerm_container_app" "monitoring" {
       image  = "onlinestorecontainerregistry.azurecr.io/dotnet/aspire-dashboard:8.0.0"
       cpu    = 0.25
       memory = "0.5Gi"
+      env {
+        name  = "DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS"
+        value = "true"
+      }
     }
     max_replicas = 1
   }
@@ -130,9 +134,9 @@ resource "azapi_update_resource" "container_app_api" {
       configuration = {
         ingress = {
           additionalPortMappings = [{
-            exposedPort: 18889,
-            targetPort: 18889,
-            external: false
+            exposedPort = 18889,
+            targetPort = 18889,
+            external = false
           }]
         }
       }
