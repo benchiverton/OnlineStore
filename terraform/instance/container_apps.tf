@@ -129,11 +129,11 @@ resource "azapi_update_resource" "container_app_api" {
     properties = {
       configuration = {
         ingress = {
-          additionalPortMappings = {
+          additionalPortMappings = [{
             exposedPort: 18889,
             targetPort: 18889,
             external: false
-          }
+          }]
         }
       }
     }
