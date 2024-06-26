@@ -114,14 +114,6 @@ resource "azurerm_container_app" "monitoring" {
     name = "acr-password"
     value = var.acr_password
   }
-  
-  lifecycle {
-    ignore_changes = [
-      template[0].container[0],
-      registry,
-      secret,
-    ]
-  }
 }
 
 # update the container app with extra additionalPortMappings, as this is not supported by the existing TF provider
