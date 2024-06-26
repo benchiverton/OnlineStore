@@ -140,21 +140,21 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           comment-author: 'github-actions[bot]'
           body-includes: "### Test environment information"
-      # - name: Create comment
-      #   if: steps.fc.outputs.comment-id == ''
-      #   uses: peter-evans/create-or-update-comment@v1
-      #   with:
-      #     issue-number: ${{ github.event.pull_request.number }}
-      #     body: "### Test environment information"
-      # - name: Update comment
-      #   if: steps.fc.outputs.comment-id != ''
-      #   uses: peter-evans/create-or-update-comment@v1
-      #   with:
-      #     comment-id: ${{ steps.fc.outputs.comment-id }}
-      #     body: |
-      #       ### Test environment information
-      #       #### 🔗 [Company Website](https://${{ env.container_app_website_fqdn }}/)
-      #       #### 🔗 [Company API](https://${{ env.container_app_api_fqdn }}/swagger/)
-      #       #### 🔗 [Monitoring Dashboard](https://${{ env.container_app_monitoring_fqdn }})
+      - name: Create comment
+        if: steps.fc.outputs.comment-id == ''
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: "### Test environment information"
+      - name: Update comment
+        if: steps.fc.outputs.comment-id != ''
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          body: |
+            ### Test environment information
+            #### 🔗 [Company Website](https://${{ env.container_app_website_fqdn }}/)
+            #### 🔗 [Company API](https://${{ env.container_app_api_fqdn }}/swagger/)
+            #### 🔗 [Monitoring Dashboard](https://${{ env.container_app_monitoring_fqdn }})
 
-      #       *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*
