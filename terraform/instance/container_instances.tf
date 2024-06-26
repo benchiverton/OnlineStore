@@ -8,25 +8,24 @@ resource "azurerm_container_group" "monitoring" {
   os_type             = "Linux"
 
   container {
-    name   = "jaegertracing-all-in-one"
-    image  = "onlinestorecontainerregistry.azurecr.io/jaegertracing/all-in-one:1.42"
+    name   = "aspire-dashboard"
+    image  = "onlinestorecontainerregistry.azurecr.io/dotnet/aspire-dashboard:8.0.0"
     cpu    = "0.05"
     memory = "0.20"
 
     # serve frontend
     ports {
-      port     = 16686
+      port     = 18888
       protocol = "TCP"
     }
     # OTLP over GRPC
     ports {
-      port     = 4317
+      port     = 18889
       protocol = "TCP"
     }
 
     environment_variables = {
-      COLLECTOR_ZIPKIN_HOST_PORT = ":9411"
-      COLLECTOR_OTLP_ENABLED     = "true"
+      DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS = "true"
     }
   }
 

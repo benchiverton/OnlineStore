@@ -1,15 +1,15 @@
 using System;
-using System.Diagnostics.Metrics;
 using System.Reflection;
 using Company.Api.Products;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -22,47 +22,58 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateLogger();
 
-// allow any traffic for now
-builder.Services.AddCors(policy => policy.AddPolicy("CorsPolicy", opt => opt
-        .AllowAnyOrigin()
-        .AllowAnyHeader()
-        .AllowAnyMethod()));
-builder.Services.AddControllers();
-builder.Services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo { Title = "Company Website API", Version = "v1" }));
-
-var sqlLiteConnectionStringBuilder = new SqliteConnectionStringBuilder()
+builder.Logging.AddOpenTelemetry(logging =>
 {
-    DataSource = "CompanyApi.db",
-    Mode = SqliteOpenMode.ReadWriteCreate,
-};
-builder.Services.AddDbContext<ProductContext>(options => options.UseSqlite(sqlLiteConnectionStringBuilder.ConnectionString));
+    logging.IncludeFormattedMessage = true;
+    logging.IncludeScopes = true;
+});
 
 var serviceName = Assembly.GetExecutingAssembly().GetName().Name.ToString();
 var serviceVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 var appResourceBuilder = ResourceBuilder.CreateDefault()
     .AddService(serviceName: serviceName, serviceVersion: serviceVersion);
-var otlpExporterEndpoint = builder.Configuration.GetValue<string>("OTLPExporter:Endpoint");
-if (Uri.TryCreate(otlpExporterEndpoint, UriKind.Absolute, out var otlpExporterEndpointUri))
+builder.Services
+    .AddMetrics()
+    .AddOpenTelemetry()
+    .ConfigureResource(c => c.AddService(serviceName))
+    .WithMetrics(metricProviderBuilder => metricProviderBuilder
+        .AddMeter(
+            "Microsoft.AspNetCore.Hosting",
+            "Microsoft.AspNetCore.Server.Kestrel",
+            "System.Net.Http",
+            serviceName)
+        .SetResourceBuilder(appResourceBuilder)
+        .AddAspNetCoreInstrumentation()
+        .AddRuntimeInstrumentation())
+    .WithTracing(tracerProviderBuilder => tracerProviderBuilder
+        .AddSource(serviceName, nameof(ProductsController))
+        .SetResourceBuilder(appResourceBuilder)
+        .AddAspNetCoreInstrumentation()
+        .AddEntityFrameworkCoreInstrumentation());
+
+var otlpExporterEndpoint = builder.Configuration.GetValue<string>("OTEL_EXPORTER_OTLP_ENDPOINT");
+if (Uri.TryCreate(otlpExporterEndpoint, UriKind.Absolute, out _))
 {
-    var meter = new Meter(serviceName);
-    builder.Services.AddOpenTelemetry()
-        .WithTracing(tracerProviderBuilder => tracerProviderBuilder
-            .AddOtlpExporter(opt => opt.Endpoint = otlpExporterEndpointUri)
-            .AddSource(serviceName)
-            .SetResourceBuilder(
-                ResourceBuilder.CreateDefault()
-                    .AddService(serviceName: serviceName, serviceVersion: serviceVersion))
-            .AddAspNetCoreInstrumentation())
-        .WithMetrics(metricProviderBuilder => metricProviderBuilder
-            .AddOtlpExporter(opt => opt.Endpoint = otlpExporterEndpointUri)
-            .AddMeter(meter.Name)
-            .SetResourceBuilder(appResourceBuilder)
-            .AddAspNetCoreInstrumentation());
+    builder.Services.Configure<OpenTelemetryLoggerOptions>(options => options.AddOtlpExporter())
+        .ConfigureOpenTelemetryMeterProvider(metrics => metrics.AddOtlpExporter())
+        .ConfigureOpenTelemetryTracerProvider(tracing => tracing.AddOtlpExporter());
 }
-else
+
+// allow any traffic for now
+builder.Services.AddCors(policy => policy.AddPolicy("CorsPolicy", opt => opt
+    .AllowAnyOrigin()
+    .AllowAnyHeader()
+    .AllowAnyMethod()));
+builder.Services.AddControllers();
+builder.Services.AddSwaggerGen(c =>
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Company Website API", Version = "v1" }));
+
+var sqlLiteConnectionStringBuilder = new SqliteConnectionStringBuilder()
 {
-    Log.Logger.Warning("Invalid OTLP URI: {uri}. Open Telemetry will not be configured.", otlpExporterEndpoint);
-}
+    DataSource = "CompanyApi.db", Mode = SqliteOpenMode.ReadWriteCreate,
+};
+builder.Services.AddDbContext<ProductContext>(options =>
+    options.UseSqlite(sqlLiteConnectionStringBuilder.ConnectionString));
 
 var host = builder.Build();
 
@@ -75,6 +86,7 @@ if (host.Environment.IsDevelopment())
 {
     host.UseDeveloperExceptionPage();
 }
+
 host.UseHttpsRedirection();
 host.UseCors("CorsPolicy");
 host.UseRouting();

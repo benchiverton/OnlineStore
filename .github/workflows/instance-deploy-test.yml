@@ -120,7 +120,7 @@ jobs:
           location: 'East US'
           resourceGroup: ${{ env.resource_group_name }}
           targetPort: 8080
-          environmentVariables: "OTLPEXPORTER__ENDPOINT=http://${{ env.container_instance_monitoring_fqdn }}:4317"
+          environmentVariables: "OTEL_EXPORTER_OTLP_ENDPOINT=http://${{ env.container_instance_monitoring_fqdn }}:18889"
       - name: Deploy website
         uses: azure/container-apps-deploy-action@v1
         with:
@@ -144,7 +144,7 @@ jobs:
             const output = `### Test environment information
             #### 🔗[Visit website](https://${{ env.container_app_website_fqdn }}/)
             #### 🔗[Visit API](https://${{ env.container_app_api_fqdn }}/swagger/)
-            #### 🔗[Visit monitoring UI](http://${{ env.container_instance_monitoring_fqdn }}:16686)
+            #### 🔗[Visit monitoring UI](http://${{ env.container_instance_monitoring_fqdn }}:18888)
 
             *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
 
