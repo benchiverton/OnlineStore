@@ -133,31 +133,31 @@ jobs:
           resourceGroup: ${{ env.resource_group_name }}
           targetPort: 80
           environmentVariables: "API__BASEPATH=https://${{ env.container_app_api_fqdn }}"
-      - name: Find Comment
-        uses: peter-evans/find-comment@v1
-        id: fc
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          comment-author: 'github-actions[bot]'
-          body-includes: |
-            ### Test environment information
-      - name: Create comment
-        if: steps.fc.outputs.comment-id == ''
-        uses: peter-evans/create-or-update-comment@v1
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            ### Test environment information
-          reactions: rocket
-      - name: Update comment
-        if: steps.fc.outputs.comment-id != ''
-        uses: peter-evans/create-or-update-comment@v1
-        with:
-          comment-id: ${{ steps.fc.outputs.comment-id }}
-          body: |
-            ### Test environment information
-            #### 🔗[Visit website](https://${{ env.container_app_website_fqdn }}/)
-            #### 🔗[Visit API](https://${{ env.container_app_api_fqdn }}/swagger/)
-            #### 🔗[Visit monitoring UI](https://${{ env.container_app_monitoring_fqdn }})
+      # - name: Find Comment
+      #   uses: peter-evans/find-comment@v1
+      #   id: fc
+      #   with:
+      #     issue-number: ${{ github.event.pull_request.number }}
+      #     comment-author: 'github-actions[bot]'
+      #     body-includes: |
+      #       ### Test environment information
+      # - name: Create comment
+      #   if: steps.fc.outputs.comment-id == ''
+      #   uses: peter-evans/create-or-update-comment@v1
+      #   with:
+      #     issue-number: ${{ github.event.pull_request.number }}
+      #     body: |
+      #       ### Test environment information
+      #     reactions: rocket
+      # - name: Update comment
+      #   if: steps.fc.outputs.comment-id != ''
+      #   uses: peter-evans/create-or-update-comment@v1
+      #   with:
+      #     comment-id: ${{ steps.fc.outputs.comment-id }}
+      #     body: |
+      #       ### Test environment information
+      #       #### 🔗[Visit website](https://${{ env.container_app_website_fqdn }}/)
+      #       #### 🔗[Visit API](https://${{ env.container_app_api_fqdn }}/swagger/)
+      #       #### 🔗[Visit monitoring UI](https://${{ env.container_app_monitoring_fqdn }})
 
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*
+      #       *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*
