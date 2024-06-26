@@ -132,6 +132,10 @@ resource "azapi_update_resource" "container_app_api" {
   body = jsonencode({
     properties = {
       configuration = {
+        secrets = [{
+          name = "acr-password"
+          value = var.acr_password
+        }]
         ingress = {
           additionalPortMappings = [{
             exposedPort = 18889,
