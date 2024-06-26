@@ -75,7 +75,7 @@ resource "azurerm_container_app" "website" {
 }
 
 resource "azurerm_container_app" "monitoring" {
-  name                         = "${var.name}-website"
+  name                         = "${var.name}-monitoring"
   container_app_environment_id = azurerm_container_app_environment.apps.id
   resource_group_name          = azurerm_resource_group.instance.name
   revision_mode                = "Single"
