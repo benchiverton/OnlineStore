@@ -103,7 +103,12 @@ resource "azurerm_container_app" "monitoring" {
   registry {
     server   = "onlinestorecontainerregistry.azurecr.io"
     username = var.acr_username
-    password_secret_name = var.acr_password
+    password_secret_name = "acr_password"
+  }
+
+  secret {
+    name = "acr_password"
+    value = var.acr_password
   }
   
   lifecycle {
