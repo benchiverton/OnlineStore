@@ -16,10 +16,6 @@ resource "azurerm_container_app" "api" {
       image  = "mcr.microsoft.com/azuredocs/containerapps-helloworld:latest"
       cpu    = 0.25
       memory = "0.5Gi"
-      env {
-        name  = "OTEL_EXPORTER_OTLP_ENDPOINT"
-        value = "http://onlinestore-monitoring:18889"
-      }
     }
     max_replicas = 1
   }

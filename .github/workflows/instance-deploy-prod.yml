@@ -117,6 +117,7 @@ jobs:
           location: 'East US'
           resourceGroup: ${{ env.resource_group_name }}
           targetPort: 8080
+          environmentVariables: OTEL_EXPORTER_OTLP_ENDPOINT=http://onlinestore-monitoring:18889
       - name: Deploy website
         uses: azure/container-apps-deploy-action@v1
         with:
