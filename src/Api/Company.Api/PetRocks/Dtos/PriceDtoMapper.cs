@@ -1,6 +1,6 @@
 using Company.Contract;
 
-namespace Company.Api.Products.Dtos;
+namespace Company.Api.PetRocks.Dtos;
 
 public static class PriceDtoMapper
 {

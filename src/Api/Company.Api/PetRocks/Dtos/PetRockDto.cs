@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Company.Api.Products.Dtos;
+namespace Company.Api.PetRocks.Dtos;
 
-public class ProductDto
+public class PetRockDto
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
     public string Name { get; set; }
-    public string Headline { get; set; }
+    public string Catchphrase { get; set; }
     public string Description { get; set; }
     public List<string> VariantTypes { get; set; }
     public List<string> Images { get; set; }

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Company.Api.Products.Dtos;
+namespace Company.Api.PetRocks.Dtos;
 
 public class VariantDtoConfiguration : IEntityTypeConfiguration<VariantDto>
 {

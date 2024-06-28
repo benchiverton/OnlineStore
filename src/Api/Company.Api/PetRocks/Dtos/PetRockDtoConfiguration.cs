@@ -3,11 +3,11 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Company.Api.Products.Dtos;
+namespace Company.Api.PetRocks.Dtos;
 
-public class ProductDtoConfiguration : IEntityTypeConfiguration<ProductDto>
+public class PetRockDtoConfiguration : IEntityTypeConfiguration<PetRockDto>
 {
-    public void Configure(EntityTypeBuilder<ProductDto> builder)
+    public void Configure(EntityTypeBuilder<PetRockDto> builder)
     {
         builder.Property(e => e.VariantTypes)
             .IsRequired()

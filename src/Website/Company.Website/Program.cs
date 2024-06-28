@@ -4,9 +4,9 @@ using Blazored.SessionStorage;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Company.Website.ShoppingBasket;
-using Company.Website.Products;
 using Serilog;
 using Company.Website;
+using Company.Website.PetRocks;
 using Microsoft.Extensions.Configuration;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -20,7 +20,7 @@ builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(build
 
 // services
 var apiBaseAddress = builder.Configuration.GetValue<string>("Api:BasePath");
-builder.Services.AddHttpClient<ProductService>(client => client.BaseAddress = new Uri(apiBaseAddress));
+builder.Services.AddHttpClient<PetRockService>(client => client.BaseAddress = new Uri(apiBaseAddress));
 builder.Services.AddTransient<CurrencyService>();
 builder.Services.AddScoped<ShoppingBasketService>();
 

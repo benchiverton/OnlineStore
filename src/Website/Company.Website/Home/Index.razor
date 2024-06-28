@@ -1,25 +1,26 @@
 @page "/"
 @using Company.Contract;
+@using Company.Website.PetRocks
 
-@inject ProductService _productService
+@inject PetRockService PetRockService
 
 <div class="content px-4">
-    @if (products != null)
+    @if (petRocks != null)
     {
         <div class="card-deck">
-            @foreach (var product in products)
+            @foreach (var petRock in petRocks)
             {
-                <ProductCard Product="@product"></ProductCard>
+                <PetRockCard PetRock="@petRock"></PetRockCard>
             }
         </div>
     }
 </div>
 
 @code {
-    private List<Product> products;
+    private List<PetRock> petRocks;
 
     protected override async Task OnInitializedAsync()
     {
-        products = await _productService.GetProducts();
+        petRocks = await PetRockService.GetPetRocks();
     }
 }

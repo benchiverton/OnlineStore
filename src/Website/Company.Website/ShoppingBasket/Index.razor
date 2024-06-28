@@ -1,8 +1,9 @@
 @page "/basket"
 @using System.Collections.Concurrent;
+@using Company.Website.PetRocks
 
 @inject ShoppingBasketService _shoppingBasketService
-@inject ProductService _productService
+@inject PetRockService PetRockService
 
 <div class="basket-container">
     @if (_shoppingBasket != null)
@@ -19,15 +20,15 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var product in _shoppingBasket.Products)
+                @foreach (var petRock in _shoppingBasket.PetRocks)
                 {
-                    _variantDetails.TryGetValue(product.VariantId, out var productAndVariant);
+                    _variantDetails.TryGetValue(petRock.VariantId, out var petRockAndVariant);
                     <tr>
                         <td>
-                            @if (productAndVariant != default)
+                            @if (petRockAndVariant != default)
                             {
-                                <div><b>@productAndVariant.product.Name</b></div>
-                                <div>@(string.Join(", ", productAndVariant.variant.VariantTypeValues.Values))</div>
+                                <div><b>@petRockAndVariant.petRock.Name</b></div>
+                                <div>@(string.Join(", ", petRockAndVariant.variant.VariantTypeValues.Values))</div>
                             }
                             else
                             {
@@ -35,10 +36,10 @@
                             }
                         </td>
                         <td>
-                            <PricingLabel CurrencyCode="GBP" ProductId="@product.ProductId" ProductVariantId="@product.VariantId" />
+                            <PricingLabel CurrencyCode="GBP" PetRockId="@petRock.PetRockId" PetRockVariantId="@petRock.VariantId" />
                         </td>
                         <td>
-                            @product.Quantity
+                            @petRock.Quantity
                         </td>
                         <td>
                             TBC
@@ -48,23 +49,23 @@
             </tbody>
         </table>
 
-        <PricingTotal TotalType="Final total" CurrencyCode="GBP" ProductVariantIdAndQuantities="@_shoppingBasket.Products?.Select(cp => (cp.ProductId, cp.VariantId, cp.Quantity))?.ToList()"></PricingTotal>
+        <PricingTotal TotalType="Final total" CurrencyCode="GBP" PetRockVariantIdAndQuantities="@_shoppingBasket.PetRocks?.Select(cp => (cp.PetRockId, cp.VariantId, cp.Quantity))?.ToList()"></PricingTotal>
     }
 </div>
 
 @code {
-    private readonly ConcurrentDictionary<string, (Product product, Variant variant)> _variantDetails = new ConcurrentDictionary<string, (Product product, Variant variant)>();
+    private readonly ConcurrentDictionary<string, (PetRock petRock, Variant variant)> _variantDetails = new ConcurrentDictionary<string, (PetRock petRock, Variant variant)>();
 
     private ShoppingBasket _shoppingBasket;
 
     protected override void OnInitialized()
     {
         _shoppingBasket = _shoppingBasketService.GetShoppingBasketFromStorage();
-        Parallel.ForEach(_shoppingBasket.Products, async p =>
+        Parallel.ForEach(_shoppingBasket.PetRocks, async p =>
         {
-            var productDetails = await _productService.GetProductById(p.ProductId);
-            var variantDetails = await _productService.GetProductVariantById(p.ProductId, p.VariantId);
-            _variantDetails.AddOrUpdate(p.VariantId, _ => (productDetails, variantDetails), (_, _) => (productDetails, variantDetails));
+            var petRockDetails = await PetRockService.GetPetRockById(p.PetRockId);
+            var variantDetails = await PetRockService.GetPetRockVariantById(p.PetRockId, p.VariantId);
+            _variantDetails.AddOrUpdate(p.VariantId, _ => (petRockDetails, variantDetails), (_, _) => (petRockDetails, variantDetails));
             StateHasChanged();
         });
     }

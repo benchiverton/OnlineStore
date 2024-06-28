@@ -1,0 +1,14 @@
+@if (PetRock != null)
+{
+    <HoverCard BackgroundImageLocation="@PetRock.Images.FirstOrDefault()"
+           Title="@PetRock.Name"
+           Headline="@PetRock.Headline"
+           Description="@PetRock.Description"
+           PageLocation="@($"petrocks/{PetRock.Id}")">
+    </HoverCard>
+}
+
+@code {
+    [Parameter]
+    public PetRock PetRock { get; set; }
+}

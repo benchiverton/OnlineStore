@@ -1,4 +1,4 @@
-@inject ProductService _productService
+@inject PetRockService PetRockService
 @inject CurrencyService _currencyService
 
 <p>
@@ -14,7 +14,7 @@
     [Parameter]
     public string TotalType { get; set; }
     [Parameter]
-    public List<(string productId, string productVarientId, int quantity)> ProductVariantIdAndQuantities { get; set; }
+    public List<(string petRockId, string petRockVarientId, int quantity)> PetRockVariantIdAndQuantities { get; set; }
     [Parameter]
     public string CurrencyCode { get; set; }
 
@@ -26,18 +26,18 @@
     {
         CurrencySymbol = _currencyService.GetCurrencyCharacter(CurrencyCode);
 
-        if (ProductVariantIdAndQuantities == null)
+        if (PetRockVariantIdAndQuantities == null)
         {
             return;
         }
 
         var fullTotalPrice = 0m;
         var dealTotalPrice = 0m;
-        foreach (var productVariantIdAndQuantity in ProductVariantIdAndQuantities)
+        foreach (var petRockVariantIdAndQuantity in PetRockVariantIdAndQuantities)
         {
-            var price = (await _productService.GetProductVariantById(productVariantIdAndQuantity.productId, productVariantIdAndQuantity.productVarientId)).Price;
-            fullTotalPrice += price.FullPriceGBP * productVariantIdAndQuantity.quantity;
-            dealTotalPrice += price.DealPriceGBP * productVariantIdAndQuantity.Item3;
+            var price = (await PetRockService.GetPetRockVariantById(petRockVariantIdAndQuantity.petRockId, petRockVariantIdAndQuantity.petRockVarientId)).Price;
+            fullTotalPrice += price.FullPriceGBP * petRockVariantIdAndQuantity.quantity;
+            dealTotalPrice += price.DealPriceGBP * petRockVariantIdAndQuantity.Item3;
         }
         FullTotalPrice = fullTotalPrice;
         DealTotalPrice = dealTotalPrice;

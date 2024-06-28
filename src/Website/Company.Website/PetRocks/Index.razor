@@ -1,6 +1,6 @@
-@page "/products/{ProductId}"
+@page "/petrocks/{PetRockId}"
 
-@inject ProductService _productService;
+@inject PetRockService PetRockService;
 @inject CurrencyService _currencyService
 
 @if (_ready)
@@ -9,12 +9,12 @@
         <br />
         <div class="row">
             <div class="col-md-6">
-                <div class="img-fluid product-image-container">
-                    <img class="img-top product-image-img" src="@_product.Images.FirstOrDefault()" alt="image">
+                <div class="img-fluid petrock-image-container">
+                    <img class="img-top petrock-image-img" src="@_petRock.Images.FirstOrDefault()" alt="image">
                 </div>
             </div>
             <div class="col-md">
-                <h2>@_product.Name</h2>
+                <h2>@_petRock.Name</h2>
                 <hr class="divider divider-solid">
 
                 @if (_selectedVariant.Price.FullPriceGBP > _selectedVariant.Price.DealPriceGBP)
@@ -42,17 +42,17 @@
                 }
                 <p>@_selectedVariant.Price.Details</p>
 
-                <VariantSelector Product="@_product" Variants="@_variants" SelectedVariant="@_selectedVariant" NewProductVariantSelected="@OnNewProductVariantSelected"></VariantSelector>
+                <VariantSelector PetRock="@_petRock" Variants="@_variants" SelectedVariant="@_selectedVariant" NewPetRockVariantSelected="@OnNewPetRockVariantSelected"></VariantSelector>
 
-                <h6>@_product.Headline</h6>
-                <p>@_product.Description</p>
+                <h6>@_petRock.Headline</h6>
+                <p>@_petRock.Description</p>
             </div>
             <div class="col-md">
                 <div class="card">
                     <div class="card-body">
                         <h5>@GetFormattedAmount(_selectedVariant.Price.DealPriceGBP)</h5>
 
-                        <ShoppingBasketButtons ProductId="@ProductId" ProductVariantId="@_selectedVariant.VariantId" OnProductAddedToBasket="OnProductAddedToBasket"></ShoppingBasketButtons>
+                        <ShoppingBasketButtons PetRockId="@PetRockId" PetRockVariantId="@_selectedVariant.VariantId" OnPetRockAddedToBasket="OnPetRockAddedToBasket"></ShoppingBasketButtons>
 
                         <div hidden="@(!_addedToBasket)">Added to basket!</div>
                     </div>
@@ -64,9 +64,9 @@
 
 @code {
     [Parameter]
-    public string ProductId { get; set; }
+    public string PetRockId { get; set; }
 
-    private Product _product;
+    private PetRock _petRock;
     private List<Variant> _variants;
     private Variant _selectedVariant;
     private string _currencyCode;
@@ -76,8 +76,8 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        _product = await _productService.GetProductById(ProductId);
-        _variants = await _productService.GetProductVariants(ProductId);
+        _petRock = await PetRockService.GetPetRockById(PetRockId);
+        _variants = await PetRockService.GetPetRockVariants(PetRockId);
         _selectedVariant = _variants.FirstOrDefault();
         _currencySymbol = _currencyService.GetCurrencyCharacter("GBP");
         _ready = true;
@@ -86,13 +86,13 @@
 
     private string GetFormattedAmount(decimal amount) => $"{_currencySymbol}{amount:0.00} {_currencyCode}";
 
-    private void OnNewProductVariantSelected(Variant selectedVariant)
+    private void OnNewPetRockVariantSelected(Variant selectedVariant)
     {
         _selectedVariant = selectedVariant;
         StateHasChanged();
     }
 
-    private void OnProductAddedToBasket()
+    private void OnPetRockAddedToBasket()
     {
         _addedToBasket = true;
         StateHasChanged();
