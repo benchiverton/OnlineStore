@@ -41,10 +41,10 @@
                 <h5>@GetFormattedAmount(_selectedVariant.Price.DealPriceGBP)</h5>
                 }
                 <p>@_selectedVariant.Price.Details</p>
-
+                <hr />
                 <VariantSelector PetRock="@_petRock" Variants="@_variants" SelectedVariant="@_selectedVariant" NewPetRockVariantSelected="@OnNewPetRockVariantSelected"></VariantSelector>
-
-                <h6>@_petRock.Headline</h6>
+                <hr />
+                <h5>@_petRock.Headline</h5>
                 <p>@_petRock.Description</p>
             </div>
             <div class="col-md">
