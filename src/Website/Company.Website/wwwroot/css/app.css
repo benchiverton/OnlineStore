@@ -1,11 +1,19 @@
 /* CSS for markup in index.html, including loading screen */
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+:root {
+    --granite-gray: #676767;
+    --slate-blue: #6A7989;
+    --sandstone-beige: #C2B280;
+    --basalt-black: #3B3C46;
+}
+
 app {
     position: relative;
     display: flex;
     flex-direction: column;
     font-family: Arial;
+    color: var(--basalt-black);
 }
 
 #blazor-error-ui {

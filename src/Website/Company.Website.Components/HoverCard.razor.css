@@ -19,7 +19,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: #121212;
+    background-color: var(--slate-blue);
     width: 100%;
     height: 0;
     transition: .5s ease;
@@ -31,7 +31,6 @@
 }
 
 .adopt-button {
-    color: #121212;
     background-color: white
 }
 
