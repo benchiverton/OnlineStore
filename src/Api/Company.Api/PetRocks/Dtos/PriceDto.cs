@@ -1,7 +1,6 @@
 using System;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Company.Api.Products.Dtos;
+namespace Company.Api.PetRocks.Dtos;
 
 public class PriceDto
 {

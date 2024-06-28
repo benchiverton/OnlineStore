@@ -2,7 +2,7 @@
 namespace Company.Contract;
 
 public record Variant(
-    string ProductId,
+    string PetRockId,
     string VariantId,
     Dictionary<string, string> VariantTypeValues,
     Price Price

@@ -1,33 +1,33 @@
 @inject ShoppingBasketService _shoppingBasketService
 @inject NavigationManager _navManager
 
-<button class="btn btn-primary btn-block" @onclick="AddToBasket">
+<button class="btn btn-add-to-basket btn-block" @onclick="AddToBasket">
     <i class="fas fa-cart-plus mr-3" />Add to basket
 </button>
-<button class="btn btn-success btn-block" @onclick="BuyNow">
-    <i class="fas fa-arrow-right mr-3" />Buy now
+<button class="btn btn-adopt-now btn-block" @onclick="AdoptNow">
+    <i class="fas fa-arrow-right mr-3" />Adopt now!
 </button>
 
 @code {
 
     [Parameter]
-    public string ProductId { get; set; }
+    public string PetRockId { get; set; }
 
     [Parameter]
-    public string ProductVariantId { get; set; }
+    public string PetRockVariantId { get; set; }
 
     [Parameter]
-    public Action OnProductAddedToBasket { get; set; }
+    public Action OnPetRockAddedToBasket { get; set; }
 
     private void AddToBasket()
     {
-        _shoppingBasketService.AddProductVariantToBasket(ProductId, ProductVariantId);
-        OnProductAddedToBasket.Invoke();
+        _shoppingBasketService.AddPetRockVariantToBasket(PetRockId, PetRockVariantId);
+        OnPetRockAddedToBasket.Invoke();
     }
 
-    private void BuyNow()
+    private void AdoptNow()
     {
-        _shoppingBasketService.AddProductVariantToBasket(ProductId, ProductVariantId);
+        _shoppingBasketService.AddPetRockVariantToBasket(PetRockId, PetRockVariantId);
         _navManager.NavigateTo("basket");
     }
 }

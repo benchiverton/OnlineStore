@@ -30,7 +30,7 @@ public class ShoppingBasketMonitor : IObserver<ShoppingBasket>
 
     public void OnNext(ShoppingBasket value)
     {
-        ShoppingBasketSize = value.Products.Sum(cp => cp.Quantity);
+        ShoppingBasketSize = value.PetRocks.Sum(cp => cp.Quantity);
         _updateAction?.Invoke();
     }
 }

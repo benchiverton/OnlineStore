@@ -1,6 +1,6 @@
 namespace Company.Contract;
 
-public record Product(
+public record PetRock(
     string Id,
     string Name,
     string Headline,

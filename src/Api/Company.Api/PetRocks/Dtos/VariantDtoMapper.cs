@@ -1,7 +1,7 @@
 using System;
 using Company.Contract;
 
-namespace Company.Api.Products.Dtos;
+namespace Company.Api.PetRocks.Dtos;
 
 public static class VariantDtoMapper
 {
@@ -9,14 +9,14 @@ public static class VariantDtoMapper
         => new VariantDto
         {
             Id = Guid.Parse(variant.VariantId),
-            ProductId = Guid.Parse(variant.ProductId),
+            PetRockId = Guid.Parse(variant.PetRockId),
             VariantTypeValues = variant.VariantTypeValues,
             Price = variant.Price.ToPriceDto()
         };
 
     public static Variant FromVariantDto(this VariantDto variantDto)
         => new Variant(
-            variantDto.ProductId.ToString(),
+            variantDto.PetRockId.ToString(),
             variantDto.Id.ToString(),
             variantDto.VariantTypeValues,
             variantDto.Price.FromPriceDto());

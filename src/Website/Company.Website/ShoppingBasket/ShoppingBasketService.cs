@@ -38,63 +38,63 @@ public class ShoppingBasketService
 
     public ShoppingBasket GetShoppingBasketFromStorage() => _sessionStorage.GetItem<ShoppingBasket>(ShoppingBasketStorageKey) ?? new ShoppingBasket();
 
-    public void AddProductVariantToBasket(string productId, string productVariantId)
+    public void AddPetRockVariantToBasket(string petRockId, string petRockVariantId)
     {
         var shoppingBasket = GetShoppingBasketFromStorage();
-        var existingProduct = GetExistingShoppingBasketProduct(shoppingBasket, productId, productVariantId);
-        if (existingProduct == null)
+        var existingPetRock = GetExistingShoppingBasketPetRock(shoppingBasket, petRockId, petRockVariantId);
+        if (existingPetRock == null)
         {
-            shoppingBasket.Products.Add(new ShoppingBasketProduct
+            shoppingBasket.PetRocks.Add(new ShoppingBasketPetRock
             {
-                ProductId = productId,
-                VariantId = productVariantId,
+                PetRockId = petRockId,
+                VariantId = petRockVariantId,
                 Quantity = 1
             });
         }
         else
         {
-            existingProduct.Quantity++;
+            existingPetRock.Quantity++;
         }
         SetShoppingBasketInStorage(shoppingBasket);
     }
 
-    public void UpdateQuantity(string productId, string productVariantId, int desiredQuantity)
+    public void UpdateQuantity(string petRockId, string petRockVariantId, int desiredQuantity)
     {
         var shoppingBasket = GetShoppingBasketFromStorage();
-        var existingProduct = GetExistingShoppingBasketProduct(shoppingBasket, productId, productVariantId);
-        if (existingProduct == null)
+        var existingPetRock = GetExistingShoppingBasketPetRock(shoppingBasket, petRockId, petRockVariantId);
+        if (existingPetRock == null)
         {
-            shoppingBasket.Products.Add(new ShoppingBasketProduct
+            shoppingBasket.PetRocks.Add(new ShoppingBasketPetRock
             {
-                ProductId = productId,
-                VariantId = productVariantId,
+                PetRockId = petRockId,
+                VariantId = petRockVariantId,
                 Quantity = desiredQuantity
             });
         }
         else if (desiredQuantity > 0)
         {
-            existingProduct.Quantity = desiredQuantity;
+            existingPetRock.Quantity = desiredQuantity;
         }
         else
         {
-            shoppingBasket.Products.Remove(existingProduct);
+            shoppingBasket.PetRocks.Remove(existingPetRock);
         }
         SetShoppingBasketInStorage(shoppingBasket);
     }
 
-    public void Delete(string productId, string productVariantId)
+    public void Delete(string petRockId, string petRockVariantId)
     {
         var shoppingBasket = GetShoppingBasketFromStorage();
-        var existingProduct = GetExistingShoppingBasketProduct(shoppingBasket, productId, productVariantId);
-        if (existingProduct != null)
+        var existingPetRock = GetExistingShoppingBasketPetRock(shoppingBasket, petRockId, petRockVariantId);
+        if (existingPetRock != null)
         {
-            shoppingBasket.Products.Remove(existingProduct);
+            shoppingBasket.PetRocks.Remove(existingPetRock);
             SetShoppingBasketInStorage(shoppingBasket);
         }
     }
 
-    private ShoppingBasketProduct GetExistingShoppingBasketProduct(ShoppingBasket shoppingBasket, string productId, string productVariantId)
-        => shoppingBasket.Products.FirstOrDefault(cp => cp.ProductId == productId && cp.VariantId == productVariantId);
+    private ShoppingBasketPetRock GetExistingShoppingBasketPetRock(ShoppingBasket shoppingBasket, string petRockId, string petRockVariantId)
+        => shoppingBasket.PetRocks.FirstOrDefault(cp => cp.PetRockId == petRockId && cp.VariantId == petRockVariantId);
 
     private void SetShoppingBasketInStorage(ShoppingBasket shoppingBasket)
     {

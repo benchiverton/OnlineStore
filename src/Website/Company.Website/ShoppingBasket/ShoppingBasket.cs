@@ -4,7 +4,7 @@ namespace Company.Website.ShoppingBasket;
 
 public class ShoppingBasket
 {
-    public ShoppingBasket() => Products = new List<ShoppingBasketProduct>();
+    public ShoppingBasket() => PetRocks = new List<ShoppingBasketPetRock>();
 
-    public List<ShoppingBasketProduct> Products { get; set; }
+    public List<ShoppingBasketPetRock> PetRocks { get; set; }
 }
