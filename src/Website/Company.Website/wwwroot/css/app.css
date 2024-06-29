@@ -16,6 +16,12 @@ app {
     color: var(--basalt-black);
 }
 
+html, body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;
