@@ -16,18 +16,6 @@ variable "location" {
   default     = "East US 2"
 }
 
-variable "dns_prefix" {
-  type        = string
-  description = "A prefix for any dns based resources"
-  default     = "os"
-}
-
-variable "plan_sku" {
-  type        = string
-  description = "The sku of app service plan to create"
-  default     = "F1"
-}
-
 variable "acr_username" {
   type        = string
   description = "The username to log in to ACR"
@@ -43,4 +31,14 @@ variable "acr_password" {
 variable "website_dns_subdomain" {
   type        = string
   description = "DNS subdomain for website"
+}
+
+variable "api_dns_subdomain" {
+  type        = string
+  description = "DNS subdomain for api"
+}
+
+variable "monitoring_dns_subdomain" {
+  type        = string
+  description = "DNS subdomain for monitoring"
 }

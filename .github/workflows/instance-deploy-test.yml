@@ -60,7 +60,9 @@ jobs:
           TF_VAR_environment: ${{ github.head_ref }}
           TF_VAR_acr_username: ${{ secrets.ACR_USERNAME }}
           TF_VAR_acr_password: ${{ secrets.ACR_TOKEN }}
-          TF_VAR_website_dns_subdomain: ${{ github.head_ref }}
+          TF_VAR_website_dns_subdomain: ${{ github.head_ref }}-site
+          TF_VAR_api_dns_subdomain: ${{ github.head_ref }}-api
+          TF_VAR_monitoring_dns_subdomain: ${{ github.head_ref }}-monitoring
       - name: Terraform Apply
         id: apply
         run: terraform -chdir=instance apply -auto-approve
@@ -70,6 +72,8 @@ jobs:
           TF_VAR_acr_username: ${{ secrets.ACR_USERNAME }}
           TF_VAR_acr_password: ${{ secrets.ACR_TOKEN }}
           TF_VAR_website_dns_subdomain: ${{ github.head_ref }}
+          TF_VAR_api_dns_subdomain: api
+          TF_VAR_monitoring_dns_subdomain: monitoring
       - name: Save terraform outputs
         shell: bash
         run: |
@@ -130,7 +134,7 @@ jobs:
           location: 'East US'
           resourceGroup: ${{ env.resource_group_name }}
           targetPort: 80
-          environmentVariables: "API__BASEPATH=https://${{ env.container_app_api_fqdn }}"
+          environmentVariables: "API__BASEPATH=https://${{ github.head_ref }}-api.rockpal.co.uk"
       - name: Find Comment
         uses: peter-evans/find-comment@v1
         id: fc
@@ -146,8 +150,8 @@ jobs:
           edit-mode: replace
           body: |
             ### Test environment information
-            #### 🔗 [Company Website](https://${{ env.container_app_website_fqdn }}/)
-            #### 🔗 [Company API](https://${{ env.container_app_api_fqdn }}/swagger/)
-            #### 🔗 [Monitoring Dashboard](https://${{ env.container_app_monitoring_fqdn }})
+            #### 🔗 [Company Website](https://${{ github.head_ref }}-site.rockpal.co.uk/)
+            #### 🔗 [Company API](https://${{ github.head_ref }}-api.rockpal.co.uk/swagger/)
+            #### 🔗 [Monitoring Dashboard](https://${{ github.head_ref }}-monitoring.rockpal.co.uk/)
 
             *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*

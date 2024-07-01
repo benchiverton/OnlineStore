@@ -62,6 +62,8 @@ jobs:
           TF_VAR_acr_username: ${{ secrets.ACR_USERNAME }}
           TF_VAR_acr_password: ${{ secrets.ACR_TOKEN }}
           TF_VAR_website_dns_subdomain: www
+          TF_VAR_api_dns_subdomain: api
+          TF_VAR_monitoring_dns_subdomain: monitoring
       - name: Terraform Apply
         id: apply
         run: terraform -chdir=instance apply -auto-approve
@@ -71,6 +73,8 @@ jobs:
           TF_VAR_acr_username: ${{ secrets.ACR_USERNAME }}
           TF_VAR_acr_password: ${{ secrets.ACR_TOKEN }}
           TF_VAR_website_dns_subdomain: www
+          TF_VAR_api_dns_subdomain: api
+          TF_VAR_monitoring_dns_subdomain: monitoring
       - name: Save terraform outputs
         shell: bash
         run: |
@@ -131,4 +135,4 @@ jobs:
           location: 'East US'
           resourceGroup: ${{ env.resource_group_name }}
           targetPort: 80
-          environmentVariables: "API__BASEPATH=https://${{ env.container_app_api_fqdn }}"
+          environmentVariables: "API__BASEPATH=https://api.rockpal.co.uk"

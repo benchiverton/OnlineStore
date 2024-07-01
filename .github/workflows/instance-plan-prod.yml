@@ -40,6 +40,8 @@ jobs:
           TF_VAR_acr_username: ${{ secrets.ACR_USERNAME }}
           TF_VAR_acr_password: ${{ secrets.ACR_TOKEN }}
           TF_VAR_website_dns_subdomain: www
+          TF_VAR_api_dns_subdomain: api
+          TF_VAR_monitoring_dns_subdomain: monitoring
       - name: Find Comment
         uses: peter-evans/find-comment@v1
         id: fc
