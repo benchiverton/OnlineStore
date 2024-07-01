@@ -24,7 +24,6 @@ resource "azurerm_dns_txt_record" "api" {
 resource "azurerm_container_app_custom_domain" "api" {
   name                     = trimsuffix(trimprefix(azurerm_dns_txt_record.api.fqdn, "asuid."), ".")
   container_app_id         = azurerm_container_app.api.id
-  certificate_binding_type = "SniEnabled"
 
   depends_on = [
     azurerm_dns_txt_record.api,
@@ -57,7 +56,6 @@ resource "azurerm_dns_txt_record" "website" {
 resource "azurerm_container_app_custom_domain" "website" {
   name                     = trimsuffix(trimprefix(azurerm_dns_txt_record.website.fqdn, "asuid."), ".")
   container_app_id         = azurerm_container_app.website.id
-  certificate_binding_type = "SniEnabled"
 
   depends_on = [
     azurerm_dns_txt_record.website,
@@ -90,7 +88,6 @@ resource "azurerm_dns_txt_record" "monitoring" {
 resource "azurerm_container_app_custom_domain" "monitoring" {
   name                     = trimsuffix(trimprefix(azurerm_dns_txt_record.monitoring.fqdn, "asuid."), ".")
   container_app_id         = azurerm_container_app.monitoring.id
-  certificate_binding_type = "SniEnabled"
 
   depends_on = [
     azurerm_dns_txt_record.monitoring,
