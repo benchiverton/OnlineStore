@@ -39,3 +39,8 @@ variable "acr_password" {
   description = "The password to log in to ACR"
   sensitive   = true
 }
+
+variable "website_dns_subdomain" {
+  type        = string
+  description = "DNS subdomain for website"
+}

@@ -1,7 +1,6 @@
-resource  "azurerm_container_app_environment" "apps" {
+data  "azurerm_container_app_environment" "apps" {
   name                = "${var.name}-containerapps"
-  resource_group_name = azurerm_resource_group.instance.name
-  location            = azurerm_resource_group.instance.location
+  resource_group_name = "onlinestore-shared-rg"
 }
 
 resource "azurerm_container_app" "api" {

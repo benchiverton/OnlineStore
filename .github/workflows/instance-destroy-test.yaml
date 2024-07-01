@@ -30,3 +30,4 @@ jobs:
         env:
           TF_VAR_acr_username: "not-used"
           TF_VAR_acr_password: "not-used"
+          TF_VAR_website_dns_subdomain: "not-used"

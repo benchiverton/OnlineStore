@@ -60,6 +60,7 @@ jobs:
           TF_VAR_environment: ${{ github.head_ref }}
           TF_VAR_acr_username: ${{ secrets.ACR_USERNAME }}
           TF_VAR_acr_password: ${{ secrets.ACR_TOKEN }}
+          TF_VAR_website_dns_subdomain: ${{ github.head_ref }}
       - name: Terraform Apply
         id: apply
         run: terraform -chdir=instance apply -auto-approve
@@ -68,6 +69,7 @@ jobs:
           TF_VAR_environment: ${{ github.head_ref }}
           TF_VAR_acr_username: ${{ secrets.ACR_USERNAME }}
           TF_VAR_acr_password: ${{ secrets.ACR_TOKEN }}
+          TF_VAR_website_dns_subdomain: ${{ github.head_ref }}
       - name: Save terraform outputs
         shell: bash
         run: |
