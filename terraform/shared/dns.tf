@@ -12,7 +12,7 @@ resource "azurerm_dns_a_record" "apps" {
 }
 
 resource "azurerm_dns_txt_record" "apps" {
-  name                = "asuid.${azurerm_dns_cname_record.website.name}"
+  name                = "asuid.${azurerm_container_app_environment.apps.name}"
   zone_name           = data.azurerm_dns_zone.rockpal-co-uk.name
   resource_group_name = data.azurerm_dns_zone.rockpal-co-uk.resource_group_name
   ttl                 = 300
