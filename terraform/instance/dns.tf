@@ -55,7 +55,7 @@ resource "azurerm_dns_txt_record" "website" {
 }
 
 resource "azurerm_container_app_custom_domain" "website" {
-  name                     = trimprefix(azurerm_dns_txt_record.website.fqdn, "asuid.")
+  name                     = trimsuffix(trimprefix(azurerm_dns_txt_record.website.fqdn, "asuid."), ".")
   container_app_id         = azurerm_container_app.website.id
   certificate_binding_type = "SniEnabled"
 
@@ -88,7 +88,7 @@ resource "azurerm_dns_txt_record" "monitoring" {
 }
 
 resource "azurerm_container_app_custom_domain" "monitoring" {
-  name                     = trimprefix(azurerm_dns_txt_record.monitoring.fqdn, "asuid.")
+  name                     = trimsuffix(trimprefix(azurerm_dns_txt_record.monitoring.fqdn, "asuid."), ".")
   container_app_id         = azurerm_container_app.monitoring.id
   certificate_binding_type = "SniEnabled"
 
