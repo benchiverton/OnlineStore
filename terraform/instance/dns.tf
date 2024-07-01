@@ -8,7 +8,7 @@ resource "azurerm_dns_cname_record" "website" {
   zone_name           = data.azurerm_dns_zone.rockpal-co-uk.name
   resource_group_name = data.azurerm_dns_zone.rockpal-co-uk.resource_group_name
   ttl                 = 300
-  record              = azurerm_container_app_environment.apps.default_domain
+  record              = "${var.name}-website.${azurerm_container_app_environment.apps.default_domain}" # here
 }
 
 resource "azurerm_dns_txt_record" "website" {
