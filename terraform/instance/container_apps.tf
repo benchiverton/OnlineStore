@@ -1,10 +1,10 @@
 data  "azurerm_container_app_environment" "apps" {
-  name                = "${lower(var.environment)}-${var.name}-containerapps"
+  name                = "${var.name}-containerapps"
   resource_group_name = "onlinestore-shared-rg"
 }
 
 resource "azurerm_container_app" "api" {
-  name                         = "${var.name}-api"
+  name                         = "${lower(var.environment)}-${var.name}-api"
   container_app_environment_id = data.azurerm_container_app_environment.apps.id
   resource_group_name          = azurerm_resource_group.instance.name
   revision_mode                = "Single"
