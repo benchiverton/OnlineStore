@@ -22,9 +22,8 @@ resource "azurerm_dns_txt_record" "api" {
 }
 
 resource "azurerm_container_app_custom_domain" "api" {
-  name                     = trimprefix(azurerm_dns_txt_record.api.fqdn, "asuid.")
+  name                     = trimsuffix(trimprefix(azurerm_dns_txt_record.api.fqdn, "asuid."), ".")
   container_app_id         = azurerm_container_app.api.id
-  certificate_binding_type = "SniEnabled"
 
   lifecycle {
     // When using an Azure created Managed Certificate these values must be added to ignore_changes to prevent resource recreation.
