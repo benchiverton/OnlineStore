@@ -18,7 +18,7 @@ resource "null_resource" "null" {
   # provision a managed cert and apply it to the container app
   provisioner "local-exec" {
     when    = create
-    command = "sh ${path.module}/scripts/create.sh"
+    command = "bash ${path.module}/scripts/create.sh"
 
     environment = {
       CONTAINER_APP_NAME               = self.triggers.ca_name
@@ -31,7 +31,7 @@ resource "null_resource" "null" {
 
   provisioner "local-exec" {
     when    = destroy
-    command = "sh ${path.module}/scripts/destroy.sh"
+    command = "bash ${path.module}/scripts/destroy.sh"
 
     environment = {
       CONTAINER_APP_NAME               = self.triggers.ca_name
