@@ -1,6 +1,6 @@
-data "azurerm_dns_zone" "rockpal-co-uk"{
-    resource_group_name = "onlinestore-shared-rg"
-    name                = "rockpal.co.uk"
+data "azurerm_dns_zone" "rockpal-co-uk" {
+  resource_group_name = "onlinestore-shared-rg"
+  name                = "rockpal.co.uk"
 }
 
 resource "azurerm_dns_cname_record" "api" {
@@ -22,8 +22,8 @@ resource "azurerm_dns_txt_record" "api" {
 }
 
 resource "azurerm_container_app_custom_domain" "api" {
-  name                     = trimsuffix(azurerm_dns_cname_record.api.fqdn, ".")
-  container_app_id         = azurerm_container_app.api.id
+  name             = trimsuffix(azurerm_dns_cname_record.api.fqdn, ".")
+  container_app_id = azurerm_container_app.api.id
 
   depends_on = [
     azurerm_dns_txt_record.api,
@@ -54,8 +54,8 @@ resource "azurerm_dns_txt_record" "website" {
 }
 
 resource "azurerm_container_app_custom_domain" "website" {
-  name                     = trimsuffix(azurerm_dns_cname_record.website.fqdn, ".")
-  container_app_id         = azurerm_container_app.website.id
+  name             = trimsuffix(azurerm_dns_cname_record.website.fqdn, ".")
+  container_app_id = azurerm_container_app.website.id
 
   depends_on = [
     azurerm_dns_txt_record.website,
@@ -86,8 +86,8 @@ resource "azurerm_dns_txt_record" "monitoring" {
 }
 
 resource "azurerm_container_app_custom_domain" "monitoring" {
-  name                     = trimsuffix(azurerm_dns_cname_record.monitoring.fqdn, ".")
-  container_app_id         = azurerm_container_app.monitoring.id
+  name             = trimsuffix(azurerm_dns_cname_record.monitoring.fqdn, ".")
+  container_app_id = azurerm_container_app.monitoring.id
 
   depends_on = [
     azurerm_dns_txt_record.monitoring,
@@ -99,7 +99,7 @@ resource "azurerm_container_app_custom_domain" "monitoring" {
   }
 }
 
-module "container_apps_bind_dns"{
+module "container_apps_bind_dns" {
   source                                = "./container_apps_bind_dns"
   container_app_resource_group_name     = azurerm_resource_group.instance.name
   container_app_env_resource_group_name = data.azurerm_container_app_environment.apps.resource_group_name
@@ -110,5 +110,11 @@ module "container_apps_bind_dns"{
       custom_domain      = trimsuffix(azurerm_dns_cname_record.api.fqdn, "."),
       container_app_name = azurerm_container_app.api.name
     }
+  ]
+
+  depends_on = [
+    azurerm_container_app_custom_domain.api,
+    azurerm_container_app_custom_domain.website,
+    azurerm_container_app_custom_domain.monitoring
   ]
 }

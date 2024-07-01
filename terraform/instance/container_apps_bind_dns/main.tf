@@ -9,7 +9,7 @@ resource "null_resource" "null" {
 
   triggers = {
     ca_name        = each.value.container_app_name
-    ca_rg_name     = var.container_app_env_name
+    ca_rg_name     = var.container_app_resource_group_name
     ca_env_name    = var.container_app_env_name
     ca_env_rg_name = var.container_app_env_resource_group_name
     custom_domain  = each.value.custom_domain
@@ -22,9 +22,9 @@ resource "null_resource" "null" {
 
     environment = {
       CONTAINER_APP_NAME               = self.triggers.ca_name
-      CONTAINER_APP_RESOURCE_GROUP     = self.triggers.container_app
-      CONTAINER_APP_ENV_NAME           = self.triggers.ca_env_name_env_name
-      CONTAINER_APP_ENV_RESOURCE_GROUP = self.triggers.container_app_env_resource_group_name
+      CONTAINER_APP_RESOURCE_GROUP     = self.triggers.ca_rg_name
+      CONTAINER_APP_ENV_NAME           = self.triggers.ca_env_name
+      CONTAINER_APP_ENV_RESOURCE_GROUP = self.triggers.ca_env_rg_name
       CUSTOM_DOMAIN                    = self.triggers.custom_domain
     }
   }
@@ -35,9 +35,9 @@ resource "null_resource" "null" {
 
     environment = {
       CONTAINER_APP_NAME               = self.triggers.ca_name
-      CONTAINER_APP_RESOURCE_GROUP     = self.triggers.container_app
-      CONTAINER_APP_ENV_NAME           = self.triggers.ca_env_name_env_name
-      CONTAINER_APP_ENV_RESOURCE_GROUP = self.triggers.container_app_env_resource_group_name
+      CONTAINER_APP_RESOURCE_GROUP     = self.triggers.ca_rg_name
+      CONTAINER_APP_ENV_NAME           = self.triggers.ca_env_name
+      CONTAINER_APP_ENV_RESOURCE_GROUP = self.triggers.ca_env_rg_name
       CUSTOM_DOMAIN                    = self.triggers.custom_domain
     }
   }
