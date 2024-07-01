@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # functions below taken from: https://stackoverflow.com/a/25515370
 yell() { echo "$0: $*" >&2; }
 die() {

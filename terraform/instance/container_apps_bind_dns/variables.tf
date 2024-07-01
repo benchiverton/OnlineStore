@@ -3,13 +3,13 @@ variable "container_app_resource_group_name" {
   type = string
 }
 
-variable "container_app_env_resource_group_name" {
-  description = "name of the resource group where the container app environment is deployed"
+variable "container_app_env_name" {
+  description = "name of the container app environment name"
   type = string
 }
 
-variable "container_app_env_name" {
-  description = "name of the container app environment name"
+variable "container_app_env_resource_group_name" {
+  description = "name of the resource group where the container app environment is deployed"
   type = string
 }
 

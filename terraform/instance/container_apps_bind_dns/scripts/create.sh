@@ -51,22 +51,22 @@ fi
 # check if a managed cert for the domain already exists
 # if it does not exist, provision one
 # if it does, save its name to use for binding it later
-MANAGED_CERTIFICATE_NAME=$(
+MANAGED_CERTIFICATE_ID=$(
   az containerapp env certificate list \
     -g $CONTAINER_APP_ENV_RESOURCE_GROUP \
     -n $CONTAINER_APP_ENV_NAME \
     --managed-certificates-only \
-    --query "[?properties.subjectName=='$CUSTOM_DOMAIN'].name" \
+    --query "[?properties.subjectName=='$CUSTOM_DOMAIN'].id" \
     --output tsv
 )
-if [ -z "${MANAGED_CERTIFICATE_NAME}" ]; then
-  MANAGED_CERTIFICATE_NAME=$(
+if [ -z "${MANAGED_CERTIFICATE_ID}" ]; then
+  MANAGED_CERTIFICATE_ID=$(
     az containerapp env certificate create \
       -g $CONTAINER_APP_ENV_RESOURCE_GROUP \
       -n $CONTAINER_APP_ENV_NAME \
       --hostname $CUSTOM_DOMAIN \
       --validation-method CNAME \
-      --query "name" \
+      --query "id" \
       --output tsv
   )
   echo "created cert for '$CUSTOM_DOMAIN'. waiting for it to provision now..."
@@ -118,7 +118,7 @@ else
     -n $CONTAINER_APP_NAME \
     --hostname $CUSTOM_DOMAIN \
     --environment $CONTAINER_APP_ENV_NAME \
-    --certificate $MANAGED_CERTIFICATE_NAME \
+    --certificate $MANAGED_CERTIFICATE_ID \
     --output none
   echo "finished binding. the domain is now secured and ready to use"
 fi
