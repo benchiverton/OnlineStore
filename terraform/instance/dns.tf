@@ -98,3 +98,17 @@ resource "azurerm_container_app_custom_domain" "monitoring" {
     ignore_changes = [certificate_binding_type, container_app_environment_certificate_id]
   }
 }
+
+module "container_apps_bind_dns"{
+  source                                = "./container_apps_bind_dns"
+  container_app_resource_group_name     = azurerm_resource_group.instance.name
+  container_app_env_resource_group_name = data.azurerm_container_app_environment.apps.resource_group_name
+  container_app_env_name                = data.azurerm_container_app_environment.apps.name
+  services = [
+    {
+      key                = "api",
+      custom_domain      = trimsuffix(azurerm_dns_cname_record.api.fqdn, "."),
+      container_app_name = azurerm_container_app.api.name
+    }
+  ]
+}
