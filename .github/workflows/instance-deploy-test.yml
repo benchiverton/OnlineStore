@@ -43,8 +43,14 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_wrapper: false
-      - name: Setup Azure CLI
-        run: sudo apt-get install -y dnsutils
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      # - name: Setup azure CLI
+      #   run: 
+      # - name: Setup dnsutils (dig) CLI
+      #   run: sudo apt-get install -y dnsutils
       - name: Terraform Format
         id: fmt
         run: terraform -chdir=instance fmt

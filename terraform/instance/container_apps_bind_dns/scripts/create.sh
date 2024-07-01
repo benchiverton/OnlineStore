@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # env variables used throughout this script:
 # CONTAINER_APP_NAME
 # CONTAINER_APP_RESOURCE_GROUP
