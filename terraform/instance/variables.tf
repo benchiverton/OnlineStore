@@ -28,6 +28,12 @@ variable "acr_password" {
   sensitive   = true
 }
 
+variable "dns_host" {
+  type        = string
+  description = "DNS host"
+  default     = "rockpal.co.uk"
+}
+
 variable "website_dns_subdomain" {
   type        = string
   description = "DNS subdomain for website"

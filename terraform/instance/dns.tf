@@ -4,7 +4,7 @@ data "azurerm_dns_zone" "rockpal-co-uk"{
 }
 
 resource "azurerm_dns_cname_record" "api" {
-  name                = var.api_dns_subdomain
+  name                = "${var.api_dns_subdomain}.${var.dns_host}"
   zone_name           = data.azurerm_dns_zone.rockpal-co-uk.name
   resource_group_name = data.azurerm_dns_zone.rockpal-co-uk.resource_group_name
   ttl                 = 300
@@ -12,7 +12,7 @@ resource "azurerm_dns_cname_record" "api" {
 }
 
 resource "azurerm_dns_txt_record" "api" {
-  name                = "asuid.${var.api_dns_subdomain}"
+  name                = "asuid.${var.api_dns_subdomain}.${var.dns_host}"
   zone_name           = data.azurerm_dns_zone.rockpal-co-uk.name
   resource_group_name = data.azurerm_dns_zone.rockpal-co-uk.resource_group_name
   ttl                 = 300
