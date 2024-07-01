@@ -1,6 +1,6 @@
 data "azurerm_dns_zone" "rockpal-co-uk" {
   name                = "rockpal.co.uk"
-  resource_group_name = "rockpal-shared-rg"
+  resource_group_name = "onlinestore-shared-rg"
 }
 
 resource "azurerm_dns_cname_record" "website" {
