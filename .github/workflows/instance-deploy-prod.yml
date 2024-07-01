@@ -119,7 +119,7 @@ jobs:
           acrName: onlinestorecontainerregistry
           acrUsername: ${{ secrets.ACR_USERNAME }}
           acrPassword: ${{ secrets.ACR_TOKEN }}
-          containerAppName: onlinestore-api
+          containerAppName: prod-onlinestore-api
           imageToDeploy: onlinestorecontainerregistry.azurecr.io/onlinestore-api:${{ github.sha }}
           location: 'East US'
           resourceGroup: ${{ env.resource_group_name }}
@@ -132,7 +132,7 @@ jobs:
           acrName: onlinestorecontainerregistry
           acrUsername: ${{ secrets.ACR_USERNAME }}
           acrPassword: ${{ secrets.ACR_TOKEN }}
-          containerAppName: onlinestore-website
+          containerAppName: prod-onlinestore-website
           imageToDeploy: onlinestorecontainerregistry.azurecr.io/onlinestore-website:${{ github.sha }}
           location: 'East US'
           resourceGroup: ${{ env.resource_group_name }}
