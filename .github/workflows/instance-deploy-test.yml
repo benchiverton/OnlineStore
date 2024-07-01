@@ -114,6 +114,7 @@ jobs:
       - name: Deploy api
         uses: azure/container-apps-deploy-action@v1
         with:
+          yamlConfigPath: .github/workflows/config/container-environment-config.yaml
           acrName: onlinestorecontainerregistry
           acrUsername: ${{ secrets.ACR_USERNAME }}
           acrPassword: ${{ secrets.ACR_TOKEN }}
@@ -126,6 +127,7 @@ jobs:
       - name: Deploy website
         uses: azure/container-apps-deploy-action@v1
         with:
+          yamlConfigPath: .github/workflows/config/container-environment-config.yaml
           acrName: onlinestorecontainerregistry
           acrUsername: ${{ secrets.ACR_USERNAME }}
           acrPassword: ${{ secrets.ACR_TOKEN }}
