@@ -17,7 +17,7 @@ resource "azurerm_dns_txt_record" "website" {
   resource_group_name = data.azurerm_dns_zone.rockpal-co-uk.resource_group_name
   ttl                 = 300
   record {
-    value = azurerm_container_app.website.custom_domain_verification_id
+    value = azurerm_container_app_environment.apps.custom_domain_verification_id
   }
 }
 
