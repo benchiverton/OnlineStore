@@ -47,10 +47,6 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-      # - name: Setup azure CLI
-      #   run: 
-      # - name: Setup dnsutils (dig) CLI
-      #   run: sudo apt-get install -y dnsutils
       - name: Terraform Format
         id: fmt
         run: terraform -chdir=instance fmt
