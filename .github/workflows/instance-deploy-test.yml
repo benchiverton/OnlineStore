@@ -71,9 +71,9 @@ jobs:
           TF_VAR_environment: ${{ github.head_ref }}
           TF_VAR_acr_username: ${{ secrets.ACR_USERNAME }}
           TF_VAR_acr_password: ${{ secrets.ACR_TOKEN }}
-          TF_VAR_website_dns_subdomain: ${{ github.head_ref }}
-          TF_VAR_api_dns_subdomain: api
-          TF_VAR_monitoring_dns_subdomain: monitoring
+          TF_VAR_website_dns_subdomain: ${{ github.head_ref }}-site
+          TF_VAR_api_dns_subdomain: ${{ github.head_ref }}-api
+          TF_VAR_monitoring_dns_subdomain: ${{ github.head_ref }}-monitoring
       - name: Save terraform outputs
         shell: bash
         run: |
