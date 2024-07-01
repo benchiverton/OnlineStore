@@ -40,7 +40,7 @@ DOES_CUSTOM_DOMAIN_EXIST=$(
 if [ -z "${DOES_CUSTOM_DOMAIN_EXIST}" ]; then
   echo "adding custom hostname to container app first since it does not exist yet"
   az containerapp hostname add \
-    -n $CONTAINER_APP_CONTAINER_APP_NAME \
+    -n $CONTAINER_APP_NAME \
     -g $CONTAINER_APP_RESOURCE_GROUP \
     --hostname $CUSTOM_DOMAIN \
     --output none
