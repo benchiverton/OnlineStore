@@ -61,6 +61,7 @@ jobs:
           TF_VAR_environment: prod
           TF_VAR_acr_username: ${{ secrets.ACR_USERNAME }}
           TF_VAR_acr_password: ${{ secrets.ACR_TOKEN }}
+          TF_VAR_website_dns_subdomain: www
       - name: Terraform Apply
         id: apply
         run: terraform -chdir=instance apply -auto-approve
@@ -69,6 +70,7 @@ jobs:
           TF_VAR_environment: prod
           TF_VAR_acr_username: ${{ secrets.ACR_USERNAME }}
           TF_VAR_acr_password: ${{ secrets.ACR_TOKEN }}
+          TF_VAR_website_dns_subdomain: www
       - name: Save terraform outputs
         shell: bash
         run: |
