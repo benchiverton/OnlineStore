@@ -148,7 +148,7 @@ jobs:
           edit-mode: replace
           body: |
             ### Test environment information
-            #### 🔗 [Company Website](https://${{ github.head_ref }}-site.rockpal.co.uk/)
+            #### 🔗 [Company Website](https://${{ github.head_ref }}-website.rockpal.co.uk/)
             #### 🔗 [Company API](https://${{ github.head_ref }}-api.rockpal.co.uk/swagger/)
             #### 🔗 [Monitoring Dashboard](https://${{ github.head_ref }}-monitoring.rockpal.co.uk/)
 
