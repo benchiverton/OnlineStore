@@ -17,15 +17,15 @@ CERTIFICATE_ID=$(
     --output tsv
 )
 
+# remove the custom domain from the container app
+az containerapp hostname delete --hostname $CUSTOM_DOMAIN \
+  -g $CONTAINER_APP_RESOURCE_GROUP \
+  -n $CONTAINER_APP_NAME
+echo "removed the custom domain from the container app"
+
 # destroy the cert
 az containerapp env certificate delete \
   -g $CONTAINER_APP_ENV_RESOURCE_GROUP \
   -n $CONTAINER_APP_ENV_NAME \
   --certificate $CERTIFICATE_ID --yes
 echo "destroyed the managed certificate"
-
-# remove the custom domain from the container app
-az containerapp hostname delete --hostname $CUSTOM_DOMAIN \
-  -g $CONTAINER_APP_RESOURCE_GROUP \
-  -n $CONTAINER_APP_NAME
-echo "removed the custom domain from the container app"
