@@ -23,6 +23,25 @@ az containerapp hostname delete --hostname $CUSTOM_DOMAIN \
   -n $CONTAINER_APP_NAME
 echo "removed the custom domain from the container app"
 
+# wait for the custom domain to be removed
+tries=0
+until [ "$tries" -ge 20 ]; do
+  DOES_CUSTOM_DOMAIN_EXIST=$(
+    az containerapp hostname list \
+      -n $CONTAINER_APP_NAME \
+      -g $CONTAINER_APP_RESOURCE_GROUP \
+      --query "[?name=='$CUSTOM_DOMAIN'].name" \
+      --output tsv
+  )
+  [[ ! -z "${$DOES_CUSTOM_DOMAIN_EXIST}" ]] && break
+  tries=$((tries + 1))
+
+  sleep 15
+done
+if [ "$tries" -ge 20 ]; then
+  die "waited for 5 minutes, checked the containerapp 20 times and it still has the custom domain. check azure portal..."
+fi
+
 # destroy the cert
 az containerapp env certificate delete \
   -g $CONTAINER_APP_ENV_RESOURCE_GROUP \
