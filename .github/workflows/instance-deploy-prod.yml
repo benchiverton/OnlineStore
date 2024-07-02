@@ -84,9 +84,6 @@ jobs:
         run: |
           mkdir terraform-outputs
           terraform -chdir=instance output -raw resource_group_name > terraform-outputs/resource_group_name.txt
-          terraform -chdir=instance output -raw container_app_api_fqdn > terraform-outputs/container_app_api_fqdn.txt
-          terraform -chdir=instance output -raw container_app_website_fqdn > terraform-outputs/container_app_website_fqdn.txt
-          terraform -chdir=instance show -json | jq -r '.values.outputs.container_app_monitoring_fqdn.value // ""' > container_app_monitoring_fqdn.txt
       - name: Upload terraform outputs for deploy job
         uses: actions/upload-artifact@v3
         with:
@@ -109,9 +106,6 @@ jobs:
         shell: bash
         run: |
           echo "resource_group_name=$(cat resource_group_name.txt)" >> $GITHUB_ENV
-          echo "container_app_api_fqdn=$(cat container_app_api_fqdn.txt)" >> $GITHUB_ENV
-          echo "container_app_website_fqdn=$(cat container_app_website_fqdn.txt)" >> $GITHUB_ENV
-          echo "container_app_monitoring_fqdn=$(cat container_app_monitoring_fqdn.txt)" >> $GITHUB_ENV
       - name: Login via Azure CLI
         uses: azure/login@v1
         with:
@@ -119,26 +113,24 @@ jobs:
       - name: Deploy api
         uses: azure/container-apps-deploy-action@v1
         with:
-          yamlConfigPath: .github/workflows/config/container-environment-config.yaml
           acrName: onlinestorecontainerregistry
           acrUsername: ${{ secrets.ACR_USERNAME }}
           acrPassword: ${{ secrets.ACR_TOKEN }}
-          containerAppName: onlinestore-api
+          containerAppName: prod-onlinestore-api
           imageToDeploy: onlinestorecontainerregistry.azurecr.io/onlinestore-api:${{ github.sha }}
           location: 'East US'
-          resourceGroup: ${{ env.resource_group_name }}
+          resourceGroup: onlinestore-shared-rg
           targetPort: 8080
-          environmentVariables: OTEL_EXPORTER_OTLP_ENDPOINT=http://onlinestore-monitoring:18889
+          environmentVariables: OTEL_EXPORTER_OTLP_ENDPOINT=http://prod-onlinestore-monitoring:18889
       - name: Deploy website
         uses: azure/container-apps-deploy-action@v1
         with:
-          yamlConfigPath: .github/workflows/config/container-environment-config.yaml
           acrName: onlinestorecontainerregistry
           acrUsername: ${{ secrets.ACR_USERNAME }}
           acrPassword: ${{ secrets.ACR_TOKEN }}
-          containerAppName: onlinestore-website
+          containerAppName: prod-onlinestore-website
           imageToDeploy: onlinestorecontainerregistry.azurecr.io/onlinestore-website:${{ github.sha }}
           location: 'East US'
-          resourceGroup: ${{ env.resource_group_name }}
+          resourceGroup: onlinestore-shared-rg
           targetPort: 80
           environmentVariables: "API__BASEPATH=https://api.rockpal.co.uk"
