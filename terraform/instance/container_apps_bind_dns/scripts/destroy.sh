@@ -25,7 +25,7 @@ echo "removed the custom domain from the container app"
 
 # wait for the custom domain to be removed
 tries=0
-until [ "$tries" -ge 20 ]; do
+until [ "$tries" -ge 12 ]; do
   DOES_CUSTOM_DOMAIN_EXIST=$(
     az containerapp hostname list \
       -n $CONTAINER_APP_NAME \
@@ -33,13 +33,13 @@ until [ "$tries" -ge 20 ]; do
       --query "[?name=='$CUSTOM_DOMAIN'].name" \
       --output tsv
   )
-  [[ ! -z "${$DOES_CUSTOM_DOMAIN_EXIST}" ]] && break
+  [[ -z "${$DOES_CUSTOM_DOMAIN_EXIST}" ]] && break
   tries=$((tries + 1))
 
-  sleep 15
+  sleep 10
 done
-if [ "$tries" -ge 20 ]; then
-  die "waited for 5 minutes, checked the containerapp 20 times and it still has the custom domain. check azure portal..."
+if [ "$tries" -ge 12 ]; then
+  die "waited for 2 minutes, checked the containerapp 12 times and it still has the custom domain. check azure portal..."
 fi
 
 # destroy the cert
