@@ -11,7 +11,7 @@ resource "azurerm_container_app" "api" {
 
   template {
     container {
-      name   = "onlinestore-api"
+      name   = "${lower(var.environment)}-onlinestore-api"
       image  = "mcr.microsoft.com/azuredocs/containerapps-helloworld:latest"
       cpu    = 0.25
       memory = "0.5Gi"
@@ -46,7 +46,7 @@ resource "azurerm_container_app" "website" {
 
   template {
     container {
-      name   = "onlinestore-website"
+      name   = "${lower(var.environment)}-onlinestore-website"
       image  = "mcr.microsoft.com/azuredocs/containerapps-helloworld:latest"
       cpu    = 0.25
       memory = "0.5Gi"
@@ -81,7 +81,7 @@ resource "azurerm_container_app" "monitoring" {
 
   template {
     container {
-      name   = "aspire-dashboard"
+      name   = "${lower(var.environment)}-aspire-dashboard"
       image  = "onlinestorecontainerregistry.azurecr.io/dotnet/aspire-dashboard:8.0.0"
       cpu    = 0.25
       memory = "0.5Gi"
