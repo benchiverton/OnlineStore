@@ -59,7 +59,7 @@ resource "azurerm_dns_txt_record" "monitoring" {
 
 module "container_apps_bind_dns" {
   source                                = "./container_apps_bind_dns"
-  container_app_resource_group_name     = azurerm_resource_group.instance.name
+  container_app_resource_group_name     = data.azurerm_container_app_environment.apps.resource_group_name
   container_app_env_name                = data.azurerm_container_app_environment.apps.name
   container_app_env_resource_group_name = data.azurerm_container_app_environment.apps.resource_group_name
   services = [
