@@ -37,7 +37,7 @@ CERTIFICATE_ID=$(
     -g $CONTAINER_APP_ENV_RESOURCE_GROUP \
     -n $CONTAINER_APP_ENV_NAME \
     --managed-certificates-only \
-    --query "[?properties.subjectName=='$CUSTOM_DOMAIN'].id" \
+    --query "[?contains(properties.subjectName,'$CUSTOM_DOMAIN')].id" \
     --output tsv
 )
 
