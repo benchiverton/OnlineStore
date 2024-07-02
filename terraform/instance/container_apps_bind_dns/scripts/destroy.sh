@@ -26,14 +26,13 @@ echo "removed the custom domain from the container app"
 # wait for the custom domain to be removed
 tries=0
 until [ "$tries" -ge 12 ]; do
-  DOES_CUSTOM_DOMAIN_EXIST=$(
+  [[ -z $(
     az containerapp hostname list \
       -n $CONTAINER_APP_NAME \
       -g $CONTAINER_APP_RESOURCE_GROUP \
       --query "[?name=='$CUSTOM_DOMAIN'].name" \
       --output tsv
-  )
-  [[ -z "${$DOES_CUSTOM_DOMAIN_EXIST}" ]] && break
+  ) ]] && break
   tries=$((tries + 1))
 
   sleep 10
