@@ -6,7 +6,7 @@ data  "azurerm_container_app_environment" "apps" {
 resource "azurerm_container_app" "api" {
   name                         = "${lower(var.environment)}-${var.name}-api"
   container_app_environment_id = data.azurerm_container_app_environment.apps.id
-  resource_group_name          = azurerm_resource_group.instance.name
+  resource_group_name          = data.azurerm_container_app_environment.apps.resource_group_name
   revision_mode                = "Single"
 
   template {
@@ -41,7 +41,7 @@ resource "azurerm_container_app" "api" {
 resource "azurerm_container_app" "website" {
   name                         = "${lower(var.environment)}-${var.name}-website"
   container_app_environment_id = data.azurerm_container_app_environment.apps.id
-  resource_group_name          = azurerm_resource_group.instance.name
+  resource_group_name          = data.azurerm_container_app_environment.apps.resource_group_name
   revision_mode                = "Single"
 
   template {
@@ -76,7 +76,7 @@ resource "azurerm_container_app" "website" {
 resource "azurerm_container_app" "monitoring" {
   name                         = "${lower(var.environment)}-${var.name}-monitoring"
   container_app_environment_id = data.azurerm_container_app_environment.apps.id
-  resource_group_name          = azurerm_resource_group.instance.name
+  resource_group_name          = data.azurerm_container_app_environment.apps.resource_group_name
   revision_mode                = "Single"
 
   template {

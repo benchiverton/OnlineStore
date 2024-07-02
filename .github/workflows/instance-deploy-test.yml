@@ -110,16 +110,15 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Deploy api
-        uses: benchiverton/container-apps-deploy-action@container-env-resource-group
+        uses: azure/container-apps-deploy-action@v1
         with:
           acrName: onlinestorecontainerregistry
           acrUsername: ${{ secrets.ACR_USERNAME }}
           acrPassword: ${{ secrets.ACR_TOKEN }}
           containerAppName: ${{ github.head_ref }}-onlinestore-api
-          containerAppEnvironmentResourceGroup: onlinestore-shared-rg
           imageToDeploy: onlinestorecontainerregistry.azurecr.io/onlinestore-api:${{ github.sha }}
           location: 'East US'
-          resourceGroup: ${{ env.resource_group_name }}
+          resourceGroup: onlinestore-shared-rg
           targetPort: 8080
           environmentVariables: OTEL_EXPORTER_OTLP_ENDPOINT=http://${{ github.head_ref }}-onlinestore-monitoring:18889
       - name: Deploy website
@@ -129,10 +128,9 @@ jobs:
           acrUsername: ${{ secrets.ACR_USERNAME }}
           acrPassword: ${{ secrets.ACR_TOKEN }}
           containerAppName: ${{ github.head_ref }}-onlinestore-website
-          containerAppEnvironmentResourceGroup: onlinestore-shared-rg
           imageToDeploy: onlinestorecontainerregistry.azurecr.io/onlinestore-website:${{ github.sha }}
           location: 'East US'
-          resourceGroup: ${{ env.resource_group_name }}
+          resourceGroup: onlinestore-shared-rg
           targetPort: 80
           environmentVariables: "API__BASEPATH=https://${{ github.head_ref }}-api.rockpal.co.uk"
       - name: Find Comment
