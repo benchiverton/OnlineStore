@@ -79,4 +79,6 @@ module "container_apps_bind_dns" {
       container_app_name = azurerm_container_app.monitoring.name
     }
   ]
+
+  depends_on = [ azapi_update_resource.monitoring_portmappings ]
 }
