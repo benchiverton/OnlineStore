@@ -4,14 +4,14 @@ data  "azurerm_container_app_environment" "apps" {
 }
 
 resource "azurerm_container_app" "api" {
-  name                         = "${var.name}-api"
+  name                         = "${lower(var.environment)}-${var.name}-api"
   container_app_environment_id = data.azurerm_container_app_environment.apps.id
-  resource_group_name          = azurerm_resource_group.instance.name
+  resource_group_name          = data.azurerm_container_app_environment.apps.resource_group_name
   revision_mode                = "Single"
 
   template {
     container {
-      name   = "onlinestore-api"
+      name   = "${lower(var.environment)}-onlinestore-api"
       image  = "mcr.microsoft.com/azuredocs/containerapps-helloworld:latest"
       cpu    = 0.25
       memory = "0.5Gi"
@@ -39,14 +39,14 @@ resource "azurerm_container_app" "api" {
 }
 
 resource "azurerm_container_app" "website" {
-  name                         = "${var.name}-website"
+  name                         = "${lower(var.environment)}-${var.name}-website"
   container_app_environment_id = data.azurerm_container_app_environment.apps.id
-  resource_group_name          = azurerm_resource_group.instance.name
+  resource_group_name          = data.azurerm_container_app_environment.apps.resource_group_name
   revision_mode                = "Single"
 
   template {
     container {
-      name   = "onlinestore-website"
+      name   = "${lower(var.environment)}-onlinestore-website"
       image  = "mcr.microsoft.com/azuredocs/containerapps-helloworld:latest"
       cpu    = 0.25
       memory = "0.5Gi"
@@ -74,14 +74,14 @@ resource "azurerm_container_app" "website" {
 }
 
 resource "azurerm_container_app" "monitoring" {
-  name                         = "${var.name}-monitoring"
+  name                         = "${lower(var.environment)}-${var.name}-monitoring"
   container_app_environment_id = data.azurerm_container_app_environment.apps.id
-  resource_group_name          = azurerm_resource_group.instance.name
+  resource_group_name          = data.azurerm_container_app_environment.apps.resource_group_name
   revision_mode                = "Single"
 
   template {
     container {
-      name   = "aspire-dashboard"
+      name   = "${lower(var.environment)}-aspire-dashboard"
       image  = "onlinestorecontainerregistry.azurecr.io/dotnet/aspire-dashboard:8.0.0"
       cpu    = 0.25
       memory = "0.5Gi"

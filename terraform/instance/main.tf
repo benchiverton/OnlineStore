@@ -32,18 +32,3 @@ output "resource_group_name" {
   value       = azurerm_resource_group.instance.name
   sensitive   = false
 }
-
-output "container_app_api_fqdn" {
-  value       = azurerm_container_app.api.ingress[0].fqdn
-  sensitive   = false
-}
-
-output "container_app_website_fqdn" {
-  value       = azurerm_container_app.website.ingress[0].fqdn
-  sensitive   = false
-}
-
-output "container_app_monitoring_fqdn" {
-  value       = azurerm_container_app.monitoring.ingress[0].fqdn
-  sensitive   = false
-}
