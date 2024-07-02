@@ -131,7 +131,7 @@ jobs:
           imageToDeploy: onlinestorecontainerregistry.azurecr.io/onlinestore-website:${{ github.sha }}
           location: 'East US'
           resourceGroup: onlinestore-shared-rg
-          targetPort: 80
+          targetPort: 8080
           environmentVariables: "API__BASEPATH=https://${{ github.head_ref }}-api.rockpal.co.uk"
       - name: Find Comment
         uses: peter-evans/find-comment@v1

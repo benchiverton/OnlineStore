@@ -128,5 +128,5 @@ jobs:
           imageToDeploy: onlinestorecontainerregistry.azurecr.io/onlinestore-website:${{ github.sha }}
           location: 'East US'
           resourceGroup: onlinestore-shared-rg
-          targetPort: 80
+          targetPort: 8080
           environmentVariables: "API__BASEPATH=https://api.rockpal.co.uk"
