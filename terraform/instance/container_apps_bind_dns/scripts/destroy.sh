@@ -7,16 +7,6 @@ die() {
   exit 111
 }
 
-# get the managed cert using the custom domain
-CERTIFICATE_ID=$(
-  az containerapp env certificate list \
-    -g $CONTAINER_APP_ENV_RESOURCE_GROUP \
-    -n $CONTAINER_APP_ENV_NAME \
-    --managed-certificates-only \
-    --query "[?properties.subjectName=='$CUSTOM_DOMAIN'].id" \
-    --output tsv
-)
-
 # remove the custom domain from the container app
 az containerapp hostname delete --hostname $CUSTOM_DOMAIN \
   -g $CONTAINER_APP_RESOURCE_GROUP \
@@ -40,6 +30,16 @@ done
 if [ "$tries" -ge 12 ]; then
   die "waited for 2 minutes, checked the containerapp 12 times and it still has the custom domain. check azure portal..."
 fi
+
+# get the managed cert using the custom domain
+CERTIFICATE_ID=$(
+  az containerapp env certificate list \
+    -g $CONTAINER_APP_ENV_RESOURCE_GROUP \
+    -n $CONTAINER_APP_ENV_NAME \
+    --managed-certificates-only \
+    --query "[?properties.subjectName=='$CUSTOM_DOMAIN'].id" \
+    --output tsv
+)
 
 # destroy the cert
 az containerapp env certificate delete \
