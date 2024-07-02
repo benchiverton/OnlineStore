@@ -17,4 +17,4 @@ COPY /src/Website/Company.Website/nginx.conf /etc/nginx/nginx.conf
 COPY /src/Website/Company.Website/overwrite-config.sh /docker-entrypoint.d/overwrite-config.sh
 RUN chmod +x /docker-entrypoint.d/overwrite-config.sh
 
-EXPOSE 8080
+EXPOSE 80
