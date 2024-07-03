@@ -1,10 +1,8 @@
-@page "/adoption/{PetRockId}/variant/{VariantId}"
+@page "/sanctuary"
 
 <AuthorizeView>
     <Authorized>
-        <h1>Hello, @context.User.Identity?.Name!</h1>
-        @PetRockId
-        @VariantId
+        <h1>Sanctuary for @context.User.Identity?.Name!</h1>
     </Authorized>
     <NotAuthorized>
         <RedirectToLogin />
