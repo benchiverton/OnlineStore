@@ -1,9 +1,18 @@
 @page "/authentication/{action}"
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 
-<RemoteAuthenticatorView Action="@Action" />
+@inject ISyncSessionStorageService SessionStorage
+@inject NavigationManager NavigationManager
+
+<RemoteAuthenticatorView Action="@Action" OnLogInSucceeded="OnLogInSucceeded" />
 
 @code {
     [Parameter]
     public string? Action { get; set; }
+
+    private void OnLogInSucceeded(RemoteAuthenticationState obj)
+    {
+        var returnUrl = SessionStorage.GetItem<string>(AuthenticationConstants.ReturnUrlStorageKey);
+        NavigationManager.NavigateTo(returnUrl, true);
+    }
 }

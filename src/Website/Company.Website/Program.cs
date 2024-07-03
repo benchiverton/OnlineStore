@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using Blazored.SessionStorage;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -19,6 +20,8 @@ builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(build
 // services
 var apiBaseAddress = builder.Configuration.GetValue<string>("Api:BasePath");
 builder.Services.AddHttpClient<PetRockService>(client => client.BaseAddress = new Uri(apiBaseAddress));
+
+builder.Services.AddBlazoredSessionStorage();
 
 builder.Services.AddMsalAuthentication(options =>
 {

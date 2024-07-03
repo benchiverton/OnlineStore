@@ -1,0 +1,20 @@
+@page "/adoption/{PetRockId}/variant/{VariantId}"
+
+<AuthorizeView>
+    <Authorized>
+        <h1>Hello, @context.User.Identity?.Name!</h1>
+        @PetRockId
+        @VariantId
+    </Authorized>
+    <NotAuthorized>
+        @* Do this rather than rely on the [Authorize] attribute to avoid endpoint routing. *@
+        <RedirectToLogin />
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    [Parameter]
+    public string PetRockId { get; set; }
+    [Parameter]
+    public string VariantId { get; set; }
+}
