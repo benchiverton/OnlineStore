@@ -1,6 +1,6 @@
 namespace Company.Contract;
 
-public record PetRock(
+public record AdoptableRock(
     string Id,
     string Name,
     string Headline,

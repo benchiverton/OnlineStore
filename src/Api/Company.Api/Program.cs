@@ -1,6 +1,6 @@
 using System;
 using System.Reflection;
-using Company.Api.PetRocks;
+using Company.Api.Adoption;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -46,7 +46,7 @@ builder.Services
         .AddAspNetCoreInstrumentation()
         .AddRuntimeInstrumentation())
     .WithTracing(tracerProviderBuilder => tracerProviderBuilder
-        .AddSource(serviceName, nameof(PetRocksController))
+        .AddSource(serviceName, nameof(AdoptionController))
         .SetResourceBuilder(appResourceBuilder)
         .AddAspNetCoreInstrumentation()
         .AddEntityFrameworkCoreInstrumentation());
@@ -72,7 +72,7 @@ var sqlLiteConnectionStringBuilder = new SqliteConnectionStringBuilder()
 {
     DataSource = "CompanyApi.db", Mode = SqliteOpenMode.ReadWriteCreate,
 };
-builder.Services.AddDbContext<PetRockContext>(options =>
+builder.Services.AddDbContext<AdoptionContext>(options =>
     options.UseSqlite(sqlLiteConnectionStringBuilder.ConnectionString));
 
 var host = builder.Build();
@@ -95,7 +95,7 @@ host.MapControllers();
 
 using (var scope = host.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<PetRockContext>();
+    var db = scope.ServiceProvider.GetRequiredService<AdoptionContext>();
     db.Database.Migrate();
 }
 

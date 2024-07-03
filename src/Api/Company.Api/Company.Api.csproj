@@ -27,7 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Inventory\" />
+    <Folder Include="PetRocks\" />
+    <Folder Include="Sanctuary\" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 
 namespace Company.Contract;
 
-public record Variant(
+public record AdoptableRockVariant(
     string PetRockId,
     string VariantId,
     Dictionary<string, string> VariantTypeValues

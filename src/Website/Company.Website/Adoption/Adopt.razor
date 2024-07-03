@@ -1,9 +1,9 @@
-@page "/adoption/{PetRockId}/variant/{VariantId}"
+@page "/adopt/{AdoptableRockId}/{VariantId}"
 
 <AuthorizeView>
     <Authorized>
         <h1>Hello, @context.User.Identity?.Name!</h1>
-        @PetRockId
+        @AdoptableRockId
         @VariantId
     </Authorized>
     <NotAuthorized>
@@ -13,7 +13,7 @@
 
 @code {
     [Parameter]
-    public string PetRockId { get; set; }
+    public string AdoptableRockId { get; set; }
     [Parameter]
     public string VariantId { get; set; }
 }

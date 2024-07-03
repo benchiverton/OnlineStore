@@ -1,6 +1,6 @@
 @page "/"
 
-@inject PetRockService PetRockService
+@inject AdoptionService AdoptionService
 
 <div class="content px-4">
     @if (petRocks != null)
@@ -8,17 +8,17 @@
         <div class="card-deck">
             @foreach (var petRock in petRocks)
             {
-                <PetRockCard PetRock="@petRock"></PetRockCard>
+                <AdoptableRockCard AdoptableRock="@petRock"></AdoptableRockCard>
             }
         </div>
     }
 </div>
 
 @code {
-    private List<PetRock> petRocks;
+    private List<AdoptableRock> petRocks;
 
     protected override async Task OnInitializedAsync()
     {
-        petRocks = await PetRockService.GetPetRocks();
+        petRocks = await AdoptionService.GetAdoptableRocks();
     }
 }
