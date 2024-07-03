@@ -1,0 +1,17 @@
+.auth-view {
+    margin: auto;
+    color: white !important;
+    display: flex;
+    align-items: center;
+    padding-right: 1.5rem;
+}
+
+.auth-view > a {
+    padding-right: 1.5rem;
+    margin: auto;
+    color: white !important;
+}
+
+.auth-view > button {
+    color: white !important;
+}

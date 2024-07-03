@@ -1,7 +1,5 @@
 .shopping-cart {
-    font-size: large;
+    padding-right: 1.5rem;
+    margin: auto;
     color: white !important;
-    position: absolute;
-    right: 0;
-    margin-right: 1.5rem;
 }
