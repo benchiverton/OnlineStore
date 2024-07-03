@@ -2,26 +2,24 @@
 
 @foreach (var availableVariantType in _availableVariantTypes)
 {
-    <h5>@availableVariantType.Key:</h5>
+    <h5 class="attribute-heading">@availableVariantType.Key:</h5>
     <select class="form-control" @onchange="e => OnNewValueSelected(availableVariantType.Key, e)">
+        <option value=""></option>
         @foreach (var availableVariableValue in availableVariantType.Value)
         {
-            <option value="@availableVariableValue" selected="@(SelectedVariant.VariantTypeValues[availableVariantType.Key] == availableVariableValue)">@availableVariableValue</option>
+            <option value="@availableVariableValue" selected="@(SelectedVariant?.VariantTypeValues[availableVariantType.Key] == availableVariableValue)">@availableVariableValue</option>
         }
     </select>
 }
 
 @code {
-    [Parameter]
-    public AdoptableRock AdoptableRock { get; set; }
-    [Parameter]
-    public List<AdoptableRockVariant> Variants { get; set; }
-    [Parameter]
-    public AdoptableRockVariant SelectedVariant { get; set; }
-    [Parameter]
-    public Action<AdoptableRockVariant> NewVariantSelected { get; set; }
+    [Parameter] public AdoptableRock AdoptableRock { get; set; }
+    [Parameter] public List<AdoptableRockVariant> Variants { get; set; }
+    [Parameter] public AdoptableRockVariant SelectedVariant { get; set; }
+    [Parameter] public Action<AdoptableRockVariant> NewVariantSelected { get; set; }
 
     private Dictionary<string, List<string>> _availableVariantTypes;
+    private Dictionary<string, string> _selectedVariantTypes;
 
     protected override void OnParametersSet()
     {
@@ -29,29 +27,38 @@
 
         foreach (var variantType in AdoptableRock.VariantTypes)
         {
-            availableVariants.Add(variantType, new List<string>());
+            availableVariants.Add(variantType, []);
         }
+
         foreach (var variant in Variants)
         {
-            foreach(var variantTypeValue in variant.VariantTypeValues)
+            foreach (var variantTypeValue in variant.VariantTypeValues)
             {
                 availableVariants[variantTypeValue.Key].Add(variantTypeValue.Value);
             }
         }
 
         _availableVariantTypes = availableVariants.ToDictionary(x => x.Key, x => x.Value.Distinct().ToList());
+
+        _selectedVariantTypes = SelectedVariant != null ? SelectedVariant.VariantTypeValues : availableVariants.ToDictionary(x => x.Key, _ => string.Empty);
     }
 
     private void OnNewValueSelected(string changedVariantType, Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
+        _selectedVariantTypes[changedVariantType] = (string)e.Value;
         var selectedVariantReduceList = Variants;
-        foreach(var variantType in _availableVariantTypes)
+        foreach (var variantType in _availableVariantTypes)
         {
             var selectedVariantType = variantType.Key == changedVariantType
                 ? (string)e.Value
-                : SelectedVariant.VariantTypeValues[variantType.Key];
+                : _selectedVariantTypes[variantType.Key];
             selectedVariantReduceList = selectedVariantReduceList.Where(v => v.VariantTypeValues[variantType.Key] == selectedVariantType).ToList();
         }
-        NewVariantSelected(selectedVariantReduceList.Single());
+
+        if (selectedVariantReduceList.Any())
+        {
+            NewVariantSelected(selectedVariantReduceList.Single());
+        }
     }
+
 }

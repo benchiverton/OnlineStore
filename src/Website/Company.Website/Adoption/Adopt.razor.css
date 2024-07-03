@@ -8,6 +8,10 @@
     object-fit: cover
 }
 
+h5.attribute-heading {
+    padding-top: 1rem;
+}
+
 .btn-adopt-now {
     color: white;
     background-color: var(--sandstone-beige);
