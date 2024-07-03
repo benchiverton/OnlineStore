@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Company.Api.Migrations
 {
     [DbContext(typeof(AdoptionContext))]
-    [Migration("20240703140727_initialcreate")]
+    [Migration("20240703144208_initialcreate")]
     partial class initialcreate
     {
         /// <inheritdoc />
@@ -50,8 +50,8 @@ namespace Company.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("207ea037-5ae5-4116-ab8d-d04c5be49eb9"),
-                            Catchphrase = "Rolling through life one pebble at a time.",
+                            Id = new Guid("278a4d93-53f1-49a6-bf62-5e3d0d9a9a37"),
+                            Catchphrase = "Rolling through life one pebble at a time!",
                             Description = "Meet Pebble Dash, your adventurous little companion! Small but full of energy, Pebble Dash is always ready to roll into new adventures. With a smooth surface and a perfectly rounded shape, this pebble loves to explore the world and bring joy wherever it goes. Whether it's a playful dash across the desk or a calming presence on your nightstand, Pebble Dash is here to remind you that life's journey is best enjoyed one pebble at a time. Compact and full of charm, Pebble Dash is the perfect pocket-sized buddy for all your daily adventures.",
                             Images = "[\"images\\\\petrocks\\\\pebble_dash.png\"]",
                             Name = "Pebble Dash",
@@ -59,8 +59,8 @@ namespace Company.Api.Migrations
                         },
                         new
                         {
-                            Id = new Guid("88a441a4-d031-49a4-87b6-60fb0b8da5e3"),
-                            Catchphrase = "Ready to rock and slate the day.",
+                            Id = new Guid("91e8c938-58e3-433c-a90a-47fa1ace3f06"),
+                            Catchphrase = "Ready to rock and slate the day!",
                             Description = "Introducing Slate Mate, your steadfast and stylish rock friend! Crafted from sleek, smooth slate, Slate Mate is the epitome of cool and collected. With its flat, elegant surface and modern look, this rock is the perfect desk companion or decorative piece. Slate Mate is always there to offer unwavering support, whether you're tackling a tough task or relaxing after a long day. Its timeless appearance and dependable nature make Slate Mate a reliable friend for every moment. Embrace the stability and charm of Slate Mate, and let this solid companion help you slate the day!",
                             Images = "[\"images\\\\petrocks\\\\slate_mate.png\"]",
                             Name = "Slate Mate",
@@ -74,7 +74,7 @@ namespace Company.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("PetRockId")
+                    b.Property<Guid>("AdoptableRockId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("VariantTypeValues")
@@ -83,90 +83,120 @@ namespace Company.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PetRockId");
+                    b.HasIndex("AdoptableRockId");
 
                     b.ToTable("RockVariantsUpForAdoption");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("28e66411-836a-4e7b-afbe-fafe3d199e23"),
-                            PetRockId = new Guid("207ea037-5ae5-4116-ab8d-d04c5be49eb9"),
+                            Id = new Guid("9232c3bb-2684-479a-95cd-f2c5b6c5a540"),
+                            AdoptableRockId = new Guid("278a4d93-53f1-49a6-bf62-5e3d0d9a9a37"),
                             VariantTypeValues = "{\"Size\":\"Small\",\"Texture\":\"Smooth\"}"
                         },
                         new
                         {
-                            Id = new Guid("6e7938fd-d40a-4e02-ba60-e7cf592694ca"),
-                            PetRockId = new Guid("207ea037-5ae5-4116-ab8d-d04c5be49eb9"),
+                            Id = new Guid("1f1c3977-3824-4e07-829e-32099dcd74c5"),
+                            AdoptableRockId = new Guid("278a4d93-53f1-49a6-bf62-5e3d0d9a9a37"),
                             VariantTypeValues = "{\"Size\":\"Small\",\"Texture\":\"Grainy\"}"
                         },
                         new
                         {
-                            Id = new Guid("4b1d93db-5505-47c9-93e7-e702e3ab4d3d"),
-                            PetRockId = new Guid("207ea037-5ae5-4116-ab8d-d04c5be49eb9"),
+                            Id = new Guid("fba21e9e-2123-4684-bc1c-5cf9f78bb505"),
+                            AdoptableRockId = new Guid("278a4d93-53f1-49a6-bf62-5e3d0d9a9a37"),
                             VariantTypeValues = "{\"Size\":\"Small\",\"Texture\":\"Jagged\"}"
                         },
                         new
                         {
-                            Id = new Guid("e3977776-55f1-4866-8252-787ddfb1432d"),
-                            PetRockId = new Guid("207ea037-5ae5-4116-ab8d-d04c5be49eb9"),
+                            Id = new Guid("06db05f0-e8f4-44cc-9f65-155f754da999"),
+                            AdoptableRockId = new Guid("278a4d93-53f1-49a6-bf62-5e3d0d9a9a37"),
                             VariantTypeValues = "{\"Size\":\"Big\",\"Texture\":\"Smooth\"}"
                         },
                         new
                         {
-                            Id = new Guid("7689c1f5-d115-4c86-ad43-2105747c6feb"),
-                            PetRockId = new Guid("207ea037-5ae5-4116-ab8d-d04c5be49eb9"),
+                            Id = new Guid("930ba646-08f8-4ea9-9456-7b9e796dd03b"),
+                            AdoptableRockId = new Guid("278a4d93-53f1-49a6-bf62-5e3d0d9a9a37"),
                             VariantTypeValues = "{\"Size\":\"Big\",\"Texture\":\"Grainy\"}"
                         },
                         new
                         {
-                            Id = new Guid("de537415-9773-4385-a297-c44849610be8"),
-                            PetRockId = new Guid("207ea037-5ae5-4116-ab8d-d04c5be49eb9"),
+                            Id = new Guid("3b0a01f6-9b31-48e8-89fd-b6b615794a58"),
+                            AdoptableRockId = new Guid("278a4d93-53f1-49a6-bf62-5e3d0d9a9a37"),
                             VariantTypeValues = "{\"Size\":\"Big\",\"Texture\":\"Jagged\"}"
                         },
                         new
                         {
-                            Id = new Guid("fe4ae075-d5d1-4fa2-b6c5-a3b92ef69ab1"),
-                            PetRockId = new Guid("88a441a4-d031-49a4-87b6-60fb0b8da5e3"),
+                            Id = new Guid("823aba63-c557-474b-b277-13bdc63cbf52"),
+                            AdoptableRockId = new Guid("91e8c938-58e3-433c-a90a-47fa1ace3f06"),
                             VariantTypeValues = "{\"Hardness\":\"Soft\",\"Slateyness\":\"Not very\"}"
                         },
                         new
                         {
-                            Id = new Guid("3e285cca-8adf-4c49-963b-0f6487083c22"),
-                            PetRockId = new Guid("88a441a4-d031-49a4-87b6-60fb0b8da5e3"),
+                            Id = new Guid("31edf9b2-8e1a-4ce6-8618-cbb7300b4b28"),
+                            AdoptableRockId = new Guid("91e8c938-58e3-433c-a90a-47fa1ace3f06"),
                             VariantTypeValues = "{\"Hardness\":\"Soft\",\"Slateyness\":\"Moderately slatey\"}"
                         },
                         new
                         {
-                            Id = new Guid("98c8a1c9-5859-43f3-ae82-8d09e9c3872d"),
-                            PetRockId = new Guid("88a441a4-d031-49a4-87b6-60fb0b8da5e3"),
+                            Id = new Guid("243de795-e35c-4b03-84ec-a0e2526e3ea8"),
+                            AdoptableRockId = new Guid("91e8c938-58e3-433c-a90a-47fa1ace3f06"),
                             VariantTypeValues = "{\"Hardness\":\"Soft\",\"Slateyness\":\"Extra slatey\"}"
                         },
                         new
                         {
-                            Id = new Guid("fbbcdb5b-4cc6-4722-a24f-3fc001daaa07"),
-                            PetRockId = new Guid("88a441a4-d031-49a4-87b6-60fb0b8da5e3"),
+                            Id = new Guid("76ac369e-c51b-4460-9cea-fda047907221"),
+                            AdoptableRockId = new Guid("91e8c938-58e3-433c-a90a-47fa1ace3f06"),
                             VariantTypeValues = "{\"Hardness\":\"Hard\",\"Slateyness\":\"Not very\"}"
                         },
                         new
                         {
-                            Id = new Guid("8df24d32-1d8d-4f0e-ade1-5666680d0aa1"),
-                            PetRockId = new Guid("88a441a4-d031-49a4-87b6-60fb0b8da5e3"),
+                            Id = new Guid("9cca2ac5-7787-4c82-b1bb-35aaab8f0900"),
+                            AdoptableRockId = new Guid("91e8c938-58e3-433c-a90a-47fa1ace3f06"),
                             VariantTypeValues = "{\"Hardness\":\"Hard\",\"Slateyness\":\"Moderately slatey\"}"
                         },
                         new
                         {
-                            Id = new Guid("7210d372-9c67-4230-b298-c6bf3d4fe81f"),
-                            PetRockId = new Guid("88a441a4-d031-49a4-87b6-60fb0b8da5e3"),
+                            Id = new Guid("0053d7e5-1a3e-4306-ae81-d0381637c1c1"),
+                            AdoptableRockId = new Guid("91e8c938-58e3-433c-a90a-47fa1ace3f06"),
                             VariantTypeValues = "{\"Hardness\":\"Hard\",\"Slateyness\":\"Extra slatey\"}"
                         });
+                });
+
+            modelBuilder.Entity("Company.Api.Adoption.Dtos.PetRockDto", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Attributes")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Catchphrase")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Images")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("Owner")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Owner");
+
+                    b.ToTable("PetRocks");
                 });
 
             modelBuilder.Entity("Company.Api.Adoption.Dtos.AdoptableRockVariantDto", b =>
                 {
                     b.HasOne("Company.Api.Adoption.Dtos.AdoptableRockDto", "AdoptableRock")
                         .WithMany("Variants")
-                        .HasForeignKey("PetRockId")
+                        .HasForeignKey("AdoptableRockId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

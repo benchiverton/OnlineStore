@@ -20,7 +20,4 @@ public class AdoptionService
 
     public Task<List<AdoptableRockVariant>> GetAdoptableRockVariants(string petRockId) =>
         _httpClient.GetFromJsonAsync<List<AdoptableRockVariant>>($"adoption/rocks/{petRockId}/variants");
-
-    public Task<AdoptableRockVariant> GetAdoptableRockVariantById(string petRockId, string variantId) =>
-        _httpClient.GetFromJsonAsync<AdoptableRockVariant>($"adoption/rocks/{petRockId}/variants/{variantId}");
 }

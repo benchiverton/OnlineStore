@@ -26,9 +26,4 @@
     <ProjectReference Include="..\..\Shared\Company.Contract\Company.Contract.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="PetRocks\" />
-    <Folder Include="Sanctuary\" />
-  </ItemGroup>
-
 </Project>

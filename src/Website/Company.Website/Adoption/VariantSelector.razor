@@ -2,7 +2,7 @@
 
 @foreach (var availableVariantType in _availableVariantTypes)
 {
-    <h4>@availableVariantType.Key</h4>
+    <h5>@availableVariantType.Key:</h5>
     <select class="form-control" @onchange="e => OnNewValueSelected(availableVariantType.Key, e)">
         @foreach (var availableVariableValue in availableVariantType.Value)
         {

@@ -5,14 +5,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Company.Api.Adoption.Dtos
 {
-    public class AdoptableRockVariantDto
+    public class PetRockDto
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-        public Guid AdoptableRockId { get; set; }
-        [ForeignKey("AdoptableRockId")]
-        public AdoptableRockDto AdoptableRock { get; set; }
-        public Dictionary<string, string> VariantTypeValues { get; set; }
+        public Guid Owner { get; set; }
+        public string Name { get; set; }
+        public string Catchphrase { get; set; }
+        public Dictionary<string, string> Attributes { get; set; }
+        public List<string> Images { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace Company.Api.Adoption.Dtos
             {
                 Id = Guid.Parse(adoptableRock.Id),
                 Name = adoptableRock.Name,
-                Catchphrase = adoptableRock.Headline,
+                Catchphrase = adoptableRock.Catchphrase,
                 Description = adoptableRock.Description,
                 VariantTypes = adoptableRock.VariantTypes,
                 Images = adoptableRock.Images

@@ -1,19 +1,61 @@
-@page "/adopt/{AdoptableRockId}/{VariantId}"
+@page "/adopt/{AdoptableRockId}"
 
-<AuthorizeView>
-    <Authorized>
-        <h1>Hello, @context.User.Identity?.Name!</h1>
-        @AdoptableRockId
-        @VariantId
-    </Authorized>
-    <NotAuthorized>
-        <RedirectToLogin />
-    </NotAuthorized>
-</AuthorizeView>
+@inject AdoptionService AdoptionService;
+@inject NavigationManager _navManager;
+
+@if (_ready)
+{
+    <div class="container-fluid">
+        <br/>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="img-fluid petrock-image-container">
+                    <img class="img-top petrock-image-img" src="@_adoptableRock.Images.FirstOrDefault()" alt="image">
+                </div>
+            </div>
+            <div class="col-md">
+                <h2>Create your @_adoptableRock.Name</h2>
+                <hr/>
+                <VariantSelector AdoptableRock="@_adoptableRock" Variants="@_variants" SelectedVariant="@_selectedAdoptableRockVariant" NewVariantSelected="@OnNewPetRockVariantSelected"></VariantSelector>
+                <h5>Name your pal:</h5>
+                <InputText class="form-control" @bind-Value="_selectedAdoptableRockName"></InputText>
+            </div>
+            <div class="col-md">
+                <button class="btn btn-adopt-now btn-block" @onclick="AdoptNow">
+                    <i class="fas fa-arrow-right mr-3"/>Adopt me!
+                </button>
+            </div>
+        </div>
+    </div>
+}
 
 @code {
-    [Parameter]
-    public string AdoptableRockId { get; set; }
-    [Parameter]
-    public string VariantId { get; set; }
+    [Parameter] public string AdoptableRockId { get; set; }
+
+    private AdoptableRock _adoptableRock;
+    private List<AdoptableRockVariant> _variants;
+    private AdoptableRockVariant _selectedAdoptableRockVariant;
+    private string _selectedAdoptableRockName;
+    private bool _ready = false;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _adoptableRock = await AdoptionService.GetAdoptableRockById(AdoptableRockId);
+        _variants = await AdoptionService.GetAdoptableRockVariants(AdoptableRockId);
+        _selectedAdoptableRockVariant = _variants.FirstOrDefault();
+        _ready = true;
+        await base.OnParametersSetAsync();
+    }
+
+    private void OnNewPetRockVariantSelected(AdoptableRockVariant selectedAdoptableRockVariant)
+    {
+        _selectedAdoptableRockVariant = selectedAdoptableRockVariant;
+        StateHasChanged();
+    }
+
+    private void AdoptNow()
+    {
+        _navManager.NavigateTo($"adopt/{AdoptableRockId}/{_selectedAdoptableRockVariant.VariantId}");
+    }
+
 }

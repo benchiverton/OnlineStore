@@ -9,13 +9,13 @@ namespace Company.Api.Adoption.Dtos
             => new AdoptableRockVariantDto
             {
                 Id = Guid.Parse(adoptableRockVariant.VariantId),
-                PetRockId = Guid.Parse(adoptableRockVariant.PetRockId),
+                AdoptableRockId = Guid.Parse(adoptableRockVariant.PetRockId),
                 VariantTypeValues = adoptableRockVariant.VariantTypeValues
             };
 
         public static AdoptableRockVariant FromVariantDto(this AdoptableRockVariantDto adoptableRockVariantDto)
             => new AdoptableRockVariant(
-                adoptableRockVariantDto.PetRockId.ToString(),
+                adoptableRockVariantDto.AdoptableRockId.ToString(),
                 adoptableRockVariantDto.Id.ToString(),
                 adoptableRockVariantDto.VariantTypeValues);
     }
