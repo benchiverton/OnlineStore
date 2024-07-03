@@ -40,151 +40,96 @@ public class PetRockContext : DbContext
         };
         modelBuilder.Entity<PetRockDto>().HasData(petRock1, petRock2);
 
-        var rand = new Random();
-        AddWithRandomPrice(modelBuilder, rand, new VariantDto
+        var variant1 = new VariantDto
         {
             Id = Guid.NewGuid(),
             PetRockId = petRock1.Id,
-            VariantTypeValues = new Dictionary<string, string>
-            {
-                { "Size", "Small" },
-                { "Texture", "Smooth" },
-            },
-        });
-        AddWithRandomPrice(modelBuilder, rand, new VariantDto
-        {
-            Id = Guid.NewGuid(),
-            PetRockId = petRock1.Id,
-            VariantTypeValues = new Dictionary<string, string>
-            {
-                { "Size", "Small" },
-                { "Texture", "Grainy" },
-            },
-        });
-        AddWithRandomPrice(modelBuilder, rand, new VariantDto
-        {
-            Id = Guid.NewGuid(),
-            PetRockId = petRock1.Id,
-            VariantTypeValues = new Dictionary<string, string>
-            {
-                { "Size", "Small" },
-                { "Texture", "Jagged" },
-            },
-        });
-        AddWithRandomPrice(modelBuilder, rand, new VariantDto
-        {
-            Id = Guid.NewGuid(),
-            PetRockId = petRock1.Id,
-            VariantTypeValues = new Dictionary<string, string>
-            {
-                { "Size", "Big" },
-                { "Texture", "Smooth" },
-            },
-        });
-        AddWithRandomPrice(modelBuilder, rand, new VariantDto
-        {
-            Id = Guid.NewGuid(),
-            PetRockId = petRock1.Id,
-            VariantTypeValues = new Dictionary<string, string>
-            {
-                { "Size", "Big" },
-                { "Texture", "Grainy" },
-            },
-        });
-        AddWithRandomPrice(modelBuilder, rand, new VariantDto
-        {
-            Id = Guid.NewGuid(),
-            PetRockId = petRock1.Id,
-            VariantTypeValues = new Dictionary<string, string>
-            {
-                { "Size", "Big" },
-                { "Texture", "Jagged" },
-            },
-        });
-        AddWithRandomPrice(modelBuilder, rand, new VariantDto
-        {
-            Id = Guid.NewGuid(),
-            PetRockId = petRock2.Id,
-            VariantTypeValues = new Dictionary<string, string>
-            {
-                { "Hardness", "Soft" },
-                { "Slateyness", "Not very" },
-            },
-        });
-        AddWithRandomPrice(modelBuilder, rand, new VariantDto
-        {
-            Id = Guid.NewGuid(),
-            PetRockId = petRock2.Id,
-            VariantTypeValues = new Dictionary<string, string>
-            {
-                { "Hardness", "Soft" },
-                { "Slateyness", "Moderately slatey" },
-            },
-        });
-        AddWithRandomPrice(modelBuilder, rand, new VariantDto
-        {
-            Id = Guid.NewGuid(),
-            PetRockId = petRock2.Id,
-            VariantTypeValues = new Dictionary<string, string>
-            {
-                { "Hardness", "Soft" },
-                { "Slateyness", "Extra slatey" },
-            },
-        });
-        AddWithRandomPrice(modelBuilder, rand, new VariantDto
-        {
-            Id = Guid.NewGuid(),
-            PetRockId = petRock2.Id,
-            VariantTypeValues = new Dictionary<string, string>
-            {
-                { "Hardness", "Hard" },
-                { "Slateyness", "Not very" },
-            },
-        });
-        AddWithRandomPrice(modelBuilder, rand, new VariantDto
-        {
-            Id = Guid.NewGuid(),
-            PetRockId = petRock2.Id,
-            VariantTypeValues = new Dictionary<string, string>
-            {
-                { "Hardness", "Hard" },
-                { "Slateyness", "Moderately slatey" },
-            },
-        });
-        AddWithRandomPrice(modelBuilder, rand, new VariantDto
-        {
-            Id = Guid.NewGuid(),
-            PetRockId = petRock2.Id,
-            VariantTypeValues = new Dictionary<string, string>
-            {
-                { "Hardness", "Hard" },
-                { "Slateyness", "Extra slatey" },
-            },
-        });
-    }
-
-    private void AddWithRandomPrice(ModelBuilder modelBuilder, Random rand, VariantDto variant)
-        => modelBuilder.Entity<VariantDto>(v =>
-            {
-                v.HasData(variant);
-                v.OwnsOne(x => x.Price).HasData(GenerateRandomPrice(variant.Id, rand));
-            });
-
-
-    private PriceDto GenerateRandomPrice(Guid variantId, Random rand)
-    {
-        var fullPrice = rand.Next(100);
-        return new PriceDto
-        {
-            VariantDtoId = variantId,
-            FullPriceGBP = fullPrice,
-            DealPriceGBP = fullPrice * 0.67m,
-            Details = (fullPrice % 3) switch
-            {
-                0 => "33% off today!",
-                1 => "33% off while stocks last!",
-                _ => "2/3 off for a limited time!"
-            }
+            VariantTypeValues = new Dictionary<string, string> { { "Size", "Small" }, { "Texture", "Smooth" }, },
         };
+        var variant2 = new VariantDto
+        {
+            Id = Guid.NewGuid(),
+            PetRockId = petRock1.Id,
+            VariantTypeValues = new Dictionary<string, string> { { "Size", "Small" }, { "Texture", "Grainy" }, },
+        };
+        var variant3 = new VariantDto
+        {
+            Id = Guid.NewGuid(),
+            PetRockId = petRock1.Id,
+            VariantTypeValues = new Dictionary<string, string> { { "Size", "Small" }, { "Texture", "Jagged" }, },
+        };
+        var variant4 = new VariantDto
+        {
+            Id = Guid.NewGuid(),
+            PetRockId = petRock1.Id,
+            VariantTypeValues = new Dictionary<string, string> { { "Size", "Big" }, { "Texture", "Smooth" }, },
+        };
+        var variant5 = new VariantDto
+        {
+            Id = Guid.NewGuid(),
+            PetRockId = petRock1.Id,
+            VariantTypeValues = new Dictionary<string, string> { { "Size", "Big" }, { "Texture", "Grainy" }, },
+        };
+        var variant6 = new VariantDto
+        {
+            Id = Guid.NewGuid(),
+            PetRockId = petRock1.Id,
+            VariantTypeValues = new Dictionary<string, string> { { "Size", "Big" }, { "Texture", "Jagged" }, },
+        };
+        var variant7 = new VariantDto
+        {
+            Id = Guid.NewGuid(),
+            PetRockId = petRock2.Id,
+            VariantTypeValues = new Dictionary<string, string>
+            {
+                { "Hardness", "Soft" }, { "Slateyness", "Not very" },
+            },
+        };
+        var variant8 = new VariantDto
+        {
+            Id = Guid.NewGuid(),
+            PetRockId = petRock2.Id,
+            VariantTypeValues = new Dictionary<string, string>
+            {
+                { "Hardness", "Soft" }, { "Slateyness", "Moderately slatey" },
+            },
+        };
+        var variant9 = new VariantDto
+        {
+            Id = Guid.NewGuid(),
+            PetRockId = petRock2.Id,
+            VariantTypeValues = new Dictionary<string, string>
+            {
+                { "Hardness", "Soft" }, { "Slateyness", "Extra slatey" },
+            },
+        };
+        var variant10 = new VariantDto
+        {
+            Id = Guid.NewGuid(),
+            PetRockId = petRock2.Id,
+            VariantTypeValues = new Dictionary<string, string>
+            {
+                { "Hardness", "Hard" }, { "Slateyness", "Not very" },
+            },
+        };
+        var variant11 = new VariantDto
+        {
+            Id = Guid.NewGuid(),
+            PetRockId = petRock2.Id,
+            VariantTypeValues = new Dictionary<string, string>
+            {
+                { "Hardness", "Hard" }, { "Slateyness", "Moderately slatey" },
+            },
+        };
+        var variant12 = new VariantDto
+        {
+            Id = Guid.NewGuid(),
+            PetRockId = petRock2.Id,
+            VariantTypeValues = new Dictionary<string, string>
+            {
+                { "Hardness", "Hard" }, { "Slateyness", "Extra slatey" },
+            },
+        };
+        modelBuilder.Entity<VariantDto>().HasData(variant1, variant2, variant3, variant4, variant5, variant6, variant7, variant8, variant9, variant10, variant11, variant12);
     }
 }

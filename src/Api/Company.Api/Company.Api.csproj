@@ -28,7 +28,6 @@
 
   <ItemGroup>
     <Folder Include="Inventory\" />
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

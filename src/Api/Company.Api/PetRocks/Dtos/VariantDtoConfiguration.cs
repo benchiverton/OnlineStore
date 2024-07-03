@@ -9,7 +9,6 @@ public class VariantDtoConfiguration : IEntityTypeConfiguration<VariantDto>
 {
     public void Configure(EntityTypeBuilder<VariantDto> builder)
     {
-        builder.OwnsOne(v => v.Price).WithOwner();
         builder.Property(e => e.VariantTypeValues)
             .IsRequired()
             .HasConversion(

@@ -14,5 +14,4 @@ public class VariantDto
     [ForeignKey("PetRockId")]
     public PetRockDto PetRock { get; set; }
     public Dictionary<string, string> VariantTypeValues { get; set; }
-    public PriceDto Price { get; set; }
 }

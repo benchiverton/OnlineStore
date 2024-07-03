@@ -10,14 +10,12 @@ public static class VariantDtoMapper
         {
             Id = Guid.Parse(variant.VariantId),
             PetRockId = Guid.Parse(variant.PetRockId),
-            VariantTypeValues = variant.VariantTypeValues,
-            Price = variant.Price.ToPriceDto()
+            VariantTypeValues = variant.VariantTypeValues
         };
 
     public static Variant FromVariantDto(this VariantDto variantDto)
         => new Variant(
             variantDto.PetRockId.ToString(),
             variantDto.Id.ToString(),
-            variantDto.VariantTypeValues,
-            variantDto.Price.FromPriceDto());
+            variantDto.VariantTypeValues);
 }
