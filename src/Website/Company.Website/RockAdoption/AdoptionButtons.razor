@@ -1,0 +1,19 @@
+@inject NavigationManager _navManager
+
+<button class="btn btn-adopt-now btn-block" @onclick="AdoptNow">
+    <i class="fas fa-arrow-right mr-3" />Adopt now!
+</button>
+
+@code {
+
+    [Parameter]
+    public string PetRockId { get; set; }
+
+    [Parameter]
+    public string PetRockVariantId { get; set; }
+
+    private void AdoptNow()
+    {
+        _navManager.NavigateTo("adoption");
+    }
+}

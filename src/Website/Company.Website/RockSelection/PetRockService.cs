@@ -4,7 +4,7 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Company.Contract;
 
-namespace Company.Website.PetRocks;
+namespace Company.Website.RockSelection;
 
 public class PetRockService
 {
