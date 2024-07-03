@@ -41,31 +41,22 @@ public class AdoptionController : ControllerBase
         return Ok(petRock);
     }
 
-    [HttpGet("rocks/{adoptableRockId}/variants")]
-    public async Task<IActionResult> GetAdoptableRockVariants(Guid adoptableRockId)
-    {
-        var variantDtos = await _context.RockVariantsUpForAdoption.Where(v => v.AdoptableRockId == adoptableRockId)
-            .ToListAsync();
-        var variants = variantDtos.Select(v => v.FromVariantDto());
-        return Ok(variants);
-    }
-
     [HttpPost("rocks/{adoptableRockId}/variants/{variantId}/adopt")]
-    public async Task<IActionResult> AdoptRock(Guid adoptableRockId, Guid variantId, [FromQuery] string name)
+    public async Task<IActionResult> AdoptRock(Guid adoptableRockId, Guid variantId)
     {
-        var adoptableRockDto = await _context.RocksUpForAdoption.FindAsync(adoptableRockId)!;
-        var variantDto = await _context.RockVariantsUpForAdoption.FindAsync(variantId);
-
-        var petRock = new PetRockDto
-        {
-            Owner = Guid.NewGuid(),// TODO
-            Name = name,
-            Catchphrase = adoptableRockDto!.Catchphrase,
-            Attributes = variantDto!.VariantTypeValues,
-            Images = adoptableRockDto!.Images
-        };
-        await _context.PetRocks.AddAsync(petRock);
-        await _context.SaveChangesAsync();
+        // var adoptableRockDto = await _context.RocksUpForAdoption.FindAsync(adoptableRockId)!;
+        // var variantDto = await _context.RockVariantsUpForAdoption.FindAsync(variantId);
+        //
+        // var petRock = new PetRockDto
+        // {
+        //     Owner = Guid.NewGuid(),// TODO
+        //     Name = name,
+        //     Catchphrase = adoptableRockDto!.Catchphrase,
+        //     Attributes = variantDto!.VariantTypeValues,
+        //     Images = adoptableRockDto!.Images
+        // };
+        // await _context.PetRocks.AddAsync(petRock);
+        // await _context.SaveChangesAsync();
 
         return Ok();
     }

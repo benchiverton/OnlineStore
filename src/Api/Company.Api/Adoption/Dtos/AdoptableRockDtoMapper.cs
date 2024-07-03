@@ -12,7 +12,7 @@ namespace Company.Api.Adoption.Dtos
                 Name = adoptableRock.Name,
                 Catchphrase = adoptableRock.Catchphrase,
                 Description = adoptableRock.Description,
-                VariantTypes = adoptableRock.VariantTypes,
+                CustomisableAttributes = adoptableRock.CustomisableAttributes,
                 Images = adoptableRock.Images
             };
 
@@ -22,7 +22,7 @@ namespace Company.Api.Adoption.Dtos
                 adoptableRockDto.Name,
                 adoptableRockDto.Catchphrase,
                 adoptableRockDto.Description,
-                adoptableRockDto.VariantTypes,
+                adoptableRockDto.CustomisableAttributes,
                 adoptableRockDto.Images);
     }
 }

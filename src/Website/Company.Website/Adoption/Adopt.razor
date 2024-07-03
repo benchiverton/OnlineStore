@@ -19,13 +19,23 @@
                         <h2>Customise your Rock Pal</h2>
                         <hr/>
                         <h6>Customize @_adoptableRock.Name into your perfect pal and make them uniquely yours!</h6>
-                        <VariantSelector AdoptableRock="@_adoptableRock" Variants="@_variants" SelectedVariant="@_selectedAdoptableRockVariant" NewVariantSelected="@OnNewPetRockVariantSelected"></VariantSelector>
+                        @foreach (var customAttribute in _adoptableRock.CustomisableAttributes)
+                        {
+                            <h5 class="attribute-heading">@customAttribute.Key:</h5>
+                            <select class="form-control" @onchange="e => OnNewCustomAttributeSelected(customAttribute.Key, e)">
+                                <option value=""></option>
+                                @foreach (var availableValue in customAttribute.Value)
+                                {
+                                    <option value="@availableValue" selected="@(_selectedCustomisableAttributes[customAttribute.Key] == availableValue)">@availableValue</option>
+                                }
+                            </select>
+                        }
                         <h5 class="attribute-heading">Name your pal:</h5>
                         <InputText class="form-control" @bind-Value="_selectedAdoptableRockName"></InputText>
                     </div>
                     <div class="col-md">
                         <button class="btn btn-adopt-now btn-block"
-                                disabled="@(_selectedAdoptableRockVariant == null || string.IsNullOrEmpty(_selectedAdoptableRockName))"
+                                disabled="@(_selectedCustomisableAttributes.Values.Any(v => string.IsNullOrEmpty(v)) || string.IsNullOrEmpty(_selectedAdoptableRockName))"
                                 @onclick="AdoptNow">
                             <i class="fas fa-arrow-right mr-3"/>Adopt me!
                         </button>
@@ -43,28 +53,26 @@
     [Parameter] public string AdoptableRockId { get; set; }
 
     private AdoptableRock _adoptableRock;
-    private List<AdoptableRockVariant> _variants;
-    private AdoptableRockVariant _selectedAdoptableRockVariant;
+    private Dictionary<string, string> _selectedCustomisableAttributes;
     private string _selectedAdoptableRockName;
     private bool _ready = false;
 
     protected override async Task OnParametersSetAsync()
     {
         _adoptableRock = await AdoptionService.GetAdoptableRockById(AdoptableRockId);
-        _variants = await AdoptionService.GetAdoptableRockVariants(AdoptableRockId);
+        _selectedCustomisableAttributes = _adoptableRock.CustomisableAttributes.ToDictionary(r => r.Key, _ => string.Empty);
         _ready = true;
         await base.OnParametersSetAsync();
     }
 
-    private void OnNewPetRockVariantSelected(AdoptableRockVariant selectedAdoptableRockVariant)
+    private Task OnNewCustomAttributeSelected(string customAttributeKey, ChangeEventArgs changeEventArgs)
     {
-        _selectedAdoptableRockVariant = selectedAdoptableRockVariant;
-        StateHasChanged();
+        _selectedCustomisableAttributes[customAttributeKey] = (string)changeEventArgs.Value;
+        return Task.CompletedTask;
     }
 
     private void AdoptNow()
     {
-        _navManager.NavigateTo($"adopt/{AdoptableRockId}/{_selectedAdoptableRockVariant.VariantId}?name={_selectedAdoptableRockName}");
+        // _navManager.NavigateTo($"adopt/{AdoptableRockId}/{_selectedAdoptableRockVariant.VariantId}?name={_selectedAdoptableRockName}");
     }
-
 }

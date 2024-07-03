@@ -5,6 +5,6 @@ public record AdoptableRock(
     string Name,
     string Catchphrase,
     string Description,
-    List<string> VariantTypes,
+    Dictionary<string, List<string>> CustomisableAttributes,
     List<string> Images
     );
