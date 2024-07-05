@@ -3,18 +3,28 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Company.Contract;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Company.Website.Adoption;
 
 public class AdoptionService
 {
-    private readonly HttpClient _httpClient;
+    private readonly HttpClient _anonymousHttpClient;
+    private readonly HttpClient _authorisedHttpClient;
 
-    public AdoptionService(HttpClient httpClient) => _httpClient = httpClient;
+    public AdoptionService([FromKeyedServices("anonymous")] HttpClient anonymousHttpClient,
+        [FromKeyedServices("authorised")] HttpClient authorisedHttpClient)
+    {
+        _anonymousHttpClient = anonymousHttpClient;
+        _authorisedHttpClient = authorisedHttpClient;
+    }
 
     public Task<List<AdoptableRock>> GetAdoptableRocks() =>
-        _httpClient.GetFromJsonAsync<List<AdoptableRock>>("adoption/rocks");
+        _anonymousHttpClient.GetFromJsonAsync<List<AdoptableRock>>("adoption/rocks");
 
     public Task<AdoptableRock> GetAdoptableRockById(string petRockId) =>
-        _httpClient.GetFromJsonAsync<AdoptableRock>($"adoption/rocks/{petRockId}");
+        _anonymousHttpClient.GetFromJsonAsync<AdoptableRock>($"adoption/rocks/{petRockId}");
+
+    public Task AdoptRock(string petRockId) =>
+        _authorisedHttpClient.PostAsync($"adoption/rocks/{petRockId}/adopt", new StringContent(""));
 }

@@ -1,6 +1,6 @@
 @page "/"
 
-@inject AdoptionService AdoptionService
+@inject AdoptionService _adoptionService
 
 <div class="content px-4">
     @if (petRocks != null)
@@ -19,6 +19,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        petRocks = await AdoptionService.GetAdoptableRocks();
+        petRocks = await _adoptionService.GetAdoptableRocks();
     }
 }

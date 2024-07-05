@@ -3,9 +3,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Company.Api.Adoption.Dtos;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Identity.Web.Resource;
 
 namespace Company.Api.Adoption;
 
@@ -17,11 +20,13 @@ public class AdoptionController : ControllerBase
 
     private readonly ILogger<AdoptionController> _logger;
     private readonly AdoptionContext _context;
+    private readonly IHttpContextAccessor _contextAccessor;
 
-    public AdoptionController(ILogger<AdoptionController> logger, AdoptionContext context)
+    public AdoptionController(ILogger<AdoptionController> logger, AdoptionContext context, IHttpContextAccessor contextAccessor)
     {
         _logger = logger;
         _context = context;
+        _contextAccessor = contextAccessor;
     }
 
     [HttpGet("rocks")]
@@ -41,9 +46,13 @@ public class AdoptionController : ControllerBase
         return Ok(petRock);
     }
 
-    [HttpPost("rocks/{adoptableRockId}/variants/{variantId}/adopt")]
-    public async Task<IActionResult> AdoptRock(Guid adoptableRockId, Guid variantId)
+    [HttpPost("rocks/{adoptableRockId}/adopt")]
+    [Authorize]
+    [RequiredScope(RequiredScopesConfigurationKey = "access_as_user")]
+    public async Task<IActionResult> AdoptRock(Guid adoptableRockId)
     {
+        var user = _contextAccessor.HttpContext.User;
+
         // var adoptableRockDto = await _context.RocksUpForAdoption.FindAsync(adoptableRockId)!;
         // var variantDto = await _context.RockVariantsUpForAdoption.FindAsync(variantId);
         //

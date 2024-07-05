@@ -1,6 +1,6 @@
 @page "/adopt/{AdoptableRockId}"
 
-@inject AdoptionService AdoptionService;
+@inject AdoptionService _adoptionService;
 @inject NavigationManager _navManager;
 
 <AuthorizeView>
@@ -36,7 +36,7 @@
                     <div class="col-md">
                         <button class="btn btn-adopt-now btn-block"
                                 disabled="@(_selectedCustomisableAttributes.Values.Any(v => string.IsNullOrEmpty(v)) || string.IsNullOrEmpty(_selectedAdoptableRockName))"
-                                @onclick="AdoptNow">
+                                @onclick="() => AdoptNow()">
                             <i class="fas fa-arrow-right mr-3"/>Adopt me!
                         </button>
                     </div>
@@ -59,7 +59,7 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        _adoptableRock = await AdoptionService.GetAdoptableRockById(AdoptableRockId);
+        _adoptableRock = await _adoptionService.GetAdoptableRockById(AdoptableRockId);
         _selectedCustomisableAttributes = _adoptableRock.CustomisableAttributes.ToDictionary(r => r.Key, _ => string.Empty);
         _ready = true;
         await base.OnParametersSetAsync();
@@ -71,8 +71,9 @@
         return Task.CompletedTask;
     }
 
-    private void AdoptNow()
+    private async Task AdoptNow()
     {
-        // _navManager.NavigateTo($"adopt/{AdoptableRockId}/{_selectedAdoptableRockVariant.VariantId}?name={_selectedAdoptableRockName}");
+        await _adoptionService.AdoptRock(AdoptableRockId);
+        _navManager.NavigateTo("sanctuary");
     }
 }

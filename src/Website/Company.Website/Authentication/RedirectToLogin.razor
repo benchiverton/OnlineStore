@@ -1,10 +1,10 @@
-@inject ISyncSessionStorageService SessionStorage
-@inject NavigationManager NavigationManager
+@inject ISyncSessionStorageService _sessionStorage
+@inject NavigationManager _navigationManager
 
 @code {
     protected override void OnInitialized()
     {
-        SessionStorage.SetItem(AuthenticationConstants.ReturnUrlStorageKey, NavigationManager.ToBaseRelativePath(NavigationManager.Uri));
-        NavigationManager.NavigateTo($"authentication/login");
+        _sessionStorage.SetItem(AuthenticationConstants.ReturnUrlStorageKey, _navigationManager.ToBaseRelativePath(_navigationManager.Uri));
+        _navigationManager.NavigateTo($"authentication/login");
     }
 }

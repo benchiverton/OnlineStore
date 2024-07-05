@@ -1,6 +1,6 @@
 @page "/adoption/{AdoptableRockId}"
 
-@inject AdoptionService AdoptionService;
+@inject AdoptionService _adoptionService;
 @inject NavigationManager _navManager;
 
 @if (_ready)
@@ -38,7 +38,7 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        _adoptableRock = await AdoptionService.GetAdoptableRockById(AdoptableRockId);
+        _adoptableRock = await _adoptionService.GetAdoptableRockById(AdoptableRockId);
         _ready = true;
         await base.OnParametersSetAsync();
     }
