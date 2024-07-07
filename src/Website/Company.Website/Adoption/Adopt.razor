@@ -73,7 +73,13 @@
 
     private async Task AdoptNow()
     {
-        await _adoptionService.AdoptRock(AdoptableRockId);
-        _navManager.NavigateTo("sanctuary");
+        var request = new AdoptRockRequest(
+            _selectedAdoptableRockName,
+            _adoptableRock.Catchphrase,
+            _adoptableRock.Description,
+            _selectedCustomisableAttributes,
+            _adoptableRock.Images);
+        await _adoptionService.AdoptRock(request);
+        _navManager.NavigateTo("/");
     }
 }

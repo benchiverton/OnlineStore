@@ -9,7 +9,7 @@ namespace Company.Api.Adoption.Dtos
     {
         public void Configure(EntityTypeBuilder<PetRockDto> builder)
         {
-            builder.HasIndex(e => e.Owner);
+            builder.HasIndex(e => e.OwnerId);
 
             builder.Property(e => e.Attributes)
                 .IsRequired()

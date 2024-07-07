@@ -3,22 +3,64 @@
 @inject AdoptionService _adoptionService
 
 <div class="content px-4">
-    @if (petRocks != null)
-    {
-        <div class="card-deck">
-            @foreach (var petRock in petRocks)
+    <AuthorizeView>
+        <Authorized>
+            @if (_petRocks != null)
+            {
+                <h1>Your Rock Pals</h1>
+                <div class="card-deck">
+                    @foreach (var petRock in _petRocks)
+                    {
+                        <div class="card img-fluid rockpal-card">
+                            <img class="card-img-top" src="@petRock.Images.First()" alt="Card image">
+                            <div class="card-img-overlay">
+                                <div style="height: 40%"/>
+                                <h1 class="card-title">@petRock.Name</h1>
+                                <i>
+                                    <h6 class="card-title">@petRock.Attributes.Aggregate("", (a, b) => $"{a}; {b.Key}: {b.Value}")</h6>
+                                </i>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <h4>Once you've adopted a Rock Pal, you'll see them here.</h4>
+            }
+        </Authorized>
+        <NotAuthorized>
+            <h4>Log in to see your Rock Pals!</h4>
+        </NotAuthorized>
+    </AuthorizeView>
+    <hr/>
+    <h1>Adopt a Rock Pal</h1>
+    <div class="card-deck">
+        @if (_adoptableRocks != null)
+        {
+            @foreach (var petRock in _adoptableRocks)
             {
                 <AdoptableRockCard AdoptableRock="@petRock"></AdoptableRockCard>
             }
-        </div>
-    }
+        }
+    </div>
 </div>
 
 @code {
-    private List<AdoptableRock> petRocks;
+    [CascadingParameter] private Task<AuthenticationState> authStateTask { get; set; }
+
+    private List<PetRock> _petRocks;
+    private List<AdoptableRock> _adoptableRocks;
 
     protected override async Task OnInitializedAsync()
     {
-        petRocks = await _adoptionService.GetAdoptableRocks();
+        var authState = await authStateTask;
+        if (authState.User.Identity?.IsAuthenticated ?? false)
+        {
+            _petRocks = await _adoptionService.GetPetRocks();
+        }
+
+        _adoptableRocks = await _adoptionService.GetAdoptableRocks();
     }
+
 }

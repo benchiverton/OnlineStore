@@ -10,7 +10,7 @@ namespace Company.Api.Adoption.Dtos
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-        public Guid Owner { get; set; }
+        public string OwnerId { get; set; }
         public string Name { get; set; }
         public string Catchphrase { get; set; }
         public Dictionary<string, string> Attributes { get; set; }

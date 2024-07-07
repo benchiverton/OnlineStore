@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Company.Contract;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,6 +27,12 @@ public class AdoptionService
     public Task<AdoptableRock> GetAdoptableRockById(string petRockId) =>
         _anonymousHttpClient.GetFromJsonAsync<AdoptableRock>($"adoption/rocks/{petRockId}");
 
-    public Task AdoptRock(string petRockId) =>
-        _authorisedHttpClient.PostAsync($"adoption/rocks/{petRockId}/adopt", new StringContent(""));
+    public Task AdoptRock(AdoptRockRequest request)
+    {
+        var requestAsJson = JsonSerializer.Serialize(request);
+        var content = new StringContent(requestAsJson, Encoding.UTF8, "application/json");
+        return _authorisedHttpClient.PostAsync($"adoption/rocks/adopt", content);
+    }
+
+    public Task<List<PetRock>> GetPetRocks() => _authorisedHttpClient.GetFromJsonAsync<List<PetRock>>($"adoption/petrocks");
 }

@@ -3,11 +3,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Company.Api.Adoption.Dtos;
+using Company.Contract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.Resource;
 
 namespace Company.Api.Adoption;
@@ -22,7 +24,8 @@ public class AdoptionController : ControllerBase
     private readonly AdoptionContext _context;
     private readonly IHttpContextAccessor _contextAccessor;
 
-    public AdoptionController(ILogger<AdoptionController> logger, AdoptionContext context, IHttpContextAccessor contextAccessor)
+    public AdoptionController(ILogger<AdoptionController> logger, AdoptionContext context,
+        IHttpContextAccessor contextAccessor)
     {
         _logger = logger;
         _context = context;
@@ -46,37 +49,45 @@ public class AdoptionController : ControllerBase
         return Ok(petRock);
     }
 
-    [HttpPost("rocks/{adoptableRockId}/adopt")]
+    [HttpPost("rocks/adopt")]
     [Authorize]
     [RequiredScope(RequiredScopesConfigurationKey = "access_as_user")]
-    public async Task<IActionResult> AdoptRock(Guid adoptableRockId)
+    public async Task<IActionResult> AdoptRock([FromBody] AdoptRockRequest request)
     {
-        var user = _contextAccessor.HttpContext.User;
+        var userId = _contextAccessor.HttpContext?.User.GetObjectId();
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized();
+        }
 
-        // var adoptableRockDto = await _context.RocksUpForAdoption.FindAsync(adoptableRockId)!;
-        // var variantDto = await _context.RockVariantsUpForAdoption.FindAsync(variantId);
-        //
-        // var petRock = new PetRockDto
-        // {
-        //     Owner = Guid.NewGuid(),// TODO
-        //     Name = name,
-        //     Catchphrase = adoptableRockDto!.Catchphrase,
-        //     Attributes = variantDto!.VariantTypeValues,
-        //     Images = adoptableRockDto!.Images
-        // };
-        // await _context.PetRocks.AddAsync(petRock);
-        // await _context.SaveChangesAsync();
+        var petRock = new PetRockDto
+        {
+            OwnerId = userId,
+            Name = request.Name,
+            Catchphrase = request.Catchphrase,
+            Attributes = request.Attributes,
+            Images = request.Images
+        };
+        await _context.PetRocks.AddAsync(petRock);
+        await _context.SaveChangesAsync();
 
-        return Ok();
+        return Ok(petRock.Id);
     }
 
     [HttpGet("petrocks")]
     public async Task<IActionResult> GetMyPets()
     {
-        var owner = Guid.NewGuid(); // TODO
-        var petRockDtos = await _context.PetRocks.Where(v => v.Owner == owner)
+        var userId = _contextAccessor.HttpContext?.User.GetObjectId();
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized();
+        }
+
+        var petRockDtos = await _context.PetRocks
+            .Where(v => v.OwnerId == userId)
             .ToListAsync();
         var petRocks = petRockDtos.Select(v => v.FromPetRockDto());
-        return Ok(petRockDtos);
+
+        return Ok(petRocks);
     }
 }
