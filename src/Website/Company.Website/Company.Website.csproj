@@ -9,6 +9,7 @@
     <PackageReference Include="Blazored.SessionStorage" Version="2.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.6" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Authentication.WebAssembly.Msal" Version="8.0.6" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
     <PackageReference Include="Serilog.Sinks.BrowserConsole" Version="2.0.0" />
@@ -19,9 +20,18 @@
     <ProjectReference Include="..\..\Shared\Company.Contract\Company.Contract.csproj" />
     <ProjectReference Include="..\Company.Website.Components\Company.Website.Components.csproj" />
   </ItemGroup>
+   
+  <ItemGroup>
+    <TrimmerRootAssembly Include="Microsoft.Authentication.WebAssembly.Msal" />
+  </ItemGroup>
 
   <ItemGroup>
     <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Sanctuary\Index.razor" />
+    <_ContentIncludedByDefault Remove="Sanctuary\SanctuaryDisplay.razor" />
   </ItemGroup>
 
 </Project>

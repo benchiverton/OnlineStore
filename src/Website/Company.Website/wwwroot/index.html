@@ -5,15 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Rock Pal</title>
-
-    <!-- Set base href to OnlineStore if it's in the path name (current location of GitHub Pages) -->
-    <script type="text/javascript">
-        var href = "/";
-        if (document.location.pathname.includes("OnlineStore")) {
-            href = "/OnlineStore/";
-        }
-        document.write("<base href='" + href + "' />");
-    </script>
+   <base href="/" />
 
     <!-- Bootstrap, Font Awesome -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
@@ -43,6 +35,7 @@
         <a class="dismiss">🗙</a>
     </div>
 
+    <script src="_content/Microsoft.Authentication.WebAssembly.Msal/AuthenticationService.js"></script>
     <script src="_framework/blazor.webassembly.js"></script>
 
     <!-- JQuery, Popper, Bootstrap -->

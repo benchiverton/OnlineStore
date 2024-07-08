@@ -1,0 +1,85 @@
+@page "/adopt/{AdoptableRockId}"
+
+@inject AdoptionService _adoptionService;
+@inject NavigationManager _navManager;
+
+<AuthorizeView>
+    <Authorized>
+        @if (_ready)
+        {
+            <div class="container-fluid">
+                <br/>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="img-fluid petrock-image-container">
+                            <img class="img-top petrock-image-img" src="@_adoptableRock.Images.FirstOrDefault()" alt="image">
+                        </div>
+                    </div>
+                    <div class="customise-inputs col-md">
+                        <h2>Customise your Rock Pal</h2>
+                        <hr/>
+                        <h6>Customize @_adoptableRock.Name into your perfect pal and make them uniquely yours!</h6>
+                        @foreach (var customAttribute in _adoptableRock.CustomisableAttributes)
+                        {
+                            <h5 class="attribute-heading">@customAttribute.Key:</h5>
+                            <select class="form-control" @onchange="e => OnNewCustomAttributeSelected(customAttribute.Key, e)">
+                                <option value=""></option>
+                                @foreach (var availableValue in customAttribute.Value)
+                                {
+                                    <option value="@availableValue" selected="@(_selectedCustomisableAttributes[customAttribute.Key] == availableValue)">@availableValue</option>
+                                }
+                            </select>
+                        }
+                        <h5 class="attribute-heading">Name your pal:</h5>
+                        <InputText class="form-control" @bind-Value="_selectedAdoptableRockName"></InputText>
+                    </div>
+                    <div class="col-md">
+                        <button class="btn btn-adopt-now btn-block"
+                                disabled="@(_selectedCustomisableAttributes.Values.Any(v => string.IsNullOrEmpty(v)) || string.IsNullOrEmpty(_selectedAdoptableRockName))"
+                                @onclick="() => AdoptNow()">
+                            <i class="fas fa-arrow-right mr-3"/>Adopt me!
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <RedirectToLogin/>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    [Parameter] public string AdoptableRockId { get; set; }
+
+    private AdoptableRock _adoptableRock;
+    private Dictionary<string, string> _selectedCustomisableAttributes;
+    private string _selectedAdoptableRockName;
+    private bool _ready = false;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _adoptableRock = await _adoptionService.GetAdoptableRockById(AdoptableRockId);
+        _selectedCustomisableAttributes = _adoptableRock.CustomisableAttributes.ToDictionary(r => r.Key, _ => string.Empty);
+        _ready = true;
+        await base.OnParametersSetAsync();
+    }
+
+    private Task OnNewCustomAttributeSelected(string customAttributeKey, ChangeEventArgs changeEventArgs)
+    {
+        _selectedCustomisableAttributes[customAttributeKey] = (string)changeEventArgs.Value;
+        return Task.CompletedTask;
+    }
+
+    private async Task AdoptNow()
+    {
+        var request = new AdoptRockRequest(
+            _selectedAdoptableRockName,
+            _adoptableRock.Catchphrase,
+            _adoptableRock.Description,
+            _selectedCustomisableAttributes,
+            _adoptableRock.Images);
+        await _adoptionService.AdoptRock(request);
+        _navManager.NavigateTo("/");
+    }
+}

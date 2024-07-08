@@ -1,0 +1,51 @@
+@page "/adoption/{AdoptableRockId}"
+
+@inject AdoptionService _adoptionService;
+@inject NavigationManager _navManager;
+
+@if (_ready)
+{
+    <div class="container-fluid">
+        <br/>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="img-fluid petrock-image-container">
+                    <img class="img-top petrock-image-img" src="@_adoptableRock.Images.FirstOrDefault()" alt="image">
+                </div>
+            </div>
+            <div class="col-md">
+                <h2>@_adoptableRock.Name</h2>
+                <hr/>
+                <h5>
+                    <i>@_adoptableRock.Catchphrase</i>
+                </h5>
+                <p>@_adoptableRock.Description</p>
+            </div>
+            <div class="col-md">
+                <button class="btn btn-adopt-now btn-block" @onclick="AdoptNow">
+                    <i class="fas fa-arrow-right mr-3"/>Customise your @_adoptableRock.Name!
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public string AdoptableRockId { get; set; }
+
+    private AdoptableRock _adoptableRock;
+    private bool _ready = false;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _adoptableRock = await _adoptionService.GetAdoptableRockById(AdoptableRockId);
+        _ready = true;
+        await base.OnParametersSetAsync();
+    }
+
+    private void AdoptNow()
+    {
+        _navManager.NavigateTo($"adopt/{AdoptableRockId}");
+    }
+
+}

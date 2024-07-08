@@ -1,6 +1,8 @@
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
-using Company.Api.PetRocks;
+using Company.Api.Adoption;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
@@ -46,7 +49,7 @@ builder.Services
         .AddAspNetCoreInstrumentation()
         .AddRuntimeInstrumentation())
     .WithTracing(tracerProviderBuilder => tracerProviderBuilder
-        .AddSource(serviceName, nameof(PetRocksController))
+        .AddSource(serviceName, nameof(AdoptionController))
         .SetResourceBuilder(appResourceBuilder)
         .AddAspNetCoreInstrumentation()
         .AddEntityFrameworkCoreInstrumentation());
@@ -59,11 +62,20 @@ if (Uri.TryCreate(otlpExporterEndpoint, UriKind.Absolute, out _))
         .ConfigureOpenTelemetryTracerProvider(tracing => tracing.AddOtlpExporter());
 }
 
+builder.Services.Configure<JwtBearerOptions>(
+    JwtBearerDefaults.AuthenticationScheme, options =>
+    {
+        options.TokenValidationParameters.NameClaimType = "name";
+    });
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAdB2C"));
+
 // allow any traffic for now
 builder.Services.AddCors(policy => policy.AddPolicy("CorsPolicy", opt => opt
     .AllowAnyOrigin()
     .AllowAnyHeader()
     .AllowAnyMethod()));
+
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Company Website API", Version = "v1" }));
@@ -72,7 +84,7 @@ var sqlLiteConnectionStringBuilder = new SqliteConnectionStringBuilder()
 {
     DataSource = "CompanyApi.db", Mode = SqliteOpenMode.ReadWriteCreate,
 };
-builder.Services.AddDbContext<PetRockContext>(options =>
+builder.Services.AddDbContext<AdoptionContext>(options =>
     options.UseSqlite(sqlLiteConnectionStringBuilder.ConnectionString));
 
 var host = builder.Build();
@@ -90,12 +102,13 @@ if (host.Environment.IsDevelopment())
 host.UseHttpsRedirection();
 host.UseCors("CorsPolicy");
 host.UseRouting();
+host.UseAuthentication();
 host.UseAuthorization();
 host.MapControllers();
 
 using (var scope = host.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<PetRockContext>();
+    var db = scope.ServiceProvider.GetRequiredService<AdoptionContext>();
     db.Database.Migrate();
 }
 
