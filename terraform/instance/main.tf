@@ -38,7 +38,7 @@ output "resource_group_name" {
 }
 
 output "api_client_id" {
-  value       = azuread_application.api.application_id
+  value       = azuread_application.api.client_id
   sensitive   = false
 }
 
