@@ -36,3 +36,13 @@ output "resource_group_name" {
   value       = azurerm_resource_group.instance.name
   sensitive   = false
 }
+
+output "api_client_id" {
+  value       = azuread_application.api.application_id
+  sensitive   = false
+}
+
+output "website_client_id" {
+  value       = azuread_application.api.application_id # TODO
+  sensitive   = false
+}
