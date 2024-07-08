@@ -5,7 +5,7 @@ resource "azuread_application" "api" {
   display_name     = "${var.name}-api"
   identifier_uris  = ["https://rockpal.onmicrosoft.com/${var.name}-api"]
   logo_image       = filebase64("images/icon-512.png")
-  owners           = [ "495f7cc2-440d-4501-aabc-c1f8c51a3c3d" ]
+  owners           = [ ]
   sign_in_audience = "AzureADandPersonalMicrosoftAccount"
 
   api {
