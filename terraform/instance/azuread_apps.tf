@@ -18,7 +18,7 @@ resource "azuread_application" "api" {
       admin_consent_description  = "Allows the app to access RockPal API as the signed-in user."
       admin_consent_display_name = "Access RockPal API"
       enabled                    = true
-      id                         = random_uuid.api_permission_scope
+      id                         = random_uuid.api_permission_scope.result
       type                       = "Admin"
       user_consent_description   = null
       user_consent_display_name  = null
