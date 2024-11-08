@@ -17,7 +17,7 @@
                                 <div style="height: 40%"/>
                                 <h1 class="card-title">@petRock.Name</h1>
                                 <i>
-                                    <h6 class="card-title">@petRock.Attributes.Aggregate("", (a, b) => $"{a}; {b.Key}: {b.Value}")</h6>
+                                    <h6 class="card-title">@string.Join(", ", petRock.Attributes.Select(attr => $"{attr.Key}: {attr.Value}"))</h6>
                                 </i>
                             </div>
                         </div>
