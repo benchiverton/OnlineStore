@@ -121,7 +121,10 @@ jobs:
           location: 'East US'
           resourceGroup: onlinestore-shared-rg
           targetPort: 8080
-          environmentVariables: OTEL_EXPORTER_OTLP_ENDPOINT=http://prod-onlinestore-monitoring:18889
+          environmentVariables: |
+            AZUREADB2C__CLIENTID=TODO
+            AZUREADB2C__AUDIENCE=TODO
+            OTEL_EXPORTER_OTLP_ENDPOINT=http://prod-onlinestore-monitoring:18889
       - name: Deploy website
         uses: azure/container-apps-deploy-action@v1
         with:
@@ -133,4 +136,7 @@ jobs:
           location: 'East US'
           resourceGroup: onlinestore-shared-rg
           targetPort: 80
-          environmentVariables: "API__BASEPATH=https://api.rockpal.co.uk"
+          environmentVariables: |
+            API__BASEPATH=https://api.rockpal.co.uk
+            API__CLIENTID=TODO
+            AZUREADB2C__CLIENTID=TODO

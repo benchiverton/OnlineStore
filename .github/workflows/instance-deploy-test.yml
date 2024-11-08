@@ -83,8 +83,6 @@ jobs:
         run: |
           mkdir terraform-outputs
           terraform -chdir=instance output -raw resource_group_name > terraform-outputs/resource_group_name.txt
-          terraform -chdir=instance output -raw api_client_id > terraform-outputs/api_client_id.txt
-          terraform -chdir=instance output -raw website_client_id > terraform-outputs/website_client_id.txt
       - name: Upload terraform outputs for deploy job
         uses: actions/upload-artifact@v3
         with:
@@ -107,8 +105,6 @@ jobs:
         shell: bash
         run: |
           echo "resource_group_name=$(cat resource_group_name.txt)" >> $GITHUB_ENV
-          echo "api_client_id=$(cat api_client_id.txt)" >> $GITHUB_ENV
-          echo "website_client_id=$(cat website_client_id.txt)" >> $GITHUB_ENV
       - name: Login via Azure CLI
         uses: azure/login@v1
         with:
@@ -125,8 +121,8 @@ jobs:
           resourceGroup: onlinestore-shared-rg
           targetPort: 8080
           environmentVariables: |
-            AZUREADB2C__CLIENTID=${{ env.api_client_id }}
-            AZUREADB2C__AUDIENCE=${{ env.api_client_id }}
+            AZUREADB2C__CLIENTID=32e35208-5d68-4ffb-a09b-9846cbe44af9
+            AZUREADB2C__AUDIENCE=32e35208-5d68-4ffb-a09b-9846cbe44af9
             OTEL_EXPORTER_OTLP_ENDPOINT=http://${{ github.head_ref }}-onlinestore-monitoring:18889
       - name: Deploy website
         uses: azure/container-apps-deploy-action@v1
@@ -141,8 +137,8 @@ jobs:
           targetPort: 80
           environmentVariables: |
             API__BASEPATH=https://${{ github.head_ref }}-api.rockpal.co.uk
-            API__CLIENTID=${{ env.api_client_id }}
-            AZUREADB2C__CLIENTID=${{ env.website_client_id }}
+            API__CLIENTID=32e35208-5d68-4ffb-a09b-9846cbe44af9
+            AZUREADB2C__CLIENTID=051b7459-8d57-4d92-b9d4-d4a73e49095d
       - name: Find Comment
         uses: peter-evans/find-comment@v1
         id: fc
