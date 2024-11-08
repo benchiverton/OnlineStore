@@ -1,3 +1,20 @@
 .content {
     padding-top: 1.1rem;
 }
+
+.rockpal-card {
+    max-height: 100%;
+    overflow: hidden;
+    color: var(--basalt-black);
+    text-align: center;
+    max-width: 18rem;
+}
+
+.rockpal-card .card-img-top {
+    max-height: 40vh;
+    object-fit: cover
+}
+
+.rockpal-card .card-img-overlay {
+    text-shadow: 0 0 4px rgba(255, 255, 255, 1);
+}

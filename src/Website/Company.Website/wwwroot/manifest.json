@@ -1,6 +1,6 @@
 {
-  "name": "Company Website App",
-  "short_name": "CompanyWebsiteApp",
+  "name": "Rock Pal",
+  "short_name": "RockPal",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",

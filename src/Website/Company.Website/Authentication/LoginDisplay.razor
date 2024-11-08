@@ -1,0 +1,27 @@
+﻿@inject ISyncSessionStorageService _sessionStorage
+@inject NavigationManager _navigationManager
+
+<div class="auth-view">
+    <SanctuaryDisplay></SanctuaryDisplay>
+    <AuthorizeView>
+        <Authorized>
+            <button class="nav-link btn btn-link" @onclick="BeginLogOut">Log out</button>
+        </Authorized>
+        <NotAuthorized>
+            <button class="nav-link btn btn-link" @onclick="BeginLogin">Log in</button>
+        </NotAuthorized>
+    </AuthorizeView>
+</div>
+
+@code{
+    public void BeginLogOut()
+    {
+        _navigationManager.NavigateToLogout("authentication/logout");
+    }
+
+    public void BeginLogin()
+    {
+        _sessionStorage.SetItem(AuthenticationConstants.ReturnUrlStorageKey, _navigationManager.ToBaseRelativePath(_navigationManager.Uri));
+        _navigationManager.NavigateTo($"authentication/login");
+    }
+}

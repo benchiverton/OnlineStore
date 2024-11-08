@@ -30,6 +30,13 @@
         text-overflow: ellipsis;
     }
 
+.end-items{
+    position: absolute;
+    right: 0;
+    font-size: large;
+    display: flex;
+}
+
 .companyname {
     color: white;
     cursor: pointer;

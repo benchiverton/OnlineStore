@@ -1,0 +1,14 @@
+@if (AdoptableRock != null)
+{
+    <HoverCard BackgroundImageLocation="@AdoptableRock.Images.FirstOrDefault()"
+           Title="@AdoptableRock.Name"
+           Headline="@AdoptableRock.Catchphrase"
+           Description="@AdoptableRock.Description"
+           PageLocation="@($"adoption/{AdoptableRock.Id}")">
+    </HoverCard>
+}
+
+@code {
+    [Parameter]
+    public AdoptableRock AdoptableRock { get; set; }
+}
