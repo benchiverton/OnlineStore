@@ -20,26 +20,42 @@
     justify-content: left;
 }
 
-    .top-row > a, .main .top-row .btn-link {
-        white-space: nowrap;
-        margin-left: 1.5rem;
-    }
+.top-row > a, .main .top-row .btn-link {
+    white-space: nowrap;
+    margin-left: 1.5rem;
+}
 
-    .top-row a:first-child {
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+.top-row a:first-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
-.end-items{
+.end-items {
     position: absolute;
     right: 0;
     font-size: large;
     display: flex;
+    max-width: calc(100% - 200px);
 }
 
 .companyname {
+    height: 100%;
     color: white;
     cursor: pointer;
+}
+
+.companyname-img {
+    height: 100%;
+    vertical-align: sub;
+}
+
+.companyname-header {
+    display: inline-block;
+}
+
+.username {
+    color: white;
+    margin: auto;
 }
 
 ::deep .btn-primary {

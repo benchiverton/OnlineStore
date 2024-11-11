@@ -17,3 +17,7 @@ h5.attribute-heading {
     background-color: var(--sandstone-beige);
     border-color: var(--sandstone-beige);
 }
+
+.input-name{
+    padding-bottom: 16px;
+}

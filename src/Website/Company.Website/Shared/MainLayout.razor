@@ -3,8 +3,15 @@
 @inject NavigationManager _navigationManager
 
 <div class="top-row pl-4 navbar navbar-light">
-    <h2 class="companyname" @onclick="NavigateHome">Rock Pal</h2>
+    <div class="companyname" @onclick="NavigateHome">
+        <img class="companyname-img" src="images/logo_cw_white.png"/>
+        <h2 class="companyname-header">RockPal</h2>
+    </div>
     <div class="end-items">
+        @if (!string.IsNullOrEmpty(Username))
+        {
+            <h6 class="username">Welcome, <b>@Username!</b></h6>
+        }
         <LoginDisplay></LoginDisplay>
     </div>
 </div>
@@ -14,8 +21,19 @@
 </div>
 
 @code {
+    [CascadingParameter] private Task<AuthenticationState> authStateTask { get; set; }
+
+    private string Username { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await authStateTask;
+        Username = authState?.User.Claims.SingleOrDefault(c => c.Type == "name")?.Value;
+    }
+
     private void NavigateHome()
     {
         _navigationManager.NavigateTo("/");
     }
+
 }

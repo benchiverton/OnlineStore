@@ -15,3 +15,7 @@
 .auth-view > button {
     color: white !important;
 }
+
+.login, .logout {
+    width: 120px;
+}

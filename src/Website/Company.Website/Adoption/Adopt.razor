@@ -16,7 +16,7 @@
                         </div>
                     </div>
                     <div class="customise-inputs col-md">
-                        <h2>Customise your Rock Pal</h2>
+                        <h2>Customise your RockPal</h2>
                         <hr/>
                         <h6>Customize @_adoptableRock.Name into your perfect pal and make them uniquely yours!</h6>
                         @foreach (var customAttribute in _adoptableRock.CustomisableAttributes)
@@ -31,7 +31,7 @@
                             </select>
                         }
                         <h5 class="attribute-heading">Name your pal:</h5>
-                        <InputText class="form-control" @bind-Value="_selectedAdoptableRockName"></InputText>
+                        <InputText class="form-control input-name" @bind-Value="_selectedAdoptableRockName"></InputText>
                     </div>
                     <div class="col-md">
                         <button class="btn btn-adopt-now btn-block"

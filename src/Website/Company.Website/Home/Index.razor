@@ -3,38 +3,7 @@
 @inject AdoptionService _adoptionService
 
 <div class="content px-4">
-    <AuthorizeView>
-        <Authorized>
-            @if (_petRocks != null)
-            {
-                <h1>Your Rock Pals</h1>
-                <div class="card-deck">
-                    @foreach (var petRock in _petRocks)
-                    {
-                        <div class="card img-fluid rockpal-card">
-                            <img class="card-img-top" src="@petRock.Images.First()" alt="Card image">
-                            <div class="card-img-overlay">
-                                <div style="height: 40%"/>
-                                <h1 class="card-title">@petRock.Name</h1>
-                                <i>
-                                    <h6 class="card-title">@string.Join(", ", petRock.Attributes.Select(attr => $"{attr.Key}: {attr.Value}"))</h6>
-                                </i>
-                            </div>
-                        </div>
-                    }
-                </div>
-            }
-            else
-            {
-                <h4>Once you've adopted a Rock Pal, you'll see them here.</h4>
-            }
-        </Authorized>
-        <NotAuthorized>
-            <h4>Log in to see your Rock Pals!</h4>
-        </NotAuthorized>
-    </AuthorizeView>
-    <hr/>
-    <h1>Adopt a Rock Pal</h1>
+    <h1>Adopt a RockPal</h1>
     <div class="card-deck">
         @if (_adoptableRocks != null)
         {
@@ -44,6 +13,36 @@
             }
         }
     </div>
+
+    <h1>Your RockPal's</h1>
+
+    <AuthorizeView>
+        <Authorized>
+            @if (_petRocks != null)
+            {
+                <div class="card-deck">
+                    @foreach (var petRock in _petRocks)
+                    {
+                        <div class="card img-fluid rockpal-card">
+                            <h1 class="card-title">@petRock.Name</h1>
+                            <img class="card-img" src="@petRock.Images.First()" alt="Card image">
+                            @foreach (var attr in petRock.Attributes)
+                            {
+                                <h6><b>@attr.Key:</b> @attr.Value</h6>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <h4>Once you've adopted a RockPal, you'll see them here.</h4>
+            }
+        </Authorized>
+        <NotAuthorized>
+            <h4>Log in to adopt & look after your RockPal's</h4>
+        </NotAuthorized>
+    </AuthorizeView>
 </div>
 
 @code {
