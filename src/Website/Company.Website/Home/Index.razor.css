@@ -16,3 +16,7 @@
     max-height: 40vh;
     object-fit: cover
 }
+
+h1.look-after-header {
+    padding-top: 1.5rem;
+}

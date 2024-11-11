@@ -3,7 +3,7 @@
 @inject AdoptionService _adoptionService
 
 <div class="content px-4">
-    <h1>Adopt a RockPal</h1>
+    <h1><b>Adopt</b> a RockPal</h1>
     <div class="card-deck">
         @if (_adoptableRocks != null)
         {
@@ -14,7 +14,7 @@
         }
     </div>
 
-    <h1>Your RockPal's</h1>
+    <h1 class="look-after-header"><b>Look After</b> your RockPal's</h1>
 
     <AuthorizeView>
         <Authorized>
@@ -28,7 +28,9 @@
                             <img class="card-img" src="@petRock.Images.First()" alt="Card image">
                             @foreach (var attr in petRock.Attributes)
                             {
-                                <h6><b>@attr.Key:</b> @attr.Value</h6>
+                                <h6>
+                                    <b>@attr.Key:</b> @attr.Value
+                                </h6>
                             }
                         </div>
                     }
@@ -40,7 +42,7 @@
             }
         </Authorized>
         <NotAuthorized>
-            <h4>Log in to adopt & look after your RockPal's</h4>
+            <h4>Log in to look after your RockPal's.</h4>
         </NotAuthorized>
     </AuthorizeView>
 </div>
