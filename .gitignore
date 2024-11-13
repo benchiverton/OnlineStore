@@ -404,3 +404,6 @@ terraform.rc
 *.db-shm
 *.db
 *.db-wal
+
+# DS_Store
+.DS_Store

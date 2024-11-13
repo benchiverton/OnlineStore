@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -85,7 +86,11 @@ var sqlLiteConnectionStringBuilder = new SqliteConnectionStringBuilder()
     DataSource = "CompanyApi.db", Mode = SqliteOpenMode.ReadWriteCreate,
 };
 builder.Services.AddDbContext<AdoptionContext>(options =>
-    options.UseSqlite(sqlLiteConnectionStringBuilder.ConnectionString));
+    {
+        options.UseSqlite(sqlLiteConnectionStringBuilder.ConnectionString);
+        options.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning));
+    }
+);
 
 var host = builder.Build();
 

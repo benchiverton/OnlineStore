@@ -82,7 +82,7 @@ resource "azurerm_container_app" "monitoring" {
   template {
     container {
       name   = "${lower(var.environment)}-aspire-dashboard"
-      image  = "onlinestorecontainerregistry.azurecr.io/dotnet/aspire-dashboard:8.0.0"
+      image  = "onlinestorecontainerregistry.azurecr.io/dotnet/aspire-dashboard:9.0.0"
       cpu    = 0.25
       memory = "0.5Gi"
       env {

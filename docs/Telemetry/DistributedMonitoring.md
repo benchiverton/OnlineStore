@@ -112,7 +112,7 @@ Further reading: https://opentelemetry.io/docs/instrumentation/net/exporters/
 Running the dashboard is simple, and can be done with the following command:
 
 ```cmd
-docker run --rm -it -p 18888:18888 -p 18889:18889  mcr.microsoft.com/dotnet/aspire-dashboard:8.0
+docker run --rm -it -p 18888:18888 -p 18889:18889  mcr.microsoft.com/dotnet/aspire-dashboard:9.0
 ```
 
 The two mapped ports are for the following:
