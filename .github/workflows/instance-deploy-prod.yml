@@ -10,7 +10,7 @@ jobs:
     with:
       solution_file: "src/Api/Company.Api.sln"
       project_file: "src/Api/Company.Api/Company.Api.csproj"
-      dotnet_version: 9.0.0
+      dotnet_version: 9.0.100
       dockerfile_name: "src/Api/Company.Api/dockerfile"
       image_name: "onlinestore-api"
     secrets: inherit
@@ -20,7 +20,7 @@ jobs:
     with:
       solution_file: "src/Website/Company.Website.sln"
       project_file: "src/Website/Company.Website/Company.Website.csproj"
-      dotnet_version: 9.0.0
+      dotnet_version: 9.0.100
       dockerfile_name: "src/Website/Company.Website/dockerfile"
       image_name: "onlinestore-website"
     secrets: inherit
