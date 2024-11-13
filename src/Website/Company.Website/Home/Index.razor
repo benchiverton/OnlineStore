@@ -4,6 +4,7 @@
 
 <div class="content px-4">
     <h1><b>Adopt</b> a RockPal</h1>
+    <h5>Pick your perfect pebble! Choose from a range of RockPal's to adopt and make your own.</h5>
     <div class="adoptable-rocks">
         @if (_adoptableRocks != null)
         {
@@ -22,7 +23,7 @@
     </div>
 
     <h1 class="look-after-header"><b>Look After</b> your RockPal's</h1>
-
+    <h5>Keep your RockPal's happy and healthy with fun activities!</h5>
     <AuthorizeView>
         <Authorized>
             @if (_petRocks != null)
@@ -47,11 +48,11 @@
             }
             else
             {
-                <h4>Once you've adopted a RockPal, you'll see them here.</h4>
+                <h6><i>Once you've adopted a RockPal, you'll see them here.</i></h6>
             }
         </Authorized>
         <NotAuthorized>
-            <h4>Log in to look after your RockPal's.</h4>
+            <h6><i>Log in to look after your RockPal's.</i></h6>
         </NotAuthorized>
     </AuthorizeView>
 </div>
