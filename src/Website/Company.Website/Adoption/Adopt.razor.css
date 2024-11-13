@@ -16,6 +16,8 @@ h5.attribute-heading {
     color: white;
     background-color: var(--sandstone-beige);
     border-color: var(--sandstone-beige);
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .input-name{

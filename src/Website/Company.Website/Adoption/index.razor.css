@@ -8,8 +8,10 @@
     object-fit: cover
 }
 
-.btn-adopt-now {
+.btn-pick-now {
     color: white;
     background-color: var(--sandstone-beige);
     border-color: var(--sandstone-beige);
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }

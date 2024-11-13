@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\Company.Contract\Company.Contract.csproj" />
-    <ProjectReference Include="..\Company.Website.Components\Company.Website.Components.csproj" />
   </ItemGroup>
    
   <ItemGroup>

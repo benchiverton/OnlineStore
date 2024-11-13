@@ -2,21 +2,47 @@
     padding-top: 1.1rem;
 }
 
-.rockpal-card {
-    max-height: 100%;
-    overflow: hidden;
-    color: var(--basalt-black);
-    text-align: center;
-    max-width: 18rem;
-    top: 15px;
-    margin-bottom: 15px;
+.adoptable-rocks {
+    display: flex;
+    flex-wrap: wrap;
 }
 
-.rockpal-card .card-img {
+.adopted-rocks {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.adopt-button {
+    color: white;
+    background-color: var(--sandstone-beige);
+    margin-top: auto;
+}
+
+.rockpal-card {
+    flex: 0 1 50%;
+    color: var(--basalt-black);
+    text-align: center;
+}
+
+.rockpal-container {
+    margin: 1rem;
+    padding: 0.5rem;
+    border: 3px dashed var(--slate-blue);
+    overflow: hidden;
+}
+
+.rockpal-img {
     max-height: 40vh;
-    object-fit: cover
+    object-fit: cover;
+    width: 100%;
 }
 
 h1.look-after-header {
     padding-top: 1.5rem;
+}
+
+@media screen and (max-width: 800px) {
+    .rockpal-card {
+        flex-basis: 100%;
+    }
 }

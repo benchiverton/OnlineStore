@@ -16,9 +16,8 @@
                         </div>
                     </div>
                     <div class="customise-inputs col-md">
-                        <h2>Customise your RockPal</h2>
-                        <hr/>
-                        <h6>Customize @_adoptableRock.Name into your perfect pal and make them uniquely yours!</h6>
+                        <h2>Pick your RockPal</h2>
+                        <h6>Select your perfect pal and make @_adoptableRock.Name uniquely yours!</h6>
                         @foreach (var customAttribute in _adoptableRock.CustomisableAttributes)
                         {
                             <h5 class="attribute-heading">@customAttribute.Key:</h5>
@@ -37,7 +36,7 @@
                         <button class="btn btn-adopt-now btn-block"
                                 disabled="@(_selectedCustomisableAttributes.Values.Any(v => string.IsNullOrEmpty(v)) || string.IsNullOrEmpty(_selectedAdoptableRockName))"
                                 @onclick="() => AdoptNow()">
-                            <i class="fas fa-arrow-right mr-3"/>Adopt me!
+                            <i class="fas fa-arrow-right mr-3"/><b>Adopt</b> @(string.IsNullOrEmpty(_selectedAdoptableRockName) ? "..." : _selectedAdoptableRockName)!
                         </button>
                     </div>
                 </div>

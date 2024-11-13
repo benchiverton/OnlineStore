@@ -15,15 +15,14 @@
             </div>
             <div class="col-md">
                 <h2>@_adoptableRock.Name</h2>
-                <hr/>
                 <h5>
                     <i>@_adoptableRock.Catchphrase</i>
                 </h5>
                 <p>@_adoptableRock.Description</p>
             </div>
             <div class="col-md">
-                <button class="btn btn-adopt-now btn-block" @onclick="AdoptNow">
-                    <i class="fas fa-arrow-right mr-3"/>Customise your @_adoptableRock.Name!
+                <button class="btn btn-pick-now btn-block" @onclick="AdoptNow">
+                    <i class="fas fa-arrow-right mr-3"/><b>Adopt</b> a @_adoptableRock.Name!
                 </button>
             </div>
         </div>

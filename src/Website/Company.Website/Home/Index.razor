@@ -4,12 +4,19 @@
 
 <div class="content px-4">
     <h1><b>Adopt</b> a RockPal</h1>
-    <div class="card-deck">
+    <div class="adoptable-rocks">
         @if (_adoptableRocks != null)
         {
             @foreach (var petRock in _adoptableRocks)
             {
-                <AdoptableRockCard AdoptableRock="@petRock"></AdoptableRockCard>
+                <div class="img-fluid rockpal-card">
+                    <div class="rockpal-container">
+                        <h1>@petRock.Name</h1>
+                        <img class="rockpal-img" src="@petRock.Images.First()" alt="Card image">
+                        <h6>@petRock.Catchphrase</h6>
+                        <a href="@($"adoption/{petRock.Id}")" class="btn adopt-button">More information</a>
+                    </div>
+                </div>
             }
         }
     </div>
@@ -20,18 +27,20 @@
         <Authorized>
             @if (_petRocks != null)
             {
-                <div class="card-deck">
+                <div class="adopted-rocks">
                     @foreach (var petRock in _petRocks)
                     {
-                        <div class="card img-fluid rockpal-card">
-                            <h1 class="card-title">@petRock.Name</h1>
-                            <img class="card-img" src="@petRock.Images.First()" alt="Card image">
-                            @foreach (var attr in petRock.Attributes)
-                            {
-                                <h6>
-                                    <b>@attr.Key:</b> @attr.Value
-                                </h6>
-                            }
+                        <div class="rockpal-card">
+                            <div class="rockpal-container">
+                                <h1>@petRock.Name</h1>
+                                <img class="rockpal-img" src="@petRock.Images.First()" alt="Card image">
+                                @foreach (var attr in petRock.Attributes)
+                                {
+                                    <h6>
+                                        <b>@attr.Key:</b> @attr.Value
+                                    </h6>
+                                }
+                            </div>
                         </div>
                     }
                 </div>
