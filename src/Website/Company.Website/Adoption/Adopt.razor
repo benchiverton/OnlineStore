@@ -34,7 +34,7 @@
                     </div>
                     <div class="col-md">
                         <button class="btn btn-adopt-now btn-block"
-                                disabled="@(_selectedCustomisableAttributes.Values.Any(v => string.IsNullOrEmpty(v)) || string.IsNullOrEmpty(_selectedAdoptableRockName))"
+                                disabled="@AdoptButtonDisabled"
                                 @onclick="() => AdoptNow()">
                             <i class="fas fa-arrow-right mr-3"/><b>Adopt</b> @(string.IsNullOrEmpty(_selectedAdoptableRockName) ? "..." : _selectedAdoptableRockName)!
                         </button>
@@ -55,6 +55,7 @@
     private Dictionary<string, string> _selectedCustomisableAttributes;
     private string _selectedAdoptableRockName;
     private bool _ready = false;
+    private bool _adoptionRequested = false;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -70,15 +71,28 @@
         return Task.CompletedTask;
     }
 
+    private bool AdoptButtonDisabled =>
+        _adoptionRequested
+        || _selectedCustomisableAttributes.Values.Any(v => string.IsNullOrEmpty(v))
+        || string.IsNullOrEmpty(_selectedAdoptableRockName);
+
     private async Task AdoptNow()
     {
-        var request = new AdoptRockRequest(
-            _selectedAdoptableRockName,
-            _adoptableRock.Catchphrase,
-            _adoptableRock.Description,
-            _selectedCustomisableAttributes,
-            _adoptableRock.Images);
-        await _adoptionService.AdoptRock(request);
-        _navManager.NavigateTo("/");
+        try
+        {
+            _adoptionRequested = true;
+            var request = new AdoptRockRequest(
+                _selectedAdoptableRockName,
+                _adoptableRock.Catchphrase,
+                _adoptableRock.Description,
+                _selectedCustomisableAttributes,
+                _adoptableRock.Images);
+            await _adoptionService.AdoptRock(request);
+            _navManager.NavigateTo("/");
+        }
+        catch (Exception ex)
+        {
+            _adoptionRequested = false;
+        }
     }
 }
