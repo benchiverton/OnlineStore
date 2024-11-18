@@ -1,7 +1,7 @@
 using System;
-using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using Company.Api.Adoption;
+using Company.Api.Adoption.Endpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Data.Sqlite;
@@ -50,7 +50,7 @@ builder.Services
         .AddAspNetCoreInstrumentation()
         .AddRuntimeInstrumentation())
     .WithTracing(tracerProviderBuilder => tracerProviderBuilder
-        .AddSource(serviceName, nameof(AdoptionController))
+        .AddSource(serviceName, nameof(GetAdoptableRocksEndpoint))
         .SetResourceBuilder(appResourceBuilder)
         .AddAspNetCoreInstrumentation()
         .AddEntityFrameworkCoreInstrumentation());
@@ -77,9 +77,9 @@ builder.Services.AddCors(policy => policy.AddPolicy("CorsPolicy", opt => opt
     .AllowAnyHeader()
     .AllowAnyMethod()));
 
-builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Company Website API", Version = "v1" }));
+builder.Services.AddOpenApi();
 
 var sqlLiteConnectionStringBuilder = new SqliteConnectionStringBuilder()
 {
@@ -98,6 +98,7 @@ host.UseSwagger();
 // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
 // specifying the Swagger JSON endpoint.
 host.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Company Website API v1"));
+host.MapOpenApi();
 
 if (host.Environment.IsDevelopment())
 {
@@ -109,7 +110,8 @@ host.UseCors("CorsPolicy");
 host.UseRouting();
 host.UseAuthentication();
 host.UseAuthorization();
-host.MapControllers();
+
+host.MapAdoptionEndpoints();
 
 using (var scope = host.Services.CreateScope())
 {
