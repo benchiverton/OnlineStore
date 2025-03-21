@@ -84,7 +84,7 @@ jobs:
           mkdir terraform-outputs
           terraform -chdir=instance output -raw resource_group_name > terraform-outputs/resource_group_name.txt
       - name: Upload terraform outputs for deploy job
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: terraform-outputs
           path: terraform/terraform-outputs/
@@ -97,7 +97,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Download terraform outputs
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: terraform-outputs
       - name: Set terraform outputs as env variables

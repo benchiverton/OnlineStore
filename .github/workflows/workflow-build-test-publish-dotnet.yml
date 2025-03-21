@@ -46,7 +46,7 @@ jobs:
         run: dotnet publish ${{ inputs.project_file }} --configuration Release --no-build --output publish/${{ inputs.artifact_name }} --self-contained ${{ inputs.self_contained }}
       - name: Publish artifact
         if: ${{ inputs.artifact_name != null }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.artifact_name }}
           path: publish/${{ inputs.artifact_name }}
