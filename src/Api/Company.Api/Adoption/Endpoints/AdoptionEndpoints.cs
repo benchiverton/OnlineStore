@@ -15,8 +15,7 @@ public static class AdoptionEndpoints
             .MapAdoptRockEndpoint()
             .MapGetAdoptableRockByIdEndpoint()
             .MapGetAdoptableRocksEndpoint()
-            .MapGetMyPetRocksEndpoint()
-            .MapGetAdoptionCertificateEndpoint();
+            .MapGetMyPetRocksEndpoint();
 
         return app;
     }

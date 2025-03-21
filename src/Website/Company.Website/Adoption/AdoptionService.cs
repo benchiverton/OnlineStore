@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
@@ -35,9 +34,5 @@ public class AdoptionService
         return _authorisedHttpClient.PostAsync($"adoption/rocks/adopt", content);
     }
 
-    public Task<List<PetRock>> GetPetRocks() =>
-        _authorisedHttpClient.GetFromJsonAsync<List<PetRock>>($"adoption/petrocks");
-
-    public Task<Stream> GetAdoptionCertificate(string petRockId) =>
-        _authorisedHttpClient.GetStreamAsync($"adoption/petrocks/{petRockId}/certificate");
+    public Task<List<PetRock>> GetPetRocks() => _authorisedHttpClient.GetFromJsonAsync<List<PetRock>>($"adoption/petrocks");
 }
