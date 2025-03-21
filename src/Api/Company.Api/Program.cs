@@ -19,9 +19,6 @@ using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Serilog;
 
-// install Playwright dependencies
-Microsoft.Playwright.Program.Main(["install-deps"]);
-
 var builder = WebApplication.CreateBuilder(args);
 
 Log.Logger = new LoggerConfiguration()
