@@ -28,6 +28,7 @@
     margin: 1rem;
     padding: 0.5rem;
     border: 3px dashed var(--slate-blue);
+    border-radius: 50px;
     overflow: hidden;
 }
 
