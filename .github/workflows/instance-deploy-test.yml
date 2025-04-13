@@ -120,7 +120,7 @@ jobs:
           location: 'East US'
           resourceGroup: onlinestore-shared-rg
           targetPort: 8080
-          environmentVariables: AZUREADB2C__CLIENTID=32e35208-5d68-4ffb-a09b-9846cbe44af9 AZUREADB2C__AUDIENCE=32e35208-5d68-4ffb-a09b-9846cbe44af9 OTEL_EXPORTER_OTLP_ENDPOINT=http://${{ github.head_ref }}-onlinestore-monitoring:18889
+          environmentVariables: AZUREADB2C__CLIENTID=32e35208-5d68-4ffb-a09b-9846cbe44af9 AZUREADB2C__AUDIENCE=32e35208-5d68-4ffb-a09b-9846cbe44af9 OTEL_EXPORTER_OTLP_ENDPOINT=http://${{ github.head_ref }}-onlinestore-monitoring:18889 USEFAKEAUTH=true
       - name: Deploy website
         uses: azure/container-apps-deploy-action@v1
         with:
@@ -132,7 +132,7 @@ jobs:
           location: 'East US'
           resourceGroup: onlinestore-shared-rg
           targetPort: 80
-          environmentVariables: API__BASEPATH=https://${{ github.head_ref }}-api.rockpal.co.uk API__CLIENTID=32e35208-5d68-4ffb-a09b-9846cbe44af9 AZUREADB2C__CLIENTID=051b7459-8d57-4d92-b9d4-d4a73e49095d
+          environmentVariables: API__BASEPATH=https://${{ github.head_ref }}-api.rockpal.co.uk API__CLIENTID=32e35208-5d68-4ffb-a09b-9846cbe44af9 AZUREADB2C__CLIENTID=051b7459-8d57-4d92-b9d4-d4a73e49095d USEFAKEAUTH=true
       - name: Find Comment
         uses: peter-evans/find-comment@v1
         id: fc

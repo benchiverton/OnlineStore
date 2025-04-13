@@ -53,7 +53,7 @@ namespace Company.Api.Migrations
                             Id = new Guid("d4e553d5-2423-46db-8512-daf05cdc8001"),
                             Catchphrase = "Rolling through life one pebble at a time!",
                             CustomisableAttributes = "{\"Size\":[\"Small\",\"Big\"],\"Texture\":[\"Smooth\",\"Grainy\",\"Jagged\"]}",
-                            Description = "Meet Pebble Dash, your adventurous little companion! Small but full of energy, Pebble Dash is always ready to roll into new adventures. With a smooth surface and a perfectly rounded shape, this pebble loves to explore the world and bring joy wherever it goes. Whether it's a playful dash across the desk or a calming presence on your nightstand, Pebble Dash is here to remind you that life's journey is best enjoyed one pebble at a time. Compact and full of charm, Pebble Dash is the perfect pocket-sized buddy for all your daily adventures.",
+                            Description = "Small, smooth, and full of spirit, this round little explorer is always up for an adventure. Whether it’s zipping across your desk or chilling on your nightstand, Pebble Dash brings charm and good vibes wherever it rolls. Pocket-sized joy for everyday journeys.",
                             Images = "[\"images\\\\petrocks\\\\pebble_dash.png\"]",
                             Name = "Pebble Dash"
                         },
@@ -62,7 +62,7 @@ namespace Company.Api.Migrations
                             Id = new Guid("f75326ac-c83d-468f-a99f-ec27bd2246ff"),
                             Catchphrase = "Ready to rock and slate the day!",
                             CustomisableAttributes = "{\"Hardness\":[\"Soft\",\"Hard\"],\"Slateyness\":[\"Not very\",\"Moderately\",\"Very\"]}",
-                            Description = "Introducing Slate Mate, your steadfast and stylish rock friend! Crafted from sleek, smooth slate, Slate Mate is the epitome of cool and collected. With its flat, elegant surface and modern look, this rock is the perfect desk companion or decorative piece. Slate Mate is always there to offer unwavering support, whether you're tackling a tough task or relaxing after a long day. Its timeless appearance and dependable nature make Slate Mate a reliable friend for every moment. Embrace the stability and charm of Slate Mate, and let this solid companion help you slate the day!",
+                            Description = "Smooth, sleek, and always chill, Slate Mate brings modern style and steady vibes to your space. Whether you're grinding through work or just vibing, this flat little legend’s got your back. Rock your day with Slate Mate – the solid sidekick you didn’t know you needed.",
                             Images = "[\"images\\\\petrocks\\\\slate_mate.png\"]",
                             Name = "Slate Mate"
                         });

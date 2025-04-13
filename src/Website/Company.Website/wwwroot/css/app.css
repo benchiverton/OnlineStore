@@ -8,11 +8,16 @@
     --basalt-black: #3B3C46;
 }
 
+@font-face {
+    font-family: "RockPal font";
+    src: url("./JelloStone/JelloStone.ttf") format("truetype");
+}
+
 app {
     position: relative;
     display: flex;
     flex-direction: column;
-    font-family: Arial;
+    font-family: "RockPal font";
     color: var(--basalt-black);
 }
 
