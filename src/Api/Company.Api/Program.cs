@@ -2,6 +2,8 @@ using System;
 using System.Reflection;
 using Company.Api.Adoption;
 using Company.Api.Adoption.Endpoints;
+using Company.Api.Auth;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Data.Sqlite;
@@ -63,13 +65,23 @@ if (Uri.TryCreate(otlpExporterEndpoint, UriKind.Absolute, out _))
         .ConfigureOpenTelemetryTracerProvider(tracing => tracing.AddOtlpExporter());
 }
 
-builder.Services.Configure<JwtBearerOptions>(
-    JwtBearerDefaults.AuthenticationScheme, options =>
-    {
-        options.TokenValidationParameters.NameClaimType = "name";
-    });
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAdB2C"));
+if (builder.Configuration.GetValue<bool>("UseFakeAuth"))
+{
+    builder.Services.AddAuthentication(defaultScheme: "TestScheme")
+        .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("TestScheme", _ => { });
+    builder.Services.AddAuthorization();
+    builder.Services.AddHttpContextAccessor();
+}
+else
+{
+    builder.Services.Configure<JwtBearerOptions>(
+        JwtBearerDefaults.AuthenticationScheme, options =>
+        {
+            options.TokenValidationParameters.NameClaimType = "name";
+        });
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAdB2C"));
+}
 
 // allow any traffic for now
 builder.Services.AddCors(policy => policy.AddPolicy("CorsPolicy", opt => opt
