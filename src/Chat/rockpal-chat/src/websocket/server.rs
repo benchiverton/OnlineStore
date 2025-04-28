@@ -1,7 +1,8 @@
 use futures_util::{SinkExt, StreamExt, TryFutureExt};
 use std::{
     io::{Error as IoError, Read},
-    str::Utf8Error, time::Duration,
+    str::Utf8Error,
+    time::Duration,
 };
 use thiserror::Error;
 use tokio::{net::TcpListener, time::sleep};

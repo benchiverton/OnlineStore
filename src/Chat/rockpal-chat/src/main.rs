@@ -1,8 +1,8 @@
 use thiserror::Error;
 use tokio::{signal, task::JoinError};
 use tokio_util::sync::CancellationToken;
-use websocket::server::{Error as WebSocketError, WebSocketServer};
 use tracing_subscriber;
+use websocket::server::{Error as WebSocketError, WebSocketServer};
 
 mod websocket;
 
@@ -16,16 +16,13 @@ pub enum Error {
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-
     tracing_subscriber::fmt::init();
 
     let token = CancellationToken::new();
 
     let server = WebSocketServer::new(11000);
     let server_token = token.clone();
-    let handle = tokio::spawn(async move {
-        server.start(server_token)
-    });
+    let handle = tokio::spawn(async move { server.start(server_token) });
 
     tokio::spawn({
         async move {
