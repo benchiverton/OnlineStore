@@ -407,3 +407,7 @@ terraform.rc
 
 # DS_Store
 .DS_Store
+
+# Rust
+src/Chat/target/*
+Cargo.lock
