@@ -1,6 +1,7 @@
 @page "/"
 
 @inject AdoptionService _adoptionService
+@inject ChatModal.ChatServerConfiguration _chatServerConfiguration
 
 <Company.Website.Home.ChatModal @ref="Modal"></Company.Website.Home.ChatModal>
 
@@ -39,7 +40,7 @@
                                 <img class="rockpal-img" src="@petRock.Images.First()" alt="Card image">
                                 <h6>@(string.Join(", ", petRock.Attributes.Select(pr => pr.Value)))</h6>
                                 <button class="btn btn-chat btn-block"
-                                        @onclick="async () => await Modal.Open(petRock.Id, petRock.Name)">
+                                        @onclick="async () => await Modal.Open(_chatServerConfiguration, petRock.Id, petRock.Name)">
                                     <i class="fas fa-comment mr-3"/><b>Chat</b>
                                 </button>
                             </div>

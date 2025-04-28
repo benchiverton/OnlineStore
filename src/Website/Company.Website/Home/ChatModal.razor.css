@@ -3,4 +3,5 @@
     flex-direction: column-reverse;
     max-height: 50vh;
     overflow-y: scroll;
+    padding-bottom: 30px;
 }

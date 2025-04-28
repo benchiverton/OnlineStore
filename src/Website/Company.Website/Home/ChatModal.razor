@@ -9,10 +9,17 @@
             </div>
             <div class="modal-body">
                 <div class="conversation">
-                    @foreach (var dialogue in _conversation.OrderByDescending(t => t.Timestamp))
+                    @if (_conversation.Count == 0)
                     {
-                        <div>@($"{(int)dialogue.Timestamp.TimeOfDay.TotalHours:D2}:{dialogue.Timestamp.TimeOfDay.Minutes:D2}:{dialogue.Timestamp.TimeOfDay.Seconds:D2}") @(dialogue.User):
-                            <i>@(dialogue.Message)</i><br></div>
+                        <div>Write a message in the text box and start the conversation.</div>
+                    }
+                    else
+                    {
+                        @foreach (var dialogue in _conversation.OrderByDescending(t => t.Timestamp))
+                        {
+                            <div>@($"{(int)dialogue.Timestamp.TimeOfDay.TotalHours:D2}:{dialogue.Timestamp.TimeOfDay.Minutes:D2}:{dialogue.Timestamp.TimeOfDay.Seconds:D2}") @(dialogue.User):
+                                <i>@(dialogue.Message)</i><br></div>
+                        }
                     }
                 </div>
                 <InputText class="form-control input-name"
@@ -48,7 +55,13 @@
     private string _modalClass = "";
     private bool _showBackdrop = false;
 
-    public async Task Open(string id, string name)
+    public class ChatServerConfiguration
+    {
+        public string Address { get; init; } = null!;
+        public int Port { get; init; }
+    }
+
+    public async Task Open(ChatServerConfiguration config, string id, string name)
     {
         _id = id;
         _name = name;
@@ -57,7 +70,7 @@
         _webSocket = new ClientWebSocket();
         try
         {
-            var uri = new Uri("ws://localhost:10006");
+            var uri = new Uri($"ws://{config.Address}:{config.Port}");
             await _webSocket.ConnectAsync(uri, CancellationToken.None);
             _isConnected = true;
             _ = ListenForMessages();
@@ -171,5 +184,4 @@
         public string User { get; set; } = null!;
         public string Message { get; set; } = null!;
     }
-
 }

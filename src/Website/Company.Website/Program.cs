@@ -7,6 +7,7 @@ using Serilog;
 using Company.Website;
 using Company.Website.Adoption;
 using Company.Website.Authentication.Testing;
+using Company.Website.Home;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication.Internal;
@@ -59,6 +60,9 @@ builder.Services.AddKeyedScoped("authorised",
     (ctx, _) => ctx.GetRequiredService<IHttpClientFactory>().CreateClient("AuthorisedHttp"));
 
 builder.Services.AddTransient<AdoptionService>();
+
+var chatServerConfiguration = builder.Configuration.GetSection("ChatServer").Get<ChatModal.ChatServerConfiguration>();
+builder.Services.AddSingleton(chatServerConfiguration);
 
 builder.Services.AddBlazoredSessionStorage();
 
