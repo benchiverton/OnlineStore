@@ -59,6 +59,7 @@
     {
         public string Address { get; init; } = null!;
         public int Port { get; init; }
+        public bool Tls { get; set; }
     }
 
     public async Task Open(ChatServerConfiguration config, string id, string name)
@@ -70,7 +71,7 @@
         _webSocket = new ClientWebSocket();
         try
         {
-            var uri = new Uri($"ws://{config.Address}:{config.Port}");
+            var uri = new Uri($"{(config.Tls ? "wss" : "ws")}://{config.Address}:{config.Port}");
             await _webSocket.ConnectAsync(uri, CancellationToken.None);
             _isConnected = true;
             _ = ListenForMessages();
@@ -149,6 +150,8 @@
         }
         else
         {
+            // 🤮 fix to ensure timestamp is always after ChatMessage for 'you'
+            await Task.Delay(TimeSpan.FromMilliseconds(1));
             _conversation.Add(new ChatMessage
             {
                 User = "_name",
