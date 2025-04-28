@@ -15,7 +15,7 @@ jobs:
     secrets: inherit
 
   build-chat:
-    uses: benchiverton/OnlineStore/.github/workflows/workflow-build-test-publish-rust.yml@chat
+    uses: benchiverton/OnlineStore/.github/workflows/workflow-build-test-publish-rust.yml@main
     with:
       working_directory: "src/Chat"
       image_name: "onlinestore-chat"
