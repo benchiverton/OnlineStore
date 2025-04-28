@@ -27,7 +27,7 @@ jobs:
       - name: Rustfmt Check
         uses: actions-rust-lang/rustfmt@v1
         with:
-          manifest-path: src/Chat
+          manifest-path: ${{ inputs.working_directory }}/Cargo.toml
       - name: Build
         run: cargo build --release
         working-directory: ${{ inputs.working_directory }}
