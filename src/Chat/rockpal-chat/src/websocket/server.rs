@@ -20,11 +20,11 @@ pub enum Error {
 }
 
 pub struct WebSocketServer {
-    port: u32,
+    port: u16,
 }
 
 impl WebSocketServer {
-    pub fn new(port: u32) -> Self {
+    pub fn new(port: u16) -> Self {
         Self { port }
     }
 

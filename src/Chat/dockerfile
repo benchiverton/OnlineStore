@@ -13,6 +13,7 @@ WORKDIR /app
 
 RUN cp ./src/Chat/target/release/$APP_NAME /bin/server
 
+ENV APP_PORT=8080
 EXPOSE 8080
 
 CMD ["/bin/server"]
