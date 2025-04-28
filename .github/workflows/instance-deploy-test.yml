@@ -18,6 +18,7 @@ jobs:
     uses: benchiverton/OnlineStore/.github/workflows/workflow-build-test-publish-rust.yml@chat
     with:
       working_directory: "src/Chat"
+      dockerfile_name: "src/Chat/dockerfile"
       image_name: "onlinestore-chat"
     secrets: inherit
 
