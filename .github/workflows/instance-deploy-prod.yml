@@ -67,6 +67,7 @@ jobs:
           TF_VAR_acr_password: ${{ secrets.ACR_TOKEN }}
           TF_VAR_website_dns_subdomain: www
           TF_VAR_api_dns_subdomain: api
+          TF_VAR_chat_dns_subdomain: chat
           TF_VAR_monitoring_dns_subdomain: monitoring
       - name: Terraform Apply
         id: apply
@@ -78,6 +79,7 @@ jobs:
           TF_VAR_acr_password: ${{ secrets.ACR_TOKEN }}
           TF_VAR_website_dns_subdomain: www
           TF_VAR_api_dns_subdomain: api
+          TF_VAR_chat_dns_subdomain: chat
           TF_VAR_monitoring_dns_subdomain: monitoring
       - name: Save terraform outputs
         shell: bash

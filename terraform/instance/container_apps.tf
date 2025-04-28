@@ -38,6 +38,41 @@ resource "azurerm_container_app" "api" {
   }
 }
 
+resource "azurerm_container_app" "chat" {
+  name                         = "${lower(var.environment)}-${var.name}-chat"
+  container_app_environment_id = data.azurerm_container_app_environment.apps.id
+  resource_group_name          = data.azurerm_container_app_environment.apps.resource_group_name
+  revision_mode                = "Single"
+
+  template {
+    container {
+      name   = "${lower(var.environment)}-onlinestore-chat"
+      image  = "mcr.microsoft.com/azuredocs/containerapps-helloworld:latest"
+      cpu    = 0.25
+      memory = "0.5Gi"
+    }
+    max_replicas = 1
+  }
+
+  ingress {
+    external_enabled = true
+    transport        = "tcp"
+    target_port      = 8080
+    traffic_weight {
+      latest_revision = true
+      percentage = 100
+    }
+  }
+  
+  lifecycle {
+    ignore_changes = [
+      template[0].container[0],
+      registry,
+      secret,
+    ]
+  }
+}
+
 resource "azurerm_container_app" "website" {
   name                         = "${lower(var.environment)}-${var.name}-website"
   container_app_environment_id = data.azurerm_container_app_environment.apps.id

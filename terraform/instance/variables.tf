@@ -38,6 +38,11 @@ variable "api_dns_subdomain" {
   description = "DNS subdomain for api"
 }
 
+variable "chat_dns_subdomain" {
+  type        = string
+  description = "DNS subdomain for chat server"
+}
+
 variable "monitoring_dns_subdomain" {
   type        = string
   description = "DNS subdomain for monitoring"
