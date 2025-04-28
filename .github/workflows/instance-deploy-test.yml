@@ -141,8 +141,8 @@ jobs:
           imageToDeploy: onlinestorecontainerregistry.azurecr.io/onlinestore-chat:${{ github.sha }}
           location: 'East US'
           resourceGroup: onlinestore-shared-rg
-          targetPort: 8080
-          environmentVariables: 
+          targetPort: 8081
+          environmentVariables:
       - name: Deploy website
         uses: azure/container-apps-deploy-action@v1
         with:

@@ -57,7 +57,7 @@ resource "azurerm_container_app" "chat" {
   ingress {
     external_enabled = true
     transport        = "http"
-    target_port      = 8080
+    target_port      = 8081
     traffic_weight {
       latest_revision = true
       percentage = 100

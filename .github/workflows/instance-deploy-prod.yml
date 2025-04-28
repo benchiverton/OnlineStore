@@ -132,6 +132,18 @@ jobs:
           resourceGroup: onlinestore-shared-rg
           targetPort: 8080
           environmentVariables: AZUREADB2C__CLIENTID=74dfe0bf-26bf-402f-8b3d-86919993a482 AZUREADB2C__AUDIENCE=74dfe0bf-26bf-402f-8b3d-86919993a482 OTEL_EXPORTER_OTLP_ENDPOINT=http://prod-onlinestore-monitoring:18889 USEFAKEAUTH=false
+      - name: Deploy chat
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          acrName: onlinestorecontainerregistry
+          acrUsername: ${{ secrets.ACR_USERNAME }}
+          acrPassword: ${{ secrets.ACR_TOKEN }}
+          containerAppName: ${{ github.head_ref }}-onlinestore-chat
+          imageToDeploy: onlinestorecontainerregistry.azurecr.io/onlinestore-chat:${{ github.sha }}
+          location: 'East US'
+          resourceGroup: onlinestore-shared-rg
+          targetPort: 8081
+          environmentVariables:
       - name: Deploy website
         uses: azure/container-apps-deploy-action@v1
         with:
