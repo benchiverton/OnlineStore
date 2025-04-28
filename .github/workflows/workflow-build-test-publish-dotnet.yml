@@ -14,8 +14,6 @@ on:
       self_contained:
         type: boolean
         default: true
-      artifact_name:
-        type: string
       dockerfile_name:
         type: string
         default: .
@@ -41,15 +39,6 @@ jobs:
         run: dotnet build ${{ inputs.solution_file }} --configuration Release --no-restore
       - name: Test
         run: dotnet test ${{ inputs.solution_file }} --configuration Release --no-build --verbosity normal
-      - name: Publish binaries
-        if: ${{ inputs.artifact_name != null }}        
-        run: dotnet publish ${{ inputs.project_file }} --configuration Release --no-build --output publish/${{ inputs.artifact_name }} --self-contained ${{ inputs.self_contained }}
-      - name: Publish artifact
-        if: ${{ inputs.artifact_name != null }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ inputs.artifact_name }}
-          path: publish/${{ inputs.artifact_name }}
       - name: Build and push image
         if: ${{ inputs.image_name != null }}
         uses: docker/login-action@v2
