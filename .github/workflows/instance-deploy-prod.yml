@@ -138,7 +138,7 @@ jobs:
           acrName: onlinestorecontainerregistry
           acrUsername: ${{ secrets.ACR_USERNAME }}
           acrPassword: ${{ secrets.ACR_TOKEN }}
-          containerAppName: ${{ github.head_ref }}-onlinestore-chat
+          containerAppName: prod-onlinestore-chat
           imageToDeploy: onlinestorecontainerregistry.azurecr.io/onlinestore-chat:${{ github.sha }}
           location: 'East US'
           resourceGroup: onlinestore-shared-rg
