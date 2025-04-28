@@ -1,7 +1,10 @@
 use futures_util::{SinkExt, StreamExt, TryFutureExt};
-use std::io::Error as IoError;
+use std::{
+    io::{Error as IoError, Read},
+    str::Utf8Error, time::Duration,
+};
 use thiserror::Error;
-use tokio::net::TcpListener;
+use tokio::{net::TcpListener, time::sleep};
 use tokio_util::sync::CancellationToken;
 use tokio_websockets::{Error as WebSocketError, Message, ServerBuilder};
 
@@ -11,6 +14,8 @@ pub enum Error {
     Io(#[from] IoError),
     #[error(transparent)]
     WebSocket(#[from] WebSocketError),
+    #[error(transparent)]
+    Utf8Error(#[from] Utf8Error),
 }
 
 pub struct WebSocketServer {
@@ -23,7 +28,7 @@ impl WebSocketServer {
     }
 
     pub async fn start(self, token: CancellationToken) -> Result<(), Error> {
-        tracing::info!("Starting server...");
+        tracing::info!("Starting server.");
 
         let listener = TcpListener::bind(format!("127.0.0.1:{}", self.port))
             .await
@@ -32,7 +37,7 @@ impl WebSocketServer {
         loop {
             tokio::select! {
                 _ = token.cancelled() => {
-                    tracing::info!("Server is shutting down...");
+                    tracing::info!("Server is shutting down.");
                     break;
                 },
                 Ok((stream, addr)) = listener.accept() => {
@@ -49,8 +54,19 @@ impl WebSocketServer {
                             tokio::spawn(async move {
                                 while let Some(Ok(msg)) = ws_stream.next().await {
                                     tracing::info!(message = ?msg, "Message received.");
+
+                                    // simulate thinking...
+                                    sleep(Duration::from_secs(1)).await;
+
                                     if msg.is_text() || msg.is_binary() {
-                                        ws_stream.send(Message::text("Your RockPal does not respond. It is, after all, a rock.")).await?;
+                                        let byte_vec: Vec<u8> = msg
+                                            .into_payload()
+                                            .bytes()
+                                            .filter_map(Result::ok)
+                                            .collect();
+                                        let rockpal_name = std::str::from_utf8(&byte_vec)?;
+                                        let message = Message::text(format!("Your RockPal does not understand the phrase '{}'. They are, after all, a rock.", rockpal_name));
+                                        ws_stream.send(message).await?;
                                     }
                                 }
                                 Ok::<_, Error>(())

@@ -1,0 +1,175 @@
+@using System.Net.WebSockets
+@using System.Text
+@using System.Threading
+<div class="modal @_modalClass" tabindex="-1" role="dialog" style="display:@_modalDisplay">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">What does @(_name) have to say?</h5>
+            </div>
+            <div class="modal-body">
+                <div class="conversation">
+                    @foreach (var dialogue in _conversation.OrderByDescending(t => t.Timestamp))
+                    {
+                        <div>@($"{(int)dialogue.Timestamp.TimeOfDay.TotalHours:D2}:{dialogue.Timestamp.TimeOfDay.Minutes:D2}:{dialogue.Timestamp.TimeOfDay.Seconds:D2}") @(dialogue.User):
+                            <i>@(dialogue.Message)</i><br></div>
+                    }
+                </div>
+                <InputText class="form-control input-name"
+                           @oninput="OnInput"
+                           @onkeypress="HandleKeyPress"
+                           @bind-Value="_userMessage"></InputText>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                        @onclick="Close">Goodbye!
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@if (_showBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+
+@code {
+    private string _id = string.Empty;
+    private string _name = string.Empty;
+    private List<ChatMessage> _conversation = [];
+    private string _userMessage;
+    private ClientWebSocket _webSocket;
+    private bool _isConnected = false;
+
+    private string _modalDisplay = "none;";
+    private string _modalClass = "";
+    private bool _showBackdrop = false;
+
+    public async Task Open(string id, string name)
+    {
+        _id = id;
+        _name = name;
+        _conversation = [];
+
+        _webSocket = new ClientWebSocket();
+        try
+        {
+            var uri = new Uri("ws://localhost:10006");
+            await _webSocket.ConnectAsync(uri, CancellationToken.None);
+            _isConnected = true;
+            _ = ListenForMessages();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"WebSocket connection failed: {ex.Message}");
+            _isConnected = false;
+        }
+
+        _modalDisplay = "block;";
+        _modalClass = "Show";
+        _showBackdrop = true;
+
+        StateHasChanged();
+    }
+
+    private async Task ListenForMessages()
+    {
+        var buffer = new byte[1024];
+
+        while (_isConnected && _webSocket != null)
+        {
+            try
+            {
+                var result = await _webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                if (result.MessageType != WebSocketMessageType.Text)
+                {
+                    continue;
+                }
+
+                var message = Encoding.UTF8.GetString(buffer, 0, result.Count);
+                _conversation.Add(new ChatMessage
+                {
+                    User = _name,
+                    Message = message
+                });
+                await InvokeAsync(StateHasChanged);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error receiving message: {ex.Message}");
+                _isConnected = false;
+            }
+        }
+    }
+
+    private void OnInput(ChangeEventArgs e)
+    {
+        _userMessage = e.Value?.ToString() ?? string.Empty;
+    }
+
+    private async Task HandleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !string.IsNullOrWhiteSpace(_userMessage))
+        {
+            await SendMessage();
+        }
+    }
+
+    private async Task SendMessage()
+    {
+        // add the message to the conversation
+        _conversation.Add(new ChatMessage
+        {
+            User = "You",
+            Message = _userMessage
+        });
+
+        // send message to server
+        if (_isConnected && !string.IsNullOrEmpty(_userMessage) && _webSocket != null)
+        {
+            var messageBytes = Encoding.UTF8.GetBytes(_userMessage);
+            var buffer = new ArraySegment<byte>(messageBytes);
+            await _webSocket.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
+        }
+        else
+        {
+            _conversation.Add(new ChatMessage
+            {
+                User = "_name",
+                Message = $"{_name} isn't listening right now."
+            });
+        }
+
+        // clear the message
+        _userMessage = string.Empty;
+    }
+
+    private void Close()
+    {
+        _id = string.Empty;
+        _name = string.Empty;
+        _conversation = [];
+
+        if (_webSocket != null && _isConnected)
+        {
+            _ = _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", CancellationToken.None).ContinueWith(_ => _webSocket.Dispose());
+        }
+
+        _modalDisplay = "none";
+        _modalClass = "";
+        _showBackdrop = false;
+
+        StateHasChanged();
+    }
+
+    private class ChatMessage
+    {
+        public DateTime Timestamp = DateTime.Now;
+        public string User { get; set; } = null!;
+        public string Message { get; set; } = null!;
+    }
+
+}
