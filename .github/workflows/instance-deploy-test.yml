@@ -14,6 +14,14 @@ jobs:
       image_name: "onlinestore-api"
     secrets: inherit
 
+  build-chat:
+    uses: benchiverton/OnlineStore/.github/workflows/workflow-build-test-publish-rust.yml@chat
+    with:
+      working_directory: "src/Chat"
+      dockerfile_name: "src/Chat/dockerfile"
+      image_name: "onlinestore-chat"
+    secrets: inherit
+
   build-website:
     uses: benchiverton/OnlineStore/.github/workflows/workflow-build-test-publish-dotnet.yml@main
     with:
@@ -25,7 +33,7 @@ jobs:
     secrets: inherit
 
   deploy-terraform-test:
-    needs: [build-api, build-website]
+    needs: [build-api, build-chat, build-website]
     environment: test
     env:
       ARM_CLIENT_ID: ${{ secrets.TF_VAR_AGENT_CLIENT_ID }}
@@ -66,6 +74,7 @@ jobs:
           TF_VAR_acr_password: ${{ secrets.ACR_TOKEN }}
           TF_VAR_website_dns_subdomain: ${{ github.head_ref }}-website
           TF_VAR_api_dns_subdomain: ${{ github.head_ref }}-api
+          TF_VAR_chat_dns_subdomain: ${{ github.head_ref }}-chat
           TF_VAR_monitoring_dns_subdomain: ${{ github.head_ref }}-monitoring
       - name: Terraform Apply
         id: apply
@@ -77,6 +86,7 @@ jobs:
           TF_VAR_acr_password: ${{ secrets.ACR_TOKEN }}
           TF_VAR_website_dns_subdomain: ${{ github.head_ref }}-website
           TF_VAR_api_dns_subdomain: ${{ github.head_ref }}-api
+          TF_VAR_chat_dns_subdomain: ${{ github.head_ref }}-chat
           TF_VAR_monitoring_dns_subdomain: ${{ github.head_ref }}-monitoring
       - name: Save terraform outputs
         shell: bash
@@ -121,6 +131,18 @@ jobs:
           resourceGroup: onlinestore-shared-rg
           targetPort: 8080
           environmentVariables: AZUREADB2C__CLIENTID=32e35208-5d68-4ffb-a09b-9846cbe44af9 AZUREADB2C__AUDIENCE=32e35208-5d68-4ffb-a09b-9846cbe44af9 OTEL_EXPORTER_OTLP_ENDPOINT=http://${{ github.head_ref }}-onlinestore-monitoring:18889 USEFAKEAUTH=true
+      - name: Deploy chat
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          acrName: onlinestorecontainerregistry
+          acrUsername: ${{ secrets.ACR_USERNAME }}
+          acrPassword: ${{ secrets.ACR_TOKEN }}
+          containerAppName: ${{ github.head_ref }}-onlinestore-chat
+          imageToDeploy: onlinestorecontainerregistry.azurecr.io/onlinestore-chat:${{ github.sha }}
+          location: 'East US'
+          resourceGroup: onlinestore-shared-rg
+          targetPort: 8081
+          environmentVariables:
       - name: Deploy website
         uses: azure/container-apps-deploy-action@v1
         with:
@@ -132,7 +154,7 @@ jobs:
           location: 'East US'
           resourceGroup: onlinestore-shared-rg
           targetPort: 80
-          environmentVariables: API__BASEPATH=https://${{ github.head_ref }}-api.rockpal.co.uk API__CLIENTID=32e35208-5d68-4ffb-a09b-9846cbe44af9 AZUREADB2C__CLIENTID=051b7459-8d57-4d92-b9d4-d4a73e49095d USEFAKEAUTH=true
+          environmentVariables: API__BASEPATH=https://${{ github.head_ref }}-api.rockpal.co.uk API__CLIENTID=32e35208-5d68-4ffb-a09b-9846cbe44af9 AZUREADB2C__CLIENTID=051b7459-8d57-4d92-b9d4-d4a73e49095d USEFAKEAUTH=true CHATSERVER__ADDRESS=${{ github.head_ref }}-chat.rockpal.co.uk
       - name: Find Comment
         uses: peter-evans/find-comment@v1
         id: fc

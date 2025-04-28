@@ -21,6 +21,24 @@ resource "azurerm_dns_txt_record" "api" {
   }
 }
 
+resource "azurerm_dns_cname_record" "chat" {
+  name                = var.chat_dns_subdomain
+  zone_name           = data.azurerm_dns_zone.rockpal-co-uk.name
+  resource_group_name = data.azurerm_dns_zone.rockpal-co-uk.resource_group_name
+  ttl                 = 300
+  record              = azurerm_container_app.chat.ingress[0].fqdn
+}
+
+resource "azurerm_dns_txt_record" "chat" {
+  name                = "asuid.${var.chat_dns_subdomain}"
+  zone_name           = data.azurerm_dns_zone.rockpal-co-uk.name
+  resource_group_name = data.azurerm_dns_zone.rockpal-co-uk.resource_group_name
+  ttl                 = 300
+  record {
+    value = azurerm_container_app.chat.custom_domain_verification_id
+  }
+}
+
 resource "azurerm_dns_cname_record" "website" {
   name                = var.website_dns_subdomain
   zone_name           = data.azurerm_dns_zone.rockpal-co-uk.name

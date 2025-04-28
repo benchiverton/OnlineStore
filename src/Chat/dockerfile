@@ -1,0 +1,19 @@
+FROM rust:1.86
+WORKDIR /app
+
+ARG APP_NAME=rockpal-chat
+
+COPY . .
+
+WORKDIR "/app/src/Chat"
+
+RUN cargo build --locked --release
+
+WORKDIR /app
+
+RUN cp ./src/Chat/target/release/$APP_NAME /bin/server
+
+ENV APP_PORT=8081
+EXPOSE 8081
+
+CMD ["/bin/server"]

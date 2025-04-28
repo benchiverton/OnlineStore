@@ -1,6 +1,9 @@
 @page "/"
 
 @inject AdoptionService _adoptionService
+@inject ChatModal.ChatServerConfiguration _chatServerConfiguration
+
+<Company.Website.Home.ChatModal @ref="Modal"></Company.Website.Home.ChatModal>
 
 <div class="content px-4">
     <h1><b>Adopt</b> a RockPal</h1>
@@ -35,12 +38,11 @@
                             <div class="rockpal-container">
                                 <h1>@petRock.Name</h1>
                                 <img class="rockpal-img" src="@petRock.Images.First()" alt="Card image">
-                                @foreach (var attr in petRock.Attributes)
-                                {
-                                    <h6>
-                                        <b>@attr.Key:</b> @attr.Value
-                                    </h6>
-                                }
+                                <h6>@(string.Join(", ", petRock.Attributes.Select(pr => pr.Value)))</h6>
+                                <button class="btn btn-chat btn-block"
+                                        @onclick="async () => await Modal.Open(_chatServerConfiguration, petRock.Id, petRock.Name)">
+                                    <i class="fas fa-comment mr-3"/><b>Chat</b>
+                                </button>
                             </div>
                         </div>
                     }
@@ -59,6 +61,8 @@
 
 @code {
     [CascadingParameter] private Task<AuthenticationState> authStateTask { get; set; }
+
+    private ChatModal Modal { get; set; }
 
     private List<PetRock> _petRocks;
     private List<AdoptableRock> _adoptableRocks;

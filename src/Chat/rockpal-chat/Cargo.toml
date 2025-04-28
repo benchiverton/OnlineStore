@@ -1,0 +1,15 @@
+[package]
+name = "rockpal-chat"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+config = "0.15.11"
+futures-util = { version = "0.3.31", features = ["sink"] }
+serde = "1.0.219"
+thiserror = "2.0.12"
+tokio = { version = "1.44.2", features = ["full"] } 
+tokio-util = "0.7.15"
+tokio-websockets = { version = "0.11.4", features = ["server", "client", "fastrand", "sha1_smol"] }
+tracing = "0.1.41"
+tracing-subscriber = "0.3.19"

@@ -38,4 +38,5 @@ jobs:
           TF_VAR_acr_password: "not-used"
           TF_VAR_website_dns_subdomain: ${{ github.head_ref }}-website
           TF_VAR_api_dns_subdomain: ${{ github.head_ref }}-api
+          TF_VAR_chat_dns_subdomain: ${{ github.head_ref }}-chat
           TF_VAR_monitoring_dns_subdomain: ${{ github.head_ref }}-monitoring

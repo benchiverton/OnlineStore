@@ -15,6 +15,14 @@ jobs:
       image_name: "onlinestore-api"
     secrets: inherit
 
+  build-chat:
+    uses: benchiverton/OnlineStore/.github/workflows/workflow-build-test-publish-rust.yml@main
+    with:
+      working_directory: "src/Chat"
+      dockerfile_name: "src/Chat/dockerfile"
+      image_name: "onlinestore-chat"
+    secrets: inherit
+
   build-website:
     uses: benchiverton/OnlineStore/.github/workflows/workflow-build-test-publish-dotnet.yml@main
     with:
@@ -26,7 +34,7 @@ jobs:
     secrets: inherit
 
   deploy-terraform-prod:
-    needs: [build-api, build-website]
+    needs: [build-api, build-chat, build-website]
     environment: prod
     env:
       ARM_CLIENT_ID: ${{ secrets.TF_VAR_AGENT_CLIENT_ID }}
@@ -67,6 +75,7 @@ jobs:
           TF_VAR_acr_password: ${{ secrets.ACR_TOKEN }}
           TF_VAR_website_dns_subdomain: www
           TF_VAR_api_dns_subdomain: api
+          TF_VAR_chat_dns_subdomain: chat
           TF_VAR_monitoring_dns_subdomain: monitoring
       - name: Terraform Apply
         id: apply
@@ -78,6 +87,7 @@ jobs:
           TF_VAR_acr_password: ${{ secrets.ACR_TOKEN }}
           TF_VAR_website_dns_subdomain: www
           TF_VAR_api_dns_subdomain: api
+          TF_VAR_chat_dns_subdomain: chat
           TF_VAR_monitoring_dns_subdomain: monitoring
       - name: Save terraform outputs
         shell: bash
@@ -122,6 +132,18 @@ jobs:
           resourceGroup: onlinestore-shared-rg
           targetPort: 8080
           environmentVariables: AZUREADB2C__CLIENTID=74dfe0bf-26bf-402f-8b3d-86919993a482 AZUREADB2C__AUDIENCE=74dfe0bf-26bf-402f-8b3d-86919993a482 OTEL_EXPORTER_OTLP_ENDPOINT=http://prod-onlinestore-monitoring:18889 USEFAKEAUTH=false
+      - name: Deploy chat
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          acrName: onlinestorecontainerregistry
+          acrUsername: ${{ secrets.ACR_USERNAME }}
+          acrPassword: ${{ secrets.ACR_TOKEN }}
+          containerAppName: ${{ github.head_ref }}-onlinestore-chat
+          imageToDeploy: onlinestorecontainerregistry.azurecr.io/onlinestore-chat:${{ github.sha }}
+          location: 'East US'
+          resourceGroup: onlinestore-shared-rg
+          targetPort: 8081
+          environmentVariables:
       - name: Deploy website
         uses: azure/container-apps-deploy-action@v1
         with:
@@ -133,4 +155,4 @@ jobs:
           location: 'East US'
           resourceGroup: onlinestore-shared-rg
           targetPort: 80
-          environmentVariables: API__BASEPATH=https://api.rockpal.co.uk API__CLIENTID=74dfe0bf-26bf-402f-8b3d-86919993a482 AZUREADB2C__CLIENTID=2a7421bc-c898-42dc-8176-1178bf6b3c7e USEFAKEAUTH=false
+          environmentVariables: API__BASEPATH=https://api.rockpal.co.uk API__CLIENTID=74dfe0bf-26bf-402f-8b3d-86919993a482 AZUREADB2C__CLIENTID=2a7421bc-c898-42dc-8176-1178bf6b3c7e USEFAKEAUTH=false CHATSERVER__ADDRESS=chat.rockpal.co.uk
