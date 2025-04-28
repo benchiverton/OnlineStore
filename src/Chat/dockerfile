@@ -2,9 +2,10 @@ FROM rust:1.86
 
 ARG APP_NAME=rockpal-chat
 
+COPY . .
+
 WORKDIR "/app/src/Chat"
 
-COPY . .
 RUN cargo build --locked --release
 RUN cp ./target/release/$APP_NAME /bin/server
 
