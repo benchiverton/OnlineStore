@@ -15,7 +15,7 @@ jobs:
     secrets: inherit
 
   build-chat:
-    uses: benchiverton/OnlineStore/.github/workflows/workflow-build-test-publish-rust.yml@chat
+    uses: benchiverton/OnlineStore/.github/workflows/workflow-build-test-publish-rust.yml@main
     with:
       working_directory: "src/Chat"
       dockerfile_name: "src/Chat/dockerfile"
@@ -142,7 +142,6 @@ jobs:
           location: 'East US'
           resourceGroup: onlinestore-shared-rg
           targetPort: 8081
-          environmentVariables:
       - name: Deploy website
         uses: azure/container-apps-deploy-action@v1
         with:
