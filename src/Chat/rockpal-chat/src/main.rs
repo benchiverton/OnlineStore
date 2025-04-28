@@ -6,8 +6,8 @@ use tokio_util::sync::CancellationToken;
 use tracing_subscriber;
 use websocket::server::{Error as WebSocketError, WebSocketServer};
 
-mod websocket;
 mod settings;
+mod websocket;
 
 #[derive(Debug, Error)]
 pub enum Error {
