@@ -154,7 +154,7 @@
             await Task.Delay(TimeSpan.FromMilliseconds(1));
             _conversation.Add(new ChatMessage
             {
-                User = "_name",
+                User = _name,
                 Message = $"{_name} isn't listening right now."
             });
         }
