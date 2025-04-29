@@ -31,7 +31,7 @@ impl WebSocketServer {
     pub async fn start(self, token: CancellationToken) -> Result<(), Error> {
         tracing::info!("Starting server.");
 
-        let listener = TcpListener::bind(format!("127.0.0.1:{}", self.port))
+        let listener = TcpListener::bind(format!("0.0.0.0:{}", self.port))
             .await
             .map_err(Error::from)?;
 
