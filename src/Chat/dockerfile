@@ -12,7 +12,7 @@ RUN cargo build --locked --release
 WORKDIR /app
 
 RUN cp ./src/Chat/target/release/$APP_NAME /bin/server
-RUN mkdir -p /rockpal-chat/src/ && \
+RUN mkdir -p /app/rockpal-chat/src/ && \
     cp ./src/Chat/rockpal-chat/src/Settings.toml /app/rockpal-chat/src/Settings.toml
 
 ENV APP_PORT=8081
