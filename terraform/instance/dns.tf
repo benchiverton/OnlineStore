@@ -87,6 +87,11 @@ module "container_apps_bind_dns" {
       container_app_name = azurerm_container_app.api.name
     },
     {
+      key                = "chat",
+      custom_domain      = trimsuffix(azurerm_dns_cname_record.chat.fqdn, "."),
+      container_app_name = azurerm_container_app.chat.name
+    },
+    {
       key                = "website",
       custom_domain      = trimsuffix(azurerm_dns_cname_record.website.fqdn, "."),
       container_app_name = azurerm_container_app.website.name

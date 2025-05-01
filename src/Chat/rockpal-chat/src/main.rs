@@ -1,5 +1,7 @@
+use std::env;
+
 use config::ConfigError;
-use settings::Settings;
+use settings::settings::Settings;
 use thiserror::Error;
 use tokio::{signal, task::JoinError};
 use tokio_util::sync::CancellationToken;
@@ -21,13 +23,15 @@ pub enum Error {
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    let settings = Settings::new()?;
+    let args: Vec<String> = env::args().collect();
+    let settings_file = &args[1];
+    let settings = Settings::new(settings_file)?;
 
     tracing_subscriber::fmt::init();
 
     let token = CancellationToken::new();
 
-    let server = WebSocketServer::new(settings.port);
+    let server = WebSocketServer::new(settings.address, settings.port);
     let server_token = token.clone();
     let handle = tokio::spawn(async move { server.start(server_token) });
 
