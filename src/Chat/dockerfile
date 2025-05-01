@@ -13,9 +13,9 @@ WORKDIR /app
 
 RUN cp ./src/Chat/target/release/$APP_NAME /bin/server
 RUN mkdir -p /app/rockpal-chat/src/ && \
-    cp ./src/Chat/rockpal-chat/src/Settings.toml /app/rockpal-chat/src/Settings.toml
+    cp ./src/Chat/rockpal-chat/src/Settings.docker.toml /app/Settings.toml
 
 ENV APP_PORT=8081
 EXPOSE 8081
 
-CMD ["/bin/server"]
+CMD ["/bin/server", "Settings"]
