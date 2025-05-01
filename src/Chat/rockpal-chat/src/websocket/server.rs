@@ -3,13 +3,13 @@ use base64::engine::general_purpose;
 use futures_util::{SinkExt, StreamExt};
 use sha1::{Digest, Sha1};
 use std::io::Read;
+use std::net::SocketAddr;
 use std::{io::Error as IoError, str::Utf8Error, time::Duration};
 use thiserror::Error;
 use tokio::io::AsyncReadExt;
 use tokio::{io::AsyncWriteExt, net::TcpListener, time::sleep};
 use tokio_util::sync::CancellationToken;
 use tokio_websockets::{Error as WebSocketError, Message, ServerBuilder};
-use tracing::{error, info};
 
 #[derive(Debug, Error)]
 pub enum Error {
@@ -45,11 +45,11 @@ impl WebSocketServer {
                     break;
                 },
                 Ok((stream, addr)) = listener.accept() => {
-                    info!(?addr, "Accepted new TCP connection");
+                    tracing::info!(?addr, "Accepted new TCP connection");
 
                     tokio::spawn(async move {
-                        if let Err(e) = handle_connection(stream).await {
-                            error!("Connection error: {:?}", e);
+                        if let Err(e) = handle_connection(stream, &addr).await {
+                            tracing::error!(?addr, "Connection error: {:?}", e);
                         }
                     });
                 }
@@ -60,18 +60,29 @@ impl WebSocketServer {
     }
 }
 
-async fn handle_connection(mut stream: tokio::net::TcpStream) -> Result<(), Error> {
+async fn handle_connection(mut stream: tokio::net::TcpStream, addr: &SocketAddr) -> Result<(), Error> {
     let mut buffer = [0u8; 1024];
-    let n = stream.read(&mut buffer).await?;
-    let request = String::from_utf8_lossy(&buffer[..n]);
+    let bytes_read = stream.read(&mut buffer).await?;
+    let request = String::from_utf8_lossy(&buffer[..bytes_read]).into_owned();
 
     if request.contains("Upgrade: websocket") && request.contains("Connection: Upgrade") {
-        upgrade_stream(&mut stream, request).await?;
+        let accept_key = generate_accept_key(&request)?;
+
+        tracing::info!(?addr, "Upgrading connection.");
+        let response = format!(
+            "HTTP/1.1 101 Switching Protocols\r\n\
+                            Upgrade: websocket\r\n\
+                            Connection: Upgrade\r\n\
+                            Sec-WebSocket-Accept: {}\r\n\r\n",
+            accept_key
+        );
+        stream.write_all(response.as_bytes()).await?;
+        tracing::info!(?addr, "Connection upgraded.");
 
         let mut ws_stream = ServerBuilder::new().serve(stream);
 
         while let Some(Ok(msg)) = ws_stream.next().await {
-            tracing::info!("Received: {:?}", msg);
+            tracing::info!(?addr, "Received: {:?}", msg);
 
             sleep(Duration::from_secs(1)).await;
 
@@ -93,18 +104,14 @@ async fn handle_connection(mut stream: tokio::net::TcpStream) -> Result<(), Erro
     Ok(())
 }
 
-async fn upgrade_stream(
-    stream: &mut tokio::net::TcpStream,
-    request: std::borrow::Cow<'_, str>,
-) -> Result<(), Error> {
-    tracing::info!("Upgrading connection.");
-    let key_line = request
+fn generate_accept_key(request: &String) -> Result<String, Error> {
+    let websocket_key_line = request
         .lines()
         .find(|line| line.to_lowercase().starts_with("sec-websocket-key:"))
         .ok_or(Error::WebSocketUpgradeError(
             "Missing Sec-WebSocket-Key".into(),
         ))?;
-    let sec_key = key_line
+    let websocket_key = websocket_key_line
         .split(':')
         .nth(1)
         .ok_or(Error::WebSocketUpgradeError(
@@ -112,17 +119,8 @@ async fn upgrade_stream(
         ))?
         .trim();
     let mut hasher = Sha1::new();
-    hasher.update(format!("{}258EAFA5-E914-47DA-95CA-C5AB0DC85B11", sec_key).as_bytes());
-    let result = hasher.finalize();
-    let accept_key = general_purpose::STANDARD.encode(&result);
-    let response = format!(
-        "HTTP/1.1 101 Switching Protocols\r\n\
-                        Upgrade: websocket\r\n\
-                        Connection: Upgrade\r\n\
-                        Sec-WebSocket-Accept: {}\r\n\r\n",
-        accept_key
-    );
-    stream.write_all(response.as_bytes()).await?;
-    tracing::info!("Connection upgraded.");
-    Ok(())
+    hasher.update(format!("{}258EAFA5-E914-47DA-95CA-C5AB0DC85B11", websocket_key).as_bytes());
+    let accept_key = hasher.finalize();
+
+    Ok(general_purpose::STANDARD.encode(&accept_key))
 }

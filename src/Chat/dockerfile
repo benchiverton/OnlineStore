@@ -12,7 +12,7 @@ RUN cargo build --locked --release
 WORKDIR /app
 
 RUN cp ./src/Chat/target/release/$APP_NAME /bin/server
-RUN cp ./src/Chat/rockpal-chat/src/Settings.docker.toml /app/Settings.toml
+RUN cp ./src/Chat/rockpal-chat/src/settings/Settings.docker.toml /app/Settings.toml
 
 ENV APP_PORT=8081
 EXPOSE 8081
