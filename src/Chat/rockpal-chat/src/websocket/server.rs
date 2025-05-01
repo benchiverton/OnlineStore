@@ -7,6 +7,7 @@ use std::net::SocketAddr;
 use std::{io::Error as IoError, str::Utf8Error, time::Duration};
 use thiserror::Error;
 use tokio::io::AsyncReadExt;
+use tokio::net::TcpStream;
 use tokio::{io::AsyncWriteExt, net::TcpListener, time::sleep};
 use tokio_util::sync::CancellationToken;
 use tokio_websockets::{Error as WebSocketError, Message, ServerBuilder};
@@ -60,10 +61,7 @@ impl WebSocketServer {
     }
 }
 
-async fn handle_connection(
-    mut stream: tokio::net::TcpStream,
-    addr: &SocketAddr,
-) -> Result<(), Error> {
+async fn handle_connection(mut stream: TcpStream, addr: &SocketAddr) -> Result<(), Error> {
     let mut buffer = [0u8; 1024];
     let bytes_read = stream.read(&mut buffer).await?;
     let request = String::from_utf8_lossy(&buffer[..bytes_read]).into_owned();
@@ -100,7 +98,11 @@ async fn handle_connection(
             }
         }
     } else {
-        // If it's not a valid WebSocket upgrade, just close the connection.
+        tracing::warn!(
+            ?addr,
+            request,
+            "Unsupported request, expected websocket/connection upgrade. Shutting down stream."
+        );
         stream.shutdown().await?;
     }
 
