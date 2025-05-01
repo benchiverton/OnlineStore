@@ -74,9 +74,9 @@ async fn handle_connection(mut stream: TcpStream, addr: &SocketAddr) -> Result<(
         tracing::info!(?addr, "Connection upgrade started.");
         let response = format!(
             "HTTP/1.1 101 Switching Protocols\r\n\
-                            Upgrade: websocket\r\n\
-                            Connection: Upgrade\r\n\
-                            Sec-WebSocket-Accept: {}\r\n\r\n",
+Upgrade: websocket\r\n\
+Connection: Upgrade\r\n\
+Sec-WebSocket-Accept: {}\r\n\r\n",
             accept_key
         );
         stream.write_all(response.as_bytes()).await?;
