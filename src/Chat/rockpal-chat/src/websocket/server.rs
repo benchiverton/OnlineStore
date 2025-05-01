@@ -66,10 +66,10 @@ async fn handle_connection(mut stream: TcpStream, addr: &SocketAddr) -> Result<(
     let bytes_read = stream.read(&mut buffer).await?;
     let request = String::from_utf8_lossy(&buffer[..bytes_read]).into_owned();
 
-    if request.contains("Upgrade: websocket") && request.contains("Connection: Upgrade") {
+    if request.contains("upgrade: websocket") && request.contains("connection: Upgrade") {
         let accept_key = generate_accept_key(&request)?;
 
-        tracing::info!(?addr, "Upgrading connection.");
+        tracing::info!(?addr, "Connection upgrade started.");
         let response = format!(
             "HTTP/1.1 101 Switching Protocols\r\n\
                             Upgrade: websocket\r\n\
@@ -78,7 +78,7 @@ async fn handle_connection(mut stream: TcpStream, addr: &SocketAddr) -> Result<(
             accept_key
         );
         stream.write_all(response.as_bytes()).await?;
-        tracing::info!(?addr, "Connection upgraded.");
+        tracing::info!(?addr, "Connection upgrade completed.");
 
         let mut ws_stream = ServerBuilder::new().serve(stream);
 
