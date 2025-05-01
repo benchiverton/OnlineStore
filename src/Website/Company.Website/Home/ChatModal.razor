@@ -17,7 +17,7 @@
                     {
                         @foreach (var dialogue in _conversation.OrderByDescending(t => t.Timestamp))
                         {
-                            <div>@($"{(int)dialogue.Timestamp.TimeOfDay.TotalHours:D2}:{dialogue.Timestamp.TimeOfDay.Minutes:D2}:{dialogue.Timestamp.TimeOfDay.Seconds:D2}") @(dialogue.User):
+                            <div>@($"{(int)dialogue.Timestamp.TimeOfDay.TotalHours:D2}:{dialogue.Timestamp.TimeOfDay.Minutes:D2}:{dialogue.Timestamp.TimeOfDay.Seconds:D2}") @(dialogue.Emoji):
                                 <i>@(dialogue.Message)</i><br></div>
                         }
                     }
@@ -106,7 +106,7 @@
                 var message = Encoding.UTF8.GetString(buffer, 0, result.Count);
                 _conversation.Add(new ChatMessage
                 {
-                    User = _name,
+                    Emoji = "🗿",
                     Message = message
                 });
                 await InvokeAsync(StateHasChanged);
@@ -137,7 +137,7 @@
         // add the message to the conversation
         _conversation.Add(new ChatMessage
         {
-            User = "You",
+            Emoji = "👤",
             Message = _userMessage
         });
 
@@ -154,7 +154,7 @@
             await Task.Delay(TimeSpan.FromMilliseconds(1));
             _conversation.Add(new ChatMessage
             {
-                User = _name,
+                Emoji = "😵",
                 Message = $"{_name} isn't listening right now."
             });
         }
@@ -184,7 +184,8 @@
     private class ChatMessage
     {
         public DateTime Timestamp = DateTime.Now;
-        public string User { get; set; } = null!;
+        public string Emoji { get; set; }
         public string Message { get; set; } = null!;
     }
+
 }

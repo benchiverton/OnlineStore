@@ -89,7 +89,7 @@ Sec-WebSocket-Accept: {}\r\n\r\n",
                 Ok(msg) => {
                     tracing::info!(?addr, "Received: {:?}", msg);
 
-                    sleep(Duration::from_millis(1)).await;
+                    sleep(Duration::from_millis(500)).await;
 
                     if msg.is_text() || msg.is_binary() {
                         let byte_vec: Vec<u8> =
