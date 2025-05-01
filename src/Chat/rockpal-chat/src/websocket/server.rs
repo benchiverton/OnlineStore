@@ -66,7 +66,9 @@ async fn handle_connection(mut stream: TcpStream, addr: &SocketAddr) -> Result<(
     let bytes_read = stream.read(&mut buffer).await?;
     let request = String::from_utf8_lossy(&buffer[..bytes_read]).into_owned();
 
-    if request.contains("upgrade: websocket") && request.contains("connection: Upgrade") {
+    if request.to_lowercase().contains("upgrade: websocket")
+        && request.to_lowercase().contains("connection: upgrade")
+    {
         let accept_key = generate_accept_key(&request)?;
 
         tracing::info!(?addr, "Connection upgrade started.");
