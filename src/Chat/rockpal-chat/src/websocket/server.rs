@@ -60,7 +60,10 @@ impl WebSocketServer {
     }
 }
 
-async fn handle_connection(mut stream: tokio::net::TcpStream, addr: &SocketAddr) -> Result<(), Error> {
+async fn handle_connection(
+    mut stream: tokio::net::TcpStream,
+    addr: &SocketAddr,
+) -> Result<(), Error> {
     let mut buffer = [0u8; 1024];
     let bytes_read = stream.read(&mut buffer).await?;
     let request = String::from_utf8_lossy(&buffer[..bytes_read]).into_owned();
