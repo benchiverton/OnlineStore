@@ -89,9 +89,9 @@ Sec-WebSocket-Accept: {}\r\n\r\n",
         while let Some(Ok(msg)) = ws_stream.next().await {
             tracing::info!(?addr, "Received: {:?}", msg);
 
-            sleep(Duration::from_secs(1)).await;
-
             if msg.is_text() || msg.is_binary() {
+                sleep(Duration::from_millis(200)).await;
+                
                 let byte_vec: Vec<u8> = msg.into_payload().bytes().filter_map(Result::ok).collect();
                 let rockpal_name = std::str::from_utf8(&byte_vec)?;
                 let message = Message::text(format!(
