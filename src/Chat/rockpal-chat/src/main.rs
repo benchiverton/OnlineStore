@@ -31,7 +31,7 @@ async fn main() -> Result<(), Error> {
 
     let token = CancellationToken::new();
 
-    let server = WebSocketServer::new(settings.port);
+    let server = WebSocketServer::new(settings.address, settings.port);
     let server_token = token.clone();
     let handle = tokio::spawn(async move { server.start(server_token) });
 

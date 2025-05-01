@@ -20,18 +20,19 @@ pub enum Error {
 }
 
 pub struct WebSocketServer {
+    address: String,
     port: u16,
 }
 
 impl WebSocketServer {
-    pub fn new(port: u16) -> Self {
-        Self { port }
+    pub fn new(address: String, port: u16) -> Self {
+        Self { address, port }
     }
 
     pub async fn start(self, token: CancellationToken) -> Result<(), Error> {
         tracing::info!("Starting server.");
 
-        let listener = TcpListener::bind(format!("0.0.0.0:{}", self.port))
+        let listener = TcpListener::bind(format!("{}:{}", self.address, self.port))
             .await
             .map_err(Error::from)?;
 
