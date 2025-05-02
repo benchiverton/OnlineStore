@@ -73,11 +73,13 @@ resource "azurerm_container_app" "chat" {
   }
 }
 
+
+# update the container app with extra additionalPortMappings, as this is not supported by the existing TF provider
 resource "azapi_update_resource" "chat_cors" {
-  type        = "Microsoft.App/containerApps@2024-02-02-preview"
+  type        = "Microsoft.App/containerApps@2023-11-02-preview"
   resource_id = azurerm_container_app.chat.id
 
-  body = {
+  body = jsonencode({
     properties = {
       configuration = {
         ingress = {
@@ -88,6 +90,14 @@ resource "azapi_update_resource" "chat_cors" {
         }
       }
     }
+  })
+
+  depends_on = [
+    azurerm_container_app.chat,
+  ]
+
+  lifecycle {
+    replace_triggered_by = [azurerm_container_app.chat]
   }
 }
 
