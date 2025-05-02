@@ -1,6 +1,9 @@
 @using System.Net.WebSockets
 @using System.Text
 @using System.Threading
+
+@inject HttpClient _httpClient
+
 <div class="modal @_modalClass" tabindex="-1" role="dialog" style="display:@_modalDisplay">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -71,8 +74,13 @@
         _webSocket = new ClientWebSocket();
         try
         {
-            var uri = new Uri($"{(config.Tls ? "wss" : "ws")}://{config.Address}:{config.Port}");
-            await _webSocket.ConnectAsync(uri, CancellationToken.None);
+            // wake up the server
+            var httpUri = new Uri($"{(config.Tls ? "https" : "http")}://{config.Address}:{config.Port}");
+            _ = await _httpClient.GetAsync(httpUri); // ignore the response
+
+            // connect to the websocket
+            var webSocketUri = new Uri($"{(config.Tls ? "wss" : "ws")}://{config.Address}:{config.Port}");
+            await _webSocket.ConnectAsync(webSocketUri, CancellationToken.None);
             _isConnected = true;
             _ = ListenForMessages();
         }
