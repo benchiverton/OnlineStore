@@ -73,6 +73,24 @@ resource "azurerm_container_app" "chat" {
   }
 }
 
+resource "azapi_update_resource" "chat_cors" {
+  type        = "Microsoft.App/containerApps@2024-02-02-preview"
+  resource_id = azurerm_container_app.chat.id
+
+  body = {
+    properties = {
+      configuration = {
+        ingress = {
+          corsPolicy = {
+            allowedOrigins = ["*"]
+            allowedHeaders = ["*"]
+          }
+        }
+      }
+    }
+  }
+}
+
 resource "azurerm_container_app" "website" {
   name                         = "${lower(var.environment)}-${var.name}-website"
   container_app_environment_id = data.azurerm_container_app_environment.apps.id

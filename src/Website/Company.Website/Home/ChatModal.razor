@@ -71,6 +71,10 @@
         _name = name;
         _conversation = [];
 
+        _modalDisplay = "block;";
+        _modalClass = "Show";
+        _showBackdrop = true;
+
         _webSocket = new ClientWebSocket();
         try
         {
@@ -78,7 +82,7 @@
             var httpUri = new Uri($"{(config.Tls ? "https" : "http")}://{config.Address}:{config.Port}");
             _ = await _httpClient.GetAsync(httpUri); // ignore the response
 
-            // connect to the websocket
+            // connect to the websocket endpoint
             var webSocketUri = new Uri($"{(config.Tls ? "wss" : "ws")}://{config.Address}:{config.Port}");
             await _webSocket.ConnectAsync(webSocketUri, CancellationToken.None);
             _isConnected = true;
@@ -89,10 +93,6 @@
             Console.WriteLine($"WebSocket connection failed: {ex.Message}");
             _isConnected = false;
         }
-
-        _modalDisplay = "block;";
-        _modalClass = "Show";
-        _showBackdrop = true;
 
         StateHasChanged();
     }
