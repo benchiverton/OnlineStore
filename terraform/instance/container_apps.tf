@@ -73,8 +73,7 @@ resource "azurerm_container_app" "chat" {
   }
 }
 
-
-# update the container app with extra additionalPortMappings, as this is not supported by the existing TF provider
+# update the container app with CORS, as this is not supported by the existing TF provider
 resource "azapi_update_resource" "chat_cors" {
   type        = "Microsoft.App/containerApps@2023-11-02-preview"
   resource_id = azurerm_container_app.chat.id
@@ -83,7 +82,7 @@ resource "azapi_update_resource" "chat_cors" {
     properties = {
       configuration = {
         secrets = [{
-          name = "acr-password"
+          name = "onlinestorecontainerregistryazurecrio-onlinestorecontainerregistry"
           value = var.acr_password
         }]
         ingress = {
