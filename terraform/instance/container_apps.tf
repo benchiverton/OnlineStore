@@ -82,6 +82,10 @@ resource "azapi_update_resource" "chat_cors" {
   body = jsonencode({
     properties = {
       configuration = {
+        secrets = [{
+          name = "acr-password"
+          value = var.acr_password
+        }]
         ingress = {
           corsPolicy = {
             allowedOrigins = ["*"]
