@@ -50,7 +50,7 @@ impl WebSocketServer {
 
                     tokio::spawn(async move {
                         if let Err(e) = handle_connection(stream, &addr).await {
-                            tracing::error!(?addr, "Connection error: {:?}", e);
+                            tracing::error!(?addr, error = ?e, "Connection error.");
                         }
                     });
                 }
@@ -86,28 +86,20 @@ Sec-WebSocket-Accept: {}\r\n\r\n",
 
             let mut ws_stream = ServerBuilder::new().serve(stream);
 
-            while let Some(msg_result) = ws_stream.next().await {
-                match msg_result {
-                    Ok(msg) => {
-                        tracing::info!(?addr, "Received: {:?}", msg);
+            while let Some(msg) = ws_stream.next().await.transpose()? {
+                // simulate thinking
+                sleep(Duration::from_millis(500)).await;
 
-                        sleep(Duration::from_millis(500)).await;
-
-                        if msg.is_text() || msg.is_binary() {
-                            let byte_vec: Vec<u8> =
-                                msg.into_payload().bytes().filter_map(Result::ok).collect();
-                            let rockpal_name = std::str::from_utf8(&byte_vec)?;
-                            let message = Message::text(format!(
-                                "Your RockPal does not understand the phrase '{}'. They are, after all, a rock.",
-                                rockpal_name
-                            ));
-                            ws_stream.send(message).await?;
-                        }
-                    }
-                    Err(err) => {
-                        tracing::error!(?addr, "WebSocket error: {:?}", err);
-                        break;
-                    }
+                // reply
+                if msg.is_text() || msg.is_binary() {
+                    let byte_vec: Vec<u8> =
+                        msg.into_payload().bytes().filter_map(Result::ok).collect();
+                    let rockpal_name = std::str::from_utf8(&byte_vec)?;
+                    let message = Message::text(format!(
+                        "Your RockPal does not understand the phrase '{}'. They are, after all, a rock.",
+                        rockpal_name
+                    ));
+                    ws_stream.send(message).await?;
                 }
             }
             Ok(())
