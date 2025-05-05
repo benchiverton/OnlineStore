@@ -66,58 +66,80 @@ async fn handle_connection(mut stream: TcpStream, addr: &SocketAddr) -> Result<(
     let bytes_read = stream.read(&mut buffer).await?;
     let request = String::from_utf8_lossy(&buffer[..bytes_read]).into_owned();
 
-    if request.to_lowercase().contains("upgrade: websocket")
-        && request.to_lowercase().contains("connection: upgrade")
-    {
-        let accept_key = generate_accept_key(&request)?;
+    tracing::info!(request, "Request");
 
-        tracing::info!(?addr, "Connection upgrade started.");
-        let response = format!(
-            "HTTP/1.1 101 Switching Protocols\r\n\
+    match request.to_lowercase() {
+        req_lower
+            if req_lower.contains("upgrade: websocket")
+                && req_lower.contains("connection: upgrade") =>
+        {
+            let accept_key = generate_accept_key(&request)?;
+
+            tracing::info!(?addr, "Connection upgrade started.");
+            let response = format!(
+                "HTTP/1.1 101 Switching Protocols\r\n\
 Upgrade: websocket\r\n\
 Connection: Upgrade\r\n\
 Sec-WebSocket-Accept: {}\r\n\r\n",
-            accept_key
-        );
-        stream.write_all(response.as_bytes()).await?;
-        tracing::info!(?addr, "Connection upgrade completed.");
+                accept_key
+            );
+            stream.write_all(response.as_bytes()).await?;
+            tracing::info!(?addr, "Connection upgrade completed.");
 
-        let mut ws_stream = ServerBuilder::new().serve(stream);
+            let mut ws_stream = ServerBuilder::new().serve(stream);
 
-        while let Some(msg_result) = ws_stream.next().await {
-            match msg_result {
-                Ok(msg) => {
-                    tracing::info!(?addr, "Received: {:?}", msg);
+            while let Some(msg_result) = ws_stream.next().await {
+                match msg_result {
+                    Ok(msg) => {
+                        tracing::info!(?addr, "Received: {:?}", msg);
 
-                    sleep(Duration::from_millis(500)).await;
+                        sleep(Duration::from_millis(500)).await;
 
-                    if msg.is_text() || msg.is_binary() {
-                        let byte_vec: Vec<u8> =
-                            msg.into_payload().bytes().filter_map(Result::ok).collect();
-                        let rockpal_name = std::str::from_utf8(&byte_vec)?;
-                        let message = Message::text(format!(
-                            "Your RockPal does not understand the phrase '{}'. They are, after all, a rock.",
-                            rockpal_name
-                        ));
-                        ws_stream.send(message).await?;
+                        if msg.is_text() || msg.is_binary() {
+                            let byte_vec: Vec<u8> =
+                                msg.into_payload().bytes().filter_map(Result::ok).collect();
+                            let rockpal_name = std::str::from_utf8(&byte_vec)?;
+                            let message = Message::text(format!(
+                                "Your RockPal does not understand the phrase '{}'. They are, after all, a rock.",
+                                rockpal_name
+                            ));
+                            ws_stream.send(message).await?;
+                        }
+                    }
+                    Err(err) => {
+                        tracing::error!(?addr, "WebSocket error: {:?}", err);
+                        break;
                     }
                 }
-                Err(err) => {
-                    tracing::error!(?addr, "WebSocket error: {:?}", err);
-                    break;
-                }
             }
+            Ok(())
         }
-    } else {
-        tracing::warn!(
-            ?addr,
-            request,
-            "Unsupported request, expected websocket/connection upgrade. Shutting down stream."
-        );
-        stream.shutdown().await?;
-    }
+        req_lower if req_lower.is_empty() || req_lower.starts_with("get /") => {
+            tracing::info!(?addr, "Heartbeat received, returning OK.");
 
-    Ok(())
+            stream
+                .write_all(
+                    b"HTTP/1.1 200 OK\r\n\
+Content-Type: text/plain\r\n\
+Content-Length: 5\r\n\
+Access-Control-Allow-Origin: *\r\n\
+\r\n\
+Hello",
+                )
+                .await?;
+
+            Ok(())
+        }
+        _ => {
+            tracing::warn!(
+                ?addr,
+                request,
+                "Unsupported request, expected websocket/connection upgrade or heartbeat. Shutting down stream."
+            );
+            stream.shutdown().await?;
+            Ok(())
+        }
+    }
 }
 
 fn generate_accept_key(request: &String) -> Result<String, Error> {
